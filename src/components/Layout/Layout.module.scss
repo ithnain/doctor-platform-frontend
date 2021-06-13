@@ -1,0 +1,40 @@
+@import "@styles/colors";
+
+.sider {
+    overflow: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: $mediumGrey;
+
+
+
+    &__logo {
+        height: 32px;
+        margin: 16px auto;
+        display: flex;
+        justify-content: center;
+        background-color: $mediumGrey;
+    }
+
+    &__menu {
+        background-color: $mediumGrey;
+
+        &__item {
+            background-color: $mediumGrey;
+
+        }
+    }
+}
+
+.content {
+    margin: 24px 16px 0;
+    overflow: initial;
+
+    >div:first-of-type {
+        padding: 24;
+        background: #fff;
+        text-align: center
+    }
+}

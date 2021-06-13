@@ -1,16 +1,29 @@
-html,
-body {
-    padding: 0;
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-        Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@import "./colors";
+@import './viewportText';
+@import './responsive';
+
+html {
+    @include fluid-type($min_width, $max_width, $min_font, $max_font);
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
+.textCenter {
+    text-align: center
 }
 
-* {
-    box-sizing: border-box;
+.ant-layout-sider-trigger {
+    background-color: $mediumGrey !important;
+    color: $darkBlue !important;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: $mediumGrey !important;
+
+    &::after {
+        border-right: 3px solid $darkBlue;
+
+    }
+}
+
+.ant-menu-item-selected {
+    color: $darkBlue !important;
 }
