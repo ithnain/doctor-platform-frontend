@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-function Header(props) {
-    return <div></div>;
+function Header() {
+    return <div>Header will go here</div>;
 }
 
 Header.propTypes = {};

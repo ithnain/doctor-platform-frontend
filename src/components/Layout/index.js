@@ -5,18 +5,9 @@ import { Layout, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import Image from 'next/image';
 import Link from 'next/link';
-// import Icon from "../../../public/assets/icons/icon.svg"
-import {
-    TeamOutlined,
-    UserOutlined,
-    UploadOutlined,
-    VideoCameraOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined
-} from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import styles from './Layout.module.scss';
-const { Content, Footer, Sider, Header } = Layout;
-// import Sidebar from './Sidebar';
+const { Content, Sider, Header } = Layout;
 function SliderLayout({ title, keywords, description, activeTab, children }) {
     const [collapsed, setCollapsed] = useState(false);
     const toggle = () => {
@@ -34,9 +25,6 @@ function SliderLayout({ title, keywords, description, activeTab, children }) {
                 collapsedWidth="0"
                 onBreakpoint={(broken) => {
                     console.log(broken);
-                }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
                 }}
                 trigger={null}
                 collapsible
@@ -91,11 +79,7 @@ function SliderLayout({ title, keywords, description, activeTab, children }) {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="site-layout-background" style={{ padding: 0 }}>
-                    {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-              className: 'trigger',
-              onClick: toggle,
-            })} */}
+                <Header className={styles.header}>
                     {collapsed ? (
                         <MenuUnfoldOutlined className="trigger" onClick={toggle} />
                     ) : (

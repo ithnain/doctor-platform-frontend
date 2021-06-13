@@ -17,6 +17,6 @@ function MyApp({ Component, pageProps }) {
         </Provider>
     );
 }
-MyApp.propTypes = { Component: PropTypes.Node, pageProps: PropTypes.object };
+MyApp.propTypes = { Component: PropTypes.func, pageProps: PropTypes.object };
 
 export default MyApp;
