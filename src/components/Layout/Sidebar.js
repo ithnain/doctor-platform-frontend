@@ -7,7 +7,7 @@ const { Text } = Typography;
 import styles from './Sidenav.module.scss';
 const SideNav = ({ tapItems, selectedTap, setSelectedTap }) => {
     return (
-        <Sider  className={styles.SideNav}>
+        <Sider className={styles.SideNav}>
             <div className="side-wrapper">
                 <div className="bg-light sider-items-container">
                     {tapItems?.length ? (

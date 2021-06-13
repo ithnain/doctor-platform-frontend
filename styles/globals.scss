@@ -1,38 +1,77 @@
-@import "./colors";
+@import './colors';
 @import './viewportText';
 @import './responsive';
+
+@font-face {
+    font-family: 'gothic';
+    src: url(/assets/fonts/GOTHIC.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'gothic-bold';
+    src: url(/assets/fonts/GOTHICB.ttf) format('truetype');
+}
 
 html {
     @include fluid-type($min_width, $max_width, $min_font, $max_font);
 }
-
-.textCenter {
-    text-align: center
+a {
+    color: inherit;
 }
-.ant-layout{
-    background: #FFF !important;
+.textCenter {
+    text-align: center;
+}
+.ant-layout {
+    background: #fff !important;
 }
 .ant-layout-sider-trigger {
     background-color: $mediumGrey !important;
     color: $darkBlue !important;
 }
 
+.ant-menu-item {
+    padding: 0 !important;
+}
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: $mediumGrey !important;
+    background-color: $lightBlue !important;
+    box-shadow: 0px 3px 26px 0px $lightBlue;
 
+    // background-color: $lightBlue;
     &::after {
-        border-right: 3px solid $darkBlue;
-
+        border-right: none;
     }
 }
 
 .ant-menu-item-selected {
     color: $darkBlue !important;
 }
-.ant-layout-header{
-      background: #fff !important;
-      >.trigger{
-          font-size: 24px !important;
-          padding-left: 5px;
-      }
+.ant-menu-item-selected a,
+.ant-menu-item-selected a:hover {
+    color: $darkBlue !important;
+}
+.ant-layout-header {
+    background: #fff !important;
+    > .trigger {
+        font-size: 24px !important;
+        padding-left: 5px;
+    }
+}
+.ant-menu-item:hover,
+.ant-menu-item-active,
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-submenu-active,
+.ant-menu-submenu-title:hover,
+.ant-menu-item a:hover {
+    color: $darkBlue !important;
+}
+.btn-text {
+    font-weight: bold;
+    font-family: 'gothic-bold';
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 0px;
+}
+.gutter-box {
+  padding: 8px 0;
+  background: #00a0e9;
 }

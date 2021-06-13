@@ -1,0 +1,27 @@
+@import './colors';
+@import "./responsive";
+
+.authLeftSide {
+    background-color: $darkBlue;
+    // height: 100vh;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: none;
+
+    @include for-tablet-up {
+        display: flex;
+    }
+}
+.authRightSide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include for-tablet-up {
+        display: flex;
+        height: auto;
+    }
+}

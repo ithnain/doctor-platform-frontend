@@ -1,4 +1,4 @@
-@import "@styles/colors";
+@import '@styles/colors';
 
 .sider {
     overflow: auto;
@@ -7,8 +7,6 @@
     top: 0;
     left: 0;
     background-color: $mediumGrey;
-
-
 
     &__logo {
         height: 32px;
@@ -19,11 +17,44 @@
     }
 
     &__menu {
-        background-color: $mediumGrey;
-
+        background-color: transparent;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 66px);
+        justify-content: flex-start;
+        align-items: center;
+        // top: -32px;
+        position: relative;
+        .lastMenuItem {
+            margin-top: auto;
+        }
         &__item {
-            background-color: $mediumGrey;
+            padding: 5px;
+            justify-content: center !important;
+            align-items: center;
+            width: 80% !important;
+            height: 16% !important;
+            border-radius: 5px !important;
+            > img:first-of-type {
+                font-size: 3vw;
+            }
+            > span {
+                margin: 0 !important;
+                &:first-of-type {
+                    display: grid !important;
+                    grid-template-rows: 60% 20%;
+                    font-weight: bold;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.17;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: $darkBlue;
+                }
+                // &:nth-of-type(2) {
 
+                // }
+            }
         }
     }
 }
@@ -32,9 +63,9 @@
     margin: 24px 16px 0;
     overflow: initial;
 
-    >div:first-of-type {
-        padding: 24;
+    > div:first-of-type {
+        padding: 24px;
         background: #fff;
-        text-align: center
+        text-align: center;
     }
 }
