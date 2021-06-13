@@ -9,7 +9,9 @@ html {
 .textCenter {
     text-align: center
 }
-
+.ant-layout{
+    background: #FFF !important;
+}
 .ant-layout-sider-trigger {
     background-color: $mediumGrey !important;
     color: $darkBlue !important;
@@ -26,4 +28,11 @@ html {
 
 .ant-menu-item-selected {
     color: $darkBlue !important;
+}
+.ant-layout-header{
+      background: #fff !important;
+      >.trigger{
+          font-size: 24px !important;
+          padding-left: 5px;
+      }
 }
