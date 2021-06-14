@@ -2,17 +2,18 @@
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
 
-function Doctor() {
+function Overview() {
     return (
         <SliderLayout
-            title={'Doctor'}
+            title={'Overview'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor page'}>
-            Doctor
+            description={'this is the doctor overview'}
+            activeTab={'1'}>
+            Overview
         </SliderLayout>
     );
 }
 
-Doctor.propTypes = {};
+Overview.propTypes = {};
 
-export default Doctor;
+export default Overview;
