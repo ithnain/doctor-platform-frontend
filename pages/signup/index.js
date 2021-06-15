@@ -262,12 +262,20 @@ const SignUp = ({ hospitals }) => {
     );
 };
 export const getStaticProps = async () => {
-    const { data } = await API.get(`/hospitals`);
-    return {
-        props: {
-            hospitals: data
-        }
-    };
+    try {
+        const { data } = await API.get(`/hospitals`);
+        return {
+            props: {
+                hospitals: data
+            }
+        };
+    } catch (error) {
+        return {
+            props: {
+                hospitals: []
+            }
+        };
+    }
 };
 SignUp.propTypes = {
     lang: PropTypes.string.isRequired,
