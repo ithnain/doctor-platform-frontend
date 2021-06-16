@@ -1,5 +1,4 @@
 import { Select, Row, Col } from 'antd';
-import { useDispatch } from 'react-redux';
 // import { toogleLang } from 'src/redux/reducers/langReducer';
 import PropTypes from 'prop-types';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
@@ -11,7 +10,6 @@ function LangChanger({ setLang, abs }) {
     if (!storageLang) {
         setLang('en');
     }
-    const dispatch = useDispatch();
 
     const handleChangeLang = (lang) => {
         setLang(lang);
@@ -30,8 +28,7 @@ function LangChanger({ setLang, abs }) {
                                 onChange={(lang) => {
                                     handleChangeLang(lang);
                                 }}
-                                size="small"
-                                style={{ borderRadius: 7 }}>
+                                size="small">
                                 <Option value="en">En</Option>
                                 <Option value="ar">Ar</Option>
                             </Select>
@@ -47,8 +44,7 @@ function LangChanger({ setLang, abs }) {
                         onChange={(lang) => {
                             handleChangeLang(lang);
                         }}
-                        size="small"
-                        style={{ borderRadius: 7 }}>
+                        size="small">
                         <Option value="en">En</Option>
                         <Option value="ar">Ar</Option>
                     </Select>
@@ -59,7 +55,8 @@ function LangChanger({ setLang, abs }) {
 }
 
 LangChanger.propTypes = {
-    setLang: PropTypes.func.isRequired
+    setLang: PropTypes.func.isRequired,
+    abs: PropTypes.bool.isRequired
 };
 
 export default LangChanger;

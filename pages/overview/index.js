@@ -7,8 +7,7 @@ function Overview() {
         <SliderLayout
             title={'Overview'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}
-            activeTab={'1'}>
+            description={'this is the doctor overview'}>
             Overview
         </SliderLayout>
     );

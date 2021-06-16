@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Form, Input, Row, Col, Image, Typography } from 'antd';
 import Placeholder from '@components/Placeholder';
 import CustomButton from '@src/components/CustomBtn';
@@ -10,9 +10,13 @@ const { Text } = Typography;
 import authStyles from '@styles/Auth.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import { ConfigProvider } from 'antd';
-
+import { useState, useEffect } from 'react';
 const Login = () => {
-    const [storageLang, setLang] = useLocalStorage('storageLang', 'en');
+    const [storageLang, setLang] = useLocalStorage('storageLang');
+    const [direction, setdirection] = useState(null);
+    useEffect(() => {
+        storageLang === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [storageLang]);
     const t = storageLang === 'en' ? en : ar;
     const onFinish = ({ email, password }) => {
         console.log({
@@ -24,7 +28,7 @@ const Login = () => {
         console.log('Failed:', errorInfo);
     };
     return (
-        <Row className={storageLang === 'ar' ? 'arabic' : ''}>
+        <Row>
             <Col
                 xs={0}
                 md={12}
@@ -34,7 +38,7 @@ const Login = () => {
                 className={authStyles.authLeftSide}>
                 <Placeholder />
             </Col>
-            <ConfigProvider direction={storageLang === 'ar' ? 'rtl' : 'ltr'}>
+            <ConfigProvider direction={direction}>
                 <Col
                     xs={24}
                     md={12}
@@ -55,10 +59,9 @@ const Login = () => {
                                 />
                             </Row>
                             <Row justify="space-around">
-                                <p className="title-1 dark-blue">{t.DoctorRegistration}</p>
+                                <p className="title-1 dark-blue">{t.login}</p>
                             </Row>
                             <Form
-                                // {...layout}
                                 name="basic"
                                 className="form-container"
                                 layout="vertical"
@@ -107,7 +110,7 @@ const Login = () => {
                                         <Form.Item>
                                             <CustomButton
                                                 htmlType="submit"
-                                                text="Register"
+                                                text={t.login}
                                                 className={`${authStyles.btnRegister} btn-text`}
                                                 // loading={loadingLogin}
                                             />
@@ -116,7 +119,7 @@ const Login = () => {
                                 </Row>
                                 <Text type="secondary" className="gothic">
                                     {t.newHere}
-                                    <span className="regular-font">?</span>&nbsp;
+                                    &nbsp;
                                     <Link className="blue pointer" href="/signup">
                                         <a>
                                             {t.register}&nbsp;

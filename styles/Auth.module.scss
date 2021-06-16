@@ -3,7 +3,6 @@
 
 .authLeftSide {
     background-color: $darkBlue;
-    // height: 100vh;
     min-height: 100vh;
     justify-content: center;
     align-items: center;
@@ -13,6 +12,7 @@
         display: flex;
     }
 }
+
 .authRightSide {
     min-height: 100vh;
     display: flex;
@@ -25,11 +25,13 @@
         height: auto;
     }
 }
+
 .btnRegister {
     background-color: $pinkBG;
     width: 50%;
     color: #fff;
 }
+
 .input {
     border-radius: 7px;
     background-color: #fafafa;

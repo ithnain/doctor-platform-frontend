@@ -1,0 +1,37 @@
+{
+    "admin": {
+        "sidenavData": [
+            { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
+            { "title": "All Doctors", "image": "stethoscope.svg", "key": "2", "link": "doctors" },
+            {
+                "title": "Registration",
+                "image": "registration.svg",
+                "key": "3",
+                "link": "registration"
+            },
+            { "title": "Hospital", "image": "hospital.svg", "key": "4", "link": "hospital" },
+            { "title": "My Support Cases", "image": "question.svg", "key": "5", "link": "cases" }
+        ]
+    },
+    "caseHandler": {
+        "sidenavData": [
+            { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
+            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },
+            {
+                "title": "Patient Transfer",
+                "image": "hospital.svg",
+                "key": "3",
+                "link": "transfer"
+            },
+            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
+        ]
+    },
+    "doctor": {
+        "sidenavData": [
+            { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
+            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },
+            { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients" },
+            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
+        ]
+    }
+}

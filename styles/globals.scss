@@ -15,15 +15,25 @@
 html {
     @include fluid-type($min_width, $max_width, $min_font, $max_font);
 }
+
+body {
+    * {
+        font-family: gothic;
+    }
+}
+
 a {
     color: inherit;
 }
+
 .textCenter {
     text-align: center;
 }
+
 .ant-layout {
     background: #fff !important;
 }
+
 .ant-layout-sider-trigger {
     background-color: $mediumGrey !important;
     color: $darkBlue !important;
@@ -32,11 +42,11 @@ a {
 .ant-menu-item {
     padding: 0 !important;
 }
+
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: $lightBlue !important;
     box-shadow: 0px 3px 26px 0px $lightBlue;
 
-    // background-color: $lightBlue;
     &::after {
         border-right: none;
     }
@@ -45,17 +55,21 @@ a {
 .ant-menu-item-selected {
     color: $darkBlue !important;
 }
+
 .ant-menu-item-selected a,
 .ant-menu-item-selected a:hover {
     color: $darkBlue !important;
 }
+
 .ant-layout-header {
     background: #fff !important;
+
     > .trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
 }
+
 .ant-menu-item:hover,
 .ant-menu-item-active,
 .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
@@ -64,6 +78,7 @@ a {
 .ant-menu-item a:hover {
     color: $darkBlue !important;
 }
+
 .btn-text {
     font-weight: bold;
     font-family: 'gothic-bold';
@@ -71,10 +86,23 @@ a {
     line-height: 21px;
     letter-spacing: 0px;
 }
+
 .gutter-box {
     padding: 8px 0;
     background: #00a0e9;
 }
-// .arabic .ant-col{
-//     text-align: right !important;
-// }
+
+.dropdown-btn > .ant-dropdown-trigger {
+    &:hover {
+        color: inherit;
+        background: transparent;
+    }
+
+    background: transparent;
+    height: 48px;
+    border: none;
+}
+
+.dropdown-btn > .ant-dropdown-trigger > span {
+    background-color: white !important;
+}

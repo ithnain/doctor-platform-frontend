@@ -4,7 +4,6 @@ import '../styles/globals.scss';
 import store from '@redux/store';
 import 'normalize.css';
 import 'antd/dist/antd.css';
-import { ConfigProvider } from 'antd';
 
 function MyApp({ Component, pageProps }) {
     return (

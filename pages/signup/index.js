@@ -11,9 +11,14 @@ import authStyles from '@styles/Auth.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import LangChanger from '@src/components/LangToggle';
 import { ConfigProvider } from 'antd';
+import { useState, useEffect } from 'react';
 
 const SignUp = ({ hospitals }) => {
-    const [storageLang, setLang] = useLocalStorage('storageLang', 'en');
+    const [storageLang, setLang] = useLocalStorage('storageLang');
+    const [direction, setdirection] = useState(null);
+    useEffect(() => {
+        storageLang === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [storageLang]);
     const t = storageLang === 'en' ? en : ar;
     const onFinish = ({ email, password, name, nationalId, specialty, phoneNumber, hospital }) => {
         console.log({
@@ -40,7 +45,7 @@ const SignUp = ({ hospitals }) => {
                 className={authStyles.authLeftSide}>
                 <Placeholder />
             </Col>
-            <ConfigProvider direction={storageLang === 'ar' ? 'rtl' : 'ltr'}>
+            <ConfigProvider direction={direction}>
                 <Col
                     xs={24}
                     md={12}

@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import styles from './Layout.module.scss';
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, activeTab, children }) {
+import { useRouter } from 'next/router';
+import sideNavIcons from './sidenav.json';
+import HeaderMenu from './Header';
+function SliderLayout({ title, keywords, description, children }) {
     const [collapsed, setCollapsed] = useState(false);
+    const router = useRouter();
+    const path = router.pathname;
+    console.log(path);
     const toggle = () => {
         setCollapsed(!collapsed);
     };
+    const role = 'admin';
     return (
         <Layout>
             <Head>
@@ -30,9 +37,7 @@ function SliderLayout({ title, keywords, description, activeTab, children }) {
                 collapsible
                 collapsed={collapsed}
                 onCollapse={() => setCollapsed(!collapsed)}
-                className={styles.sider}
-                // style={{}}
-            >
+                className={styles.sider}>
                 <div className={styles.sider__logo}>
                     <Image
                         preview={false}
@@ -41,34 +46,16 @@ function SliderLayout({ title, keywords, description, activeTab, children }) {
                         src="/assets/logo-dark-notext.png"
                     />
                 </div>
-                <Menu
-                    className={styles.sider__menu}
-                    mode="inline"
-                    defaultSelectedKeys={[`${activeTab}`]}>
-                    <Menu.Item className={styles.sider__menu__item} key="1">
-                        <Image src="/assets/icons/icon.svg" width={40} height={40} />
-                        <span className="nav-text">
-                            <Link href="/overview">Overview</Link>
-                        </span>
-                    </Menu.Item>
-                    <Menu.Item className={styles.sider__menu__item} key="2">
-                        <Image src="/assets/icons/hospital.svg" width={40} height={40} />
-                        <span className="nav-text">
-                            <Link href="/hospital">Hospital</Link>
-                        </span>
-                    </Menu.Item>
-                    <Menu.Item className={styles.sider__menu__item} key="3">
-                        <Image src="/assets/icons/patient.svg" width={40} height={40} />
-                        <span className="nav-text">
-                            <Link href="/patients">My Patients</Link>
-                        </span>
-                    </Menu.Item>
-                    <Menu.Item className={`sideMenuItem ${styles.sider__menu__item}`} key="4">
-                        <Image src="/assets/icons/question.svg" width={40} height={40} />
-                        <span className="nav-text">
-                            <Link href="/cases">My Support Cases</Link>
-                        </span>
-                    </Menu.Item>
+                <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[path]}>
+                    {sideNavIcons[role].sidenavData.map((item) => (
+                        <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
+                            <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
+                            <span className="nav-text">
+                                <Link href={`/${item.link}`}>{item.title}</Link>
+                            </span>
+                        </Menu.Item>
+                    ))}
+
                     <Menu.Item
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
@@ -79,86 +66,23 @@ function SliderLayout({ title, keywords, description, activeTab, children }) {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className={styles.header}>
-                    {collapsed ? (
-                        <MenuUnfoldOutlined className="trigger" onClick={toggle} />
-                    ) : (
-                        <MenuFoldOutlined className="trigger" onClick={toggle} />
-                    )}
-                </Header>
+                <Row justify="s tart">
+                    <Col xs={24}>
+                        <Header className={styles.header}>
+                            {collapsed ? (
+                                <MenuUnfoldOutlined className="trigger" onClick={toggle} />
+                            ) : (
+                                <MenuFoldOutlined className="trigger" onClick={toggle} />
+                            )}
+                            <HeaderMenu />
+                        </Header>
+                    </Col>
+                </Row>
                 <Content className={styles.content}>
-                    <div style={{}}>
-                        ...
-                        <br />
-                        Really
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        long
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ... ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ... ... ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ... ... ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ... ... ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ... ... ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
-                        <br />
-                        ...
+                    <div>
                         <br />
                         content
+                        <br />
                         {children}
                     </div>
                 </Content>
@@ -177,7 +101,6 @@ SliderLayout.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string.isRequired,
     keywords: PropTypes.string.isRequired,
-    activeTab: PropTypes.string,
     children: PropTypes.node.isRequired
 };
 export default SliderLayout;
