@@ -1,25 +1,26 @@
-import PropTypes from 'prop-types';
-import { Form, Input, Row, Col, Image, Typography, Select } from 'antd';
-import Placeholder from '@components/Placeholder';
-import CustomButton from '@src/components/CustomBtn';
-import Link from 'next/link';
+import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+
 import API from '@src/utils/axios';
-import en from '@src/i18n/en';
-import ar from '@src/i18n/ar';
-const { Text } = Typography;
-import authStyles from '@styles/Auth.module.scss';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import LangChanger from '@src/components/LangToggle';
 import { ConfigProvider } from 'antd';
-import { useState, useEffect } from 'react';
+import CustomButton from '@src/components/CustomBtn';
+import LangChanger from '@src/components/LangToggle';
+import Link from 'next/link';
+import Placeholder from '@components/Placeholder';
+import PropTypes from 'prop-types';
+import authStyles from '@styles/Auth.module.scss';
+import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
+
+const { Text } = Typography;
 
 const SignUp = ({ hospitals }) => {
-    const [storageLang, setLang] = useLocalStorage('storageLang');
+    const { t } = useTranslation('signup');
+    const router = useRouter();
     const [direction, setdirection] = useState(null);
     useEffect(() => {
-        storageLang === 'ar' ? setdirection('rtl') : setdirection('ltr');
-    }, [storageLang]);
-    const t = storageLang === 'en' ? en : ar;
+        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [router.locale]);
     const onFinish = ({ email, password, name, nationalId, specialty, phoneNumber, hospital }) => {
         console.log({
             email,
@@ -35,7 +36,7 @@ const SignUp = ({ hospitals }) => {
         console.log('Failed:', errorInfo);
     };
     return (
-        <Row className={t === 'ar' ? 'arabic' : ''}>
+        <Row>
             <Col
                 xs={0}
                 md={12}
@@ -55,7 +56,7 @@ const SignUp = ({ hospitals }) => {
                     direction="column"
                     className={authStyles.authRightSide}>
                     <Row type="flex" justify="center" align="middle">
-                        <LangChanger setLang={setLang} abs={true} />
+                        <LangChanger abs={true} />
                         <Col span={24} type="flex" justify="start">
                             <Row justify="center">
                                 <Image
@@ -66,7 +67,7 @@ const SignUp = ({ hospitals }) => {
                                 />
                             </Row>
                             <Row justify="space-around">
-                                <p className="title-1 dark-blue">{t.DoctorRegistration}</p>
+                                <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
                             </Row>
                             <Form
                                 // {...layout}
@@ -78,7 +79,7 @@ const SignUp = ({ hospitals }) => {
                                 <Row justify="space-around" align="middle">
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.DoctorName}
+                                            label={t('DoctorName')}
                                             name="name"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -92,7 +93,7 @@ const SignUp = ({ hospitals }) => {
                                     </Col>
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.ID}
+                                            label={t('ID')}
                                             name="nationalId"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -107,37 +108,10 @@ const SignUp = ({ hospitals }) => {
                                     </Col>
                                 </Row>
 
-                                {/* <Form.Item
-                  label={t("Specialty")}
-                  name="specialty"
-                  className="dark-blue mb-1"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your Specialty",
-                    },
-                  ]}
-                >
-                  <Select size="large" style={{ borderRadius: 7 }}>
-                    {hospitals?.length ? (
-                      hospitals.map((hospital) => {
-                        return (
-                          <Select.Option key={hospital.id} value={hospital.id}>
-                            {hospital.name}
-                          </Select.Option>
-                        );
-                      })
-                    ) : (
-                      <Select.Option key={Math.random()} disabled>
-                        No hospitals available
-                      </Select.Option>
-                    )}
-                  </Select>
-                </Form.Item> */}
                                 <Row justify="space-around" align="middle">
                                     <Col span={23}>
                                         <Form.Item
-                                            label={t.Phone}
+                                            label={t('Phone')}
                                             name="phoneNumber"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -160,7 +134,7 @@ const SignUp = ({ hospitals }) => {
                                 <Row justify="space-around" align="middle">
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.email}
+                                            label={t('email')}
                                             name="email"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -175,7 +149,7 @@ const SignUp = ({ hospitals }) => {
                                     </Col>
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.password}
+                                            label={t('password')}
                                             className="mb-1"
                                             name="password"
                                             rules={[
@@ -196,7 +170,7 @@ const SignUp = ({ hospitals }) => {
                                 <Row justify="space-around" align="middle">
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.Specialty}
+                                            label={t('Specialty')}
                                             name="specialty"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -210,7 +184,7 @@ const SignUp = ({ hospitals }) => {
                                     </Col>
                                     <Col span={11}>
                                         <Form.Item
-                                            label={t.HospitalName}
+                                            label={t('HospitalName')}
                                             name="hospital"
                                             className="dark-blue mb-1"
                                             rules={[
@@ -232,7 +206,7 @@ const SignUp = ({ hospitals }) => {
                                                     })
                                                 ) : (
                                                     <Select.Option key={Math.random()} disabled>
-                                                        No hospitals available
+                                                        {t('noHospitals')}
                                                     </Select.Option>
                                                 )}
                                             </Select>
@@ -249,12 +223,12 @@ const SignUp = ({ hospitals }) => {
                                     />
                                 </Form.Item>
                                 <Text type="secondary" className="gothic">
-                                    {t.AlreadyUser}
-                                    <span className="regular-font">?</span>&nbsp;
+                                    {t('alreadyUser')}
+                                    <span className="regular-font"></span>&nbsp;
                                     <Link className="blue pointer" href="/login">
                                         <a>
-                                            {t.login}&nbsp;
-                                            {t.now}
+                                            {t('login')}&nbsp;
+                                            {t('now')}
                                         </a>
                                     </Link>
                                 </Text>

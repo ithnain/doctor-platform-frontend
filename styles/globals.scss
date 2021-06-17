@@ -64,7 +64,7 @@ a {
 .ant-layout-header {
     background: #fff !important;
 
-    > .trigger {
+    >.trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
@@ -92,7 +92,7 @@ a {
     background: #00a0e9;
 }
 
-.dropdown-btn > .ant-dropdown-trigger {
+.dropdown-btn>.ant-dropdown-trigger {
     &:hover {
         color: inherit;
         background: transparent;
@@ -103,6 +103,54 @@ a {
     border: none;
 }
 
-.dropdown-btn > .ant-dropdown-trigger > span {
+.dropdown-btn>.ant-dropdown-trigger>span {
     background-color: white !important;
+}
+
+.ant-select-item-option-content {
+
+    width: 100% !important;
+    color: #FFF !important;
+    display: flex;
+    height: 100%;
+
+    a {
+        color: #000 !important;
+        width: 100% !important;
+
+    }
+}
+
+.ant-select-item.ant-select-item-option {
+    background-color: transparent;
+    width: 100%;
+
+    &:hover {
+        background-color: $darkBlue;
+        color: #fff;
+
+    }
+
+    .ant-select-item-option-content {
+
+        color: #000 !important;
+
+        &:hover {
+            color: #fff !important;
+        }
+    }
+}
+
+
+.ant-select-item.ant-select-item-option.ant-select-item-option-selected {
+    background: $darkBlue !important;
+    width: 100% !important;
+    color: #FFF !important;
+    display: flex;
+    height: 100%;
+
+    a {
+        width: 100% !important;
+        color: #FFF !important
+    }
 }

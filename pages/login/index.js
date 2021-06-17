@@ -1,23 +1,25 @@
 // import PropTypes from 'prop-types';
-import { Form, Input, Row, Col, Image, Typography } from 'antd';
-import Placeholder from '@components/Placeholder';
+
+import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+
 import CustomButton from '@src/components/CustomBtn';
-import Link from 'next/link';
-import en from '@src/i18n/en';
-import ar from '@src/i18n/ar';
 import LangChanger from '@src/components/LangToggle';
-const { Text } = Typography;
+import Link from 'next/link';
+import Placeholder from '@components/Placeholder';
 import authStyles from '@styles/Auth.module.scss';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import { ConfigProvider } from 'antd';
-import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
+
+const { Text } = Typography;
+
 const Login = () => {
-    const [storageLang, setLang] = useLocalStorage('storageLang');
+    const { t } = useTranslation(['login', 'common']);
+    const router = useRouter();
     const [direction, setdirection] = useState(null);
     useEffect(() => {
-        storageLang === 'ar' ? setdirection('rtl') : setdirection('ltr');
-    }, [storageLang]);
-    const t = storageLang === 'en' ? en : ar;
+        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [router.locale]);
     const onFinish = ({ email, password }) => {
         console.log({
             email,
@@ -47,7 +49,7 @@ const Login = () => {
                     align="center"
                     direction="column"
                     className={authStyles.authRightSide}>
-                    <LangChanger setLang={setLang} abs={true} />
+                    <LangChanger abs={true} />
                     <Row type="flex" justify="center" align="middle">
                         <Col span={24}>
                             <Row justify="center">
@@ -59,7 +61,7 @@ const Login = () => {
                                 />
                             </Row>
                             <Row justify="space-around">
-                                <p className="title-1 dark-blue">{t.login}</p>
+                                <p className="title-1 dark-blue">{t('login')}</p>
                             </Row>
                             <Form
                                 name="basic"
@@ -70,14 +72,14 @@ const Login = () => {
                                 <Row justify="space-around" align="middle">
                                     <Col span={23}>
                                         <Form.Item
-                                            label={t.email}
+                                            label={t('email')}
                                             name="email"
                                             className="dark-blue mb-1"
                                             rules={[
                                                 {
                                                     required: true,
                                                     type: 'email',
-                                                    message: 'Please input your email!'
+                                                    message: t('emailError')
                                                 }
                                             ]}>
                                             <Input className={authStyles.input} />
@@ -86,18 +88,18 @@ const Login = () => {
 
                                     <Col span={23}>
                                         <Form.Item
-                                            label={t.password}
+                                            label={t('password')}
                                             className="mb-1"
                                             name="password"
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your password!'
+                                                    message: t('emptyPassword')
                                                 },
                                                 {
                                                     pattern:
                                                         /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                                                    message: 'Password too weak'
+                                                    message: t('weakPassword')
                                                 }
                                             ]}>
                                             <Input.Password className={authStyles.input} />
@@ -110,7 +112,7 @@ const Login = () => {
                                         <Form.Item>
                                             <CustomButton
                                                 htmlType="submit"
-                                                text={t.login}
+                                                text={t('login')}
                                                 className={`${authStyles.btnRegister} btn-text`}
                                                 // loading={loadingLogin}
                                             />
@@ -118,12 +120,12 @@ const Login = () => {
                                     </Col>
                                 </Row>
                                 <Text type="secondary" className="gothic">
-                                    {t.newHere}
+                                    {t('newHere')}
                                     &nbsp;
                                     <Link className="blue pointer" href="/signup">
                                         <a>
-                                            {t.register}&nbsp;
-                                            {t.now}
+                                            {t('register')}&nbsp;
+                                            {t('now')}
                                         </a>
                                     </Link>
                                 </Text>

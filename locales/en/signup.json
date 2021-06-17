@@ -1,0 +1,20 @@
+{
+    "signUpSuccessfullyMessage": "Sign up successfully, We will contact you soon",
+    "errorSignUp": "Something went wrong, please try again later",
+    "alreadyUser": "Already user?",
+    "DoctorRegistration": "Doctor Registration",
+    "DoctorName": "Name",
+    "ID": "ID",
+    "Phone": "Phone",
+    "Specialty": "Specialty",
+    "HospitalName": "Hospital",
+    "email": "Email",
+    "noHospitals": "Hospitals not found",
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "emailError": "Please input your email!",
+    "emptyPassword": "Please enter your password",
+    "weakPassword": "Weak Password",
+    "now": "now"
+}
