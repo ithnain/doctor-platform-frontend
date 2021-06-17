@@ -108,31 +108,32 @@ a {
 }
 
 .ant-select-item-option-content {
-
     width: 100% !important;
-    color: #FFF !important;
+    color: #fff !important;
     display: flex;
     height: 100%;
 
     a {
         color: #000 !important;
         width: 100% !important;
-
     }
 }
 
 .ant-select-item.ant-select-item-option {
     background-color: transparent;
     width: 100%;
+    color: #fff;
 
     &:hover {
         background-color: $darkBlue;
-        color: #fff;
 
+        * {
+            color: #fff !important;
+
+        }
     }
 
     .ant-select-item-option-content {
-
         color: #000 !important;
 
         &:hover {
@@ -141,17 +142,16 @@ a {
     }
 }
 
-
 .ant-select-item.ant-select-item-option.ant-select-item-option-selected {
     background: $darkBlue !important;
     width: 100% !important;
-    color: #FFF !important;
+    color: #fff !important;
     display: flex;
     height: 100%;
 
     a {
         width: 100% !important;
-        color: #FFF !important
+        color: #fff !important;
     }
 }
 
