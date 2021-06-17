@@ -1,20 +1,26 @@
 import { Col, ConfigProvider, Row, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 
 import Card from '../../Card';
-
-// import { useLocalStorage } from '@src/hooks/useLocalStorage';
-// import { useState } from 'react';
+import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 
 function Admin() {
     // const [direction, setdirection] = useState(null);
 
+    const { t } = useTranslation('overview');
+    const router = useRouter();
+    const [direction, setdirection] = useState(null);
+    useEffect(() => {
+        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [router.locale]);
     const { Title } = Typography;
     return (
         <Row justify="start" align="middle">
-            <ConfigProvider direction={'ltr'}>
+            <ConfigProvider direction={direction}>
                 <Col flex xs={24}>
                     <Title level={3} align="start">
-                        Latest Registration
+                        {t('adminTitle')}
                     </Title>
                 </Col>
                 <Col xs={24}>
