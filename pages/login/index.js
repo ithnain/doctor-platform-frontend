@@ -1,16 +1,17 @@
 // import PropTypes from 'prop-types';
-import { Form, Input, Row, Col, Image, Typography } from 'antd';
-import Placeholder from '@components/Placeholder';
+import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+
 import CustomButton from '@src/components/CustomBtn';
-import Link from 'next/link';
-import en from '@src/i18n/en';
-import ar from '@src/i18n/ar';
 import LangChanger from '@src/components/LangToggle';
-const { Text } = Typography;
+import Link from 'next/link';
+import Placeholder from '@components/Placeholder';
+import ar from '@src/i18n/ar';
 import authStyles from '@styles/Auth.module.scss';
+import en from '@src/i18n/en';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import { ConfigProvider } from 'antd';
-import { useState, useEffect } from 'react';
+
+const { Text } = Typography;
 const Login = () => {
     const [storageLang, setLang] = useLocalStorage('storageLang');
     const [direction, setdirection] = useState(null);

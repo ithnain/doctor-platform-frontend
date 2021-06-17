@@ -1,17 +1,19 @@
-import PropTypes from 'prop-types';
-import { Form, Input, Row, Col, Image, Typography, Select } from 'antd';
-import Placeholder from '@components/Placeholder';
-import CustomButton from '@src/components/CustomBtn';
-import Link from 'next/link';
+import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+
 import API from '@src/utils/axios';
-import en from '@src/i18n/en';
-import ar from '@src/i18n/ar';
-const { Text } = Typography;
-import authStyles from '@styles/Auth.module.scss';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import LangChanger from '@src/components/LangToggle';
 import { ConfigProvider } from 'antd';
-import { useState, useEffect } from 'react';
+import CustomButton from '@src/components/CustomBtn';
+import LangChanger from '@src/components/LangToggle';
+import Link from 'next/link';
+import Placeholder from '@components/Placeholder';
+import PropTypes from 'prop-types';
+import ar from '@src/i18n/ar';
+import authStyles from '@styles/Auth.module.scss';
+import en from '@src/i18n/en';
+import { useLocalStorage } from '@src/hooks/useLocalStorage';
+
+const { Text } = Typography;
 
 const SignUp = ({ hospitals }) => {
     const [storageLang, setLang] = useLocalStorage('storageLang');

@@ -106,3 +106,33 @@ a {
 .dropdown-btn > .ant-dropdown-trigger > span {
     background-color: white !important;
 }
+
+.ant-btn.redBtn {
+    &--outline {
+        border: solid 1px #ef2323;
+
+        &:hover {
+            background-color: #ef2323;
+            color: #fff;
+            border: none;
+            outline: none;
+        }
+    }
+
+    color: #ef2323;
+    transition: 0.2s all ease-in-out;
+}
+
+.ant-btn.greenBtn {
+    background-color: #12bf5c;
+    color: #fff;
+    transition: 0.2s all ease-in-out;
+
+    &:hover {
+        background-color: #12bf5c;
+        color: #fff;
+        filter: opacity(80%);
+        border: none;
+        outline: none;
+    }
+}
