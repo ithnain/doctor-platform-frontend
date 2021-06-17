@@ -79,12 +79,7 @@ function SliderLayout({ title, keywords, description, children }) {
                     </Col>
                 </Row>
                 <Content className={styles.content}>
-                    <div>
-                        <br />
-                        content
-                        <br />
-                        {children}
-                    </div>
+                    <>{children}</>
                 </Content>
                 {/* <Footer className="textCenter">Ant Design ©2018 Created by Ant UED</Footer> */}
             </Layout>
