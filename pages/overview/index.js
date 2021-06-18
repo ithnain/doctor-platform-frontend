@@ -1,7 +1,7 @@
+import AdminOverview from '@src/components/Admin/Overview';
 //import PropTypes from 'prop-types';
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
-import AdminOverview from '@src/components/Admin/Overview/Admin';
 function Overview() {
     return (
         <SliderLayout

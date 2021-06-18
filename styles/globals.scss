@@ -31,7 +31,7 @@ a {
 }
 
 .ant-layout {
-    background: #fff !important;
+    background: $white !important;
 }
 
 .ant-layout-sider-trigger {
@@ -62,9 +62,9 @@ a {
 }
 
 .ant-layout-header {
-    background: #fff !important;
+    background: $white !important;
 
-    >.trigger {
+    > .trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
@@ -89,10 +89,10 @@ a {
 
 .gutter-box {
     padding: 8px 0;
-    background: #00a0e9;
+    // background: #00a0e9;
 }
 
-.dropdown-btn>.ant-dropdown-trigger {
+.dropdown-btn > .ant-dropdown-trigger {
     &:hover {
         color: inherit;
         background: transparent;
@@ -103,18 +103,18 @@ a {
     border: none;
 }
 
-.dropdown-btn>.ant-dropdown-trigger>span {
-    background-color: white !important;
+.dropdown-btn > .ant-dropdown-trigger > span {
+    background-color: $white !important;
 }
 
 .ant-select-item-option-content {
     width: 100% !important;
-    color: #fff !important;
+    color: $white !important;
     display: flex;
     height: 100%;
 
     a {
-        color: #000 !important;
+        color: $black !important;
         width: 100% !important;
     }
 }
@@ -122,22 +122,21 @@ a {
 .ant-select-item.ant-select-item-option {
     background-color: transparent;
     width: 100%;
-    color: #fff;
+    color: $white;
 
     &:hover {
         background-color: $darkBlue;
 
         * {
-            color: #fff !important;
-
+            color: $white !important;
         }
     }
 
     .ant-select-item-option-content {
-        color: #000 !important;
+        color: $black !important;
 
         &:hover {
-            color: #fff !important;
+            color: $white !important;
         }
     }
 }
@@ -145,40 +144,40 @@ a {
 .ant-select-item.ant-select-item-option.ant-select-item-option-selected {
     background: $darkBlue !important;
     width: 100% !important;
-    color: #fff !important;
+    color: $white !important;
     display: flex;
     height: 100%;
 
     a {
         width: 100% !important;
-        color: #fff !important;
+        color: $white !important;
     }
 }
 
 .ant-btn.redBtn {
     &--outline {
-        border: solid 1px #ef2323;
+        border: solid 1px $danger;
 
         &:hover {
-            background-color: #ef2323;
-            color: #fff;
+            background-color: $danger;
+            color: $white;
             border: none;
             outline: none;
         }
     }
 
-    color: #ef2323;
+    color: $danger;
     transition: 0.2s all ease-in-out;
 }
 
 .ant-btn.greenBtn {
-    background-color: #12bf5c;
-    color: #fff;
+    background-color: $success;
+    color: $white;
     transition: 0.2s all ease-in-out;
 
     &:hover {
-        background-color: #12bf5c;
-        color: #fff;
+        background-color: $success;
+        color: $white;
         filter: opacity(80%);
         border: none;
         outline: none;
