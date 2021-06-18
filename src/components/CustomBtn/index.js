@@ -1,7 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './Custom.module.scss';
+
 function CustomButton({ text, handleClick, loading, className, ...props }) {
     return (
         <Button
