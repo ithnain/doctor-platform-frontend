@@ -1,0 +1,38 @@
+@import './colors';
+@import './responsive';
+
+.authLeftSide {
+    background-color: $darkBlue;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: none;
+
+    @include for-tablet-up {
+        display: flex;
+    }
+}
+
+.authRightSide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include for-tablet-up {
+        display: flex;
+        height: auto;
+    }
+}
+
+.btnRegister {
+    background-color: $pinkBG;
+    width: 50%;
+    color: #fff;
+}
+
+.input {
+    border-radius: 7px;
+    background-color: $mediumGrey;
+}

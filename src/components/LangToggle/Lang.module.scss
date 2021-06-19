@@ -1,0 +1,12 @@
+@import '@styles/colors';
+
+.languageDrop {
+    position: absolute;
+    top: 0;
+    right: 5px;
+
+    a {
+        width: 50px;
+        color: #000;
+    }
+}

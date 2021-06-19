@@ -1,18 +1,18 @@
+import AdminOverview from '@src/components/Admin/Overview';
 //import PropTypes from 'prop-types';
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
-
-function Doctor() {
+function Overview() {
     return (
         <SliderLayout
-            title={'Doctor'}
+            title={'Overview'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor page'}>
-            Doctor
+            description={'this is the doctor overview'}>
+            <AdminOverview />
         </SliderLayout>
     );
 }
 
-Doctor.propTypes = {};
+Overview.propTypes = {};
 
-export default Doctor;
+export default Overview;

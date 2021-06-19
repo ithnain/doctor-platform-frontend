@@ -1,0 +1,99 @@
+@import '@styles/colors';
+
+.sider {
+    overflow: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: $mediumGrey;
+
+    &__logo {
+        height: 32px;
+        margin: 16px auto;
+        display: flex;
+        justify-content: center;
+        background-color: $mediumGrey;
+    }
+
+    &__menu {
+        background-color: transparent;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 66px);
+        justify-content: flex-start;
+        align-items: center;
+        position: relative;
+
+        .lastMenuItem {
+            margin-top: auto;
+        }
+
+        &__item {
+            padding: 5px;
+            justify-content: center !important;
+            align-items: center;
+            width: 80% !important;
+            height: 14% !important;
+            border-radius: 5px !important;
+
+            > img:first-of-type {
+                font-size: 3vw;
+            }
+
+            > span {
+                margin: 0 !important;
+
+                &:first-of-type {
+                    display: grid !important;
+                    grid-template-rows: 60% 20%;
+                    font-weight: bold;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.17;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: $darkBlue;
+                }
+            }
+        }
+    }
+}
+
+.header {
+    padding: 0 4.4vw 0 2.3vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset;
+
+    &__notifications {
+        margin-right: 3.1vw;
+        font-size: 1vw;
+    }
+
+    &__img {
+        img {
+            border-radius: 50%;
+        }
+
+        cursor: pointer;
+        display: flex;
+        border-radius: 50%;
+        margin: 0 5px;
+        border: solid 2px #f5f6fb;
+        box-shadow: 0 5px 10px 0 rgba(102, 111, 232, 0.2);
+    }
+}
+
+.content {
+    margin: 0 4.4vw 0 2.3vw;
+    overflow: initial;
+
+    > div:first-of-type {
+        padding-top: 24px;
+        background: #fff;
+        text-align: center;
+    }
+}

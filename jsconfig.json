@@ -6,7 +6,7 @@
             "@components/*": ["./src/components/*"],
             "@assets/*": ["./public/assets/*"],
             "@redux/*": ["./src/redux/*"],
-            "@styles/*": ["./styles/*"],
+            "@styles/*": ["./styles/*"]
         }
     },
     "exclude": ["node_modules", "build"]

@@ -1,0 +1,31 @@
+.card {
+    width: 100%;
+    height: 225px;
+    // margin: 30px 5.2px 104px 31.3px;
+    padding: 8px 11.8px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px 0 #fafafa;
+    border: solid 1px rgba(102, 111, 232, 0.08);
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px 0px #fafafa;
+
+    &__content {
+        height: 100%;
+    }
+
+    &__img {
+        img {
+            border-radius: 50%;
+        }
+    }
+
+    &__btn {
+        width: 100%;
+        min-width: 65px;
+        padding: 0;
+        text-align: center;
+        height: 36px;
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+}
