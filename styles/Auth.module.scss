@@ -20,6 +20,10 @@
     justify-content: center;
     align-items: center;
 
+    > div:first-of-type {
+        width: 100%;
+    }
+
     @include for-tablet-up {
         display: flex;
         height: auto;
@@ -29,7 +33,7 @@
 .btnRegister {
     background-color: $pinkBG;
     width: 50%;
-    color: #fff;
+    color: $white;
 }
 
 .input {

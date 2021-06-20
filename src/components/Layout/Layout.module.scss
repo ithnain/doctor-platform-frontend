@@ -27,6 +27,12 @@
 
         .lastMenuItem {
             margin-top: auto;
+
+            button {
+                background-color: transparent;
+                border: none;
+                outline: none;
+            }
         }
 
         &__item {
@@ -67,6 +73,7 @@
     align-items: center;
     height: 48px;
     box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset;
+    overflow: hidden;
 
     &__notifications {
         margin-right: 3.1vw;
@@ -82,7 +89,7 @@
         display: flex;
         border-radius: 50%;
         margin: 0 5px;
-        border: solid 2px #f5f6fb;
+        border: solid 2px $greyShadow;
         box-shadow: 0 5px 10px 0 rgba(102, 111, 232, 0.2);
     }
 }
@@ -93,7 +100,7 @@
 
     > div:first-of-type {
         padding-top: 24px;
-        background: #fff;
+        background: $white;
         text-align: center;
     }
 }

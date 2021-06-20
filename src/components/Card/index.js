@@ -3,7 +3,7 @@ import { Space, Typography } from 'antd';
 
 import CustomButton from '@components/CustomBtn';
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 // import PropTypes from 'prop-types';
 import styles from './Card.module.scss';
 
@@ -33,7 +33,7 @@ const Card = () => {
                                     <Text>
                                         Ant Design: <span>value</span>
                                     </Text>
-                                    <Link href="/overview">View resume</Link>
+                                    {/* <Link href="/overview">View resume</Link> */}
                                 </Space>
                             </>
                         </Col>

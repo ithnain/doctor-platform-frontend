@@ -3,11 +3,13 @@
 import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
+import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import authStyles from '@styles/Auth.module.scss';
+import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -17,6 +19,8 @@ const Login = () => {
     const { t } = useTranslation(['login', 'common']);
     const router = useRouter();
     const [direction, setdirection] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
     }, [router.locale]);
@@ -25,6 +29,37 @@ const Login = () => {
             email,
             password
         });
+
+        setLoading(true);
+
+        API.post('auth/signin', {
+            email,
+            password
+        })
+            .then((res) => {
+                try {
+                    setLoading(false);
+                    console.log(res);
+
+                    if (res?.status === 201) {
+                        // dispatch(setUser(res.data));
+                        // toastr.success('User registed successfully');
+                        router.push('/overview');
+                    }
+                } catch (error) {
+                    toastr.error('something went wrong');
+                }
+            })
+            .catch((err) => {
+                if (err.response?.data?.message) {
+                    toastr.error(err.response.data?.message);
+                } else if (err.message) {
+                    toastr.error(err.message);
+                } else if (err.request) {
+                    toastr.error(err.request);
+                }
+                setLoading(false);
+            });
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -49,9 +84,9 @@ const Login = () => {
                     align="center"
                     direction="column"
                     className={authStyles.authRightSide}>
-                    <LangChanger abs={true} />
                     <Row type="flex" justify="center" align="middle">
-                        <Col span={24}>
+                        <LangChanger abs={true} />
+                        <Col span={18}>
                             <Row justify="center">
                                 <Image
                                     preview={false}
@@ -114,7 +149,7 @@ const Login = () => {
                                                 htmlType="submit"
                                                 text={t('login')}
                                                 className={`${authStyles.btnRegister} btn-text`}
-                                                // loading={loadingLogin}
+                                                loading={loading}
                                             />
                                         </Form.Item>
                                     </Col>
