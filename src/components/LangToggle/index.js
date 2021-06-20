@@ -71,7 +71,6 @@ function LangChanger({ abs }) {
 }
 
 LangChanger.propTypes = {
-    setLang: PropTypes.func.isRequired,
     abs: PropTypes.bool.isRequired
 };
 

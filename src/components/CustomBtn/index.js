@@ -17,7 +17,7 @@ function CustomButton({ text, handleClick, loading, className, ...props }) {
 
 CustomButton.propTypes = {
     text: PropTypes.string.isRequired,
-    handleClick: PropTypes.func.isRequired,
+    handleClick: PropTypes.func,
     loading: PropTypes.bool.isRequired,
     className: PropTypes.string
 };

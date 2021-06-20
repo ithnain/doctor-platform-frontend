@@ -26,6 +26,10 @@ function SliderLayout({ title, keywords, description, children }) {
         setCollapsed(!collapsed);
     };
     const role = 'admin';
+    const logoutHandler = () => {
+        dispatch(clearUser());
+        router.push('/login');
+    };
     return (
         <Layout>
             <Head>
@@ -63,15 +67,13 @@ function SliderLayout({ title, keywords, description, children }) {
                     ))}
 
                     <Menu.Item
+                        onClick={logoutHandler}
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
                         <span className="nav-text">
                             <button
                                 // href="/login"
-                                onClick={() => {
-                                    dispatch(clearUser());
-                                    router.push('/login');
-                                }}>
+                                handleClick={logoutHandler}>
                                 Log out
                             </button>
                         </span>

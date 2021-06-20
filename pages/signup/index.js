@@ -10,6 +10,7 @@ import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
 import { setUser } from '@redux/actions/user';
+import toastr from 'toastr';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -56,17 +57,33 @@ const SignUp = ({ hospitals }) => {
             role: 'DOCTOR'
         })
             .then((res) => {
-                setLoading(false);
-                console.log(res);
-                dispatch(setUser(res.data));
-                router.push('/overview');
+                try {
+                    setLoading(false);
+                    console.log(res);
+
+                    if (res?.status === 201) {
+                        dispatch(setUser(res.data));
+                        // router.push('/login');
+                        toastr.success('User registed successfully');
+                    }
+                } catch (error) {
+                    toastr.error('something went wrong');
+                }
             })
             .catch((err) => {
-                console.log(err);
+                if (err.response?.data?.message) {
+                    toastr.error(err.response.data?.message);
+                } else if (err.message) {
+                    toastr.error(err.message);
+                } else if (err.request) {
+                    toastr.error(err.request);
+                }
                 setLoading(false);
             });
     };
     const onFinishFailed = (errorInfo) => {
+        toastr.warning(errorInfo.data.message);
+
         console.log('Failed:', errorInfo);
     };
     return (
@@ -312,8 +329,6 @@ export const getStaticProps = async () => {
     }
 };
 SignUp.propTypes = {
-    lang: PropTypes.string.isRequired,
-    setLang: PropTypes.func.isRequired,
     hospitals: PropTypes.array.isRequired
 };
 export default SignUp;
