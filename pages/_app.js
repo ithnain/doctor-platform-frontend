@@ -1,19 +1,24 @@
-import { Provider } from 'react-redux';
-import PropTypes from 'prop-types';
 import '../styles/globals.scss';
-import store from '@redux/store';
 import 'normalize.css';
 import 'antd/dist/antd.css';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
+import 'toastr/toastr.scss';
+
+import { PersistGate } from 'redux-persist/integration/react';
+import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
+import { persistStore } from 'redux-persist';
+import { useStore } from '@redux/store';
 
 function MyApp({ Component, pageProps }) {
-    const [storageLang, setLang] = useLocalStorage('storageLang', 'en');
-    if (!storageLang) {
-        setLang('en');
-    }
+    const store = useStore(pageProps.initialReduxState);
+    const persistor = persistStore(store, {}, function () {
+        persistor.persist();
+    });
     return (
         <Provider store={store}>
-            <Component {...pageProps} lang={storageLang} setLang={setLang} />
+            <PersistGate loading={<div>loading</div>} persistor={persistor}>
+                <Component {...pageProps} />
+            </PersistGate>
         </Provider>
     );
 }

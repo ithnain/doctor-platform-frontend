@@ -3,7 +3,7 @@
 import SliderLayout from '@components/Layout';
 
 function Patients() {
-    return <SliderLayout activeTab={'3'}>Patients</SliderLayout>;
+    return <SliderLayout>Patients</SliderLayout>;
 }
 
 Patients.propTypes = {};

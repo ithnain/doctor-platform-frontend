@@ -1,0 +1,10 @@
+{
+    "locales": ["en", "ar"],
+    "defaultLocale": "en",
+    "pages": {
+        "*": ["common"],
+        "/overview": ["overview"],
+        "/login": ["login"],
+        "/signup": ["signup"]
+    }
+}

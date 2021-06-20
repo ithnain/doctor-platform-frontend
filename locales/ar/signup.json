@@ -1,0 +1,23 @@
+{
+    "signUpSuccessfullyMessage": "Sign up successfully, We will contact you soon",
+    "errorSignUp": "Something went wrong, please try again later",
+    "alreadyUser": "مشترك بالفعل",
+    "DoctorRegistration": "Doctor Registration",
+    "DoctorName": "اسم الطبيب",
+    "ID": "رقم البطاقة",
+    "Phone": "الرقم",
+    "Specialty": "التخصص",
+    "HospitalName": "اسم المستشفى",
+    "noHospitals": "Hospitals not found",
+    "login": "تسجيل الدخول",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "email": "البريد الالكتروني",
+    "emailError": "من فضلك ادخل كلمة السر",
+    "emptyPassword": "من فضلك ادخل كامة المرور",
+    "weakPassword": "كلمة مرور ضعيفة",
+    "now": "الأن",
+    "male": "Male",
+    "female": "Female",
+    "gender": "Gender"
+}

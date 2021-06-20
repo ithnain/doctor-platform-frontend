@@ -1,14 +1,11 @@
 import { useEffect } from 'react';
-// import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 function NotFoundPage() {
     const router = useRouter();
     useEffect(() => {
-        router.replace('/');
+        router.replace('/overview');
     }, []);
     return <></>;
 }
-
-NotFoundPage.propTypes = {};
 
 export default NotFoundPage;
