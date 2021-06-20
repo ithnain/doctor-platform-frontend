@@ -64,7 +64,7 @@ a {
 .ant-layout-header {
     background: $white !important;
 
-    > .trigger {
+    >.trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
@@ -92,7 +92,7 @@ a {
     // background: #00a0e9;
 }
 
-.dropdown-btn > .ant-dropdown-trigger {
+.dropdown-btn>.ant-dropdown-trigger {
     &:hover {
         color: inherit;
         background: transparent;
@@ -103,7 +103,7 @@ a {
     border: none;
 }
 
-.dropdown-btn > .ant-dropdown-trigger > span {
+.dropdown-btn>.ant-dropdown-trigger>span {
     background-color: $white !important;
 }
 
@@ -181,5 +181,43 @@ a {
         filter: opacity(80%);
         border: none;
         outline: none;
+    }
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item {
+    border-radius: 8px !important;
+    border: solid 1px $borderGrey !important;
+    background-color: $white !important;
+    border: solid 1px $borderGrey !important;
+
+    &:hover {
+        border: solid 1px $darkBlue !important;
+
+    }
+
+    a {
+        &:hover {
+            color: $darkBlue !important;
+        }
+    }
+}
+
+.ant-pagination-prev button,
+.ant-pagination-next button {
+    border-radius: 8px !important;
+
+    &:hover {
+        color: $darkBlue !important;
+
+    }
+
+}
+
+.ant-pagination-item-active {
+    border: solid 1px $darkBlue !important;
+
+    a {
+        color: $darkBlue !important;
     }
 }

@@ -1,7 +1,7 @@
 import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import API from '@src/utils/axios';
+import API from '@utils/axios';
 import { ConfigProvider } from 'antd';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
@@ -18,19 +18,47 @@ const SignUp = ({ hospitals }) => {
     const { t } = useTranslation('signup');
     const router = useRouter();
     const [direction, setdirection] = useState(null);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
     }, [router.locale]);
-    const onFinish = ({ email, password, name, nationalId, specialty, phoneNumber, hospital }) => {
-        console.log({
+    const onFinish = ({
+        email,
+        password,
+        name,
+        nationalId,
+        specialty,
+        phoneNumber,
+        hospital,
+        gender
+    }) => {
+        setLoading(true);
+        let selectedHospital;
+        hospitals.map((h) => {
+            if (h.id === hospital) {
+                selectedHospital = h;
+            } else {
+                return;
+            }
+        });
+        API.post('auth/signup', {
             email,
             password,
             name,
             nationalId,
             specialty,
             phoneNumber,
-            hospital
-        });
+            hospital: selectedHospital,
+            gender,
+            role: 'DOCTOR'
+        })
+            .then(() => {
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -109,7 +137,7 @@ const SignUp = ({ hospitals }) => {
                                 </Row>
 
                                 <Row justify="space-around" align="middle">
-                                    <Col span={23}>
+                                    <Col span={11}>
                                         <Form.Item
                                             label={t('Phone')}
                                             name="phoneNumber"
@@ -128,6 +156,27 @@ const SignUp = ({ hospitals }) => {
                                                 className={authStyles.input}
                                                 placeholder="5xxxxxxxx"
                                             />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={11}>
+                                        <Form.Item
+                                            label={t('gender')}
+                                            name="gender"
+                                            className="dark-blue mb-1"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please input your Gender'
+                                                }
+                                            ]}>
+                                            <Select size="medium">
+                                                <Select.Option key={'male'} value={'male'}>
+                                                    {t('male')}
+                                                </Select.Option>
+                                                <Select.Option key={'female'} value={'female'}>
+                                                    {t('female')}
+                                                </Select.Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col>
                                 </Row>
@@ -219,7 +268,7 @@ const SignUp = ({ hospitals }) => {
                                         htmlType="submit"
                                         text="Register"
                                         className={`${authStyles.btnRegister} btn-text`}
-                                        // loading={loadingSignUp}
+                                        loading={loading}
                                     />
                                 </Form.Item>
                                 <Text type="secondary" className="gothic">

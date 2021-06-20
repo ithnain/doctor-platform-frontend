@@ -49,9 +49,9 @@ const Login = () => {
                     align="center"
                     direction="column"
                     className={authStyles.authRightSide}>
-                    <LangChanger abs={true} />
                     <Row type="flex" justify="center" align="middle">
-                        <Col span={24}>
+                        <LangChanger abs={true} />
+                        <Col span={18}>
                             <Row justify="center">
                                 <Image
                                     preview={false}

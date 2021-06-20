@@ -1,13 +1,11 @@
 import { Col, ConfigProvider, Row, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import Card from '../../Card';
+import Card from '@components/Card';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
 function Admin() {
-    // const [direction, setdirection] = useState(null);
-
     const { t } = useTranslation('overview');
     const router = useRouter();
     const [direction, setdirection] = useState(null);

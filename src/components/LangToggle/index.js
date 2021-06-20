@@ -31,9 +31,6 @@ function LangChanger({ abs }) {
                                 defaultValue={router.locale}
                                 bordered={false}
                                 className="language-drop"
-                                // onChange={(lang) => {
-                                //     handleChangeLang(lang);
-                                // }}
                                 size="small">
                                 <Option value="en">
                                     <Link locale="en" href={router.pathname}>
@@ -55,9 +52,6 @@ function LangChanger({ abs }) {
                         defaultValue={router.locale}
                         bordered={false}
                         className="language-drop"
-                        // onChange={(lang) => {
-                        //     handleChangeLang(lang);
-                        // }}
                         size="small">
                         <Option value="en">
                             <Link locale="en" href={router.pathname}>
