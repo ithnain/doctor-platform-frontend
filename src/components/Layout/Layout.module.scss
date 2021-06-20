@@ -27,6 +27,12 @@
 
         .lastMenuItem {
             margin-top: auto;
+
+            button {
+                background-color: transparent;
+                border: none;
+                outline: none;
+            }
         }
 
         &__item {

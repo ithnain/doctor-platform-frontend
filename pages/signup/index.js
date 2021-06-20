@@ -9,16 +9,19 @@ import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
+import { setUser } from '@redux/actions/user';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
 const { Text } = Typography;
-
 const SignUp = ({ hospitals }) => {
+    const dispatch = useDispatch();
     const { t } = useTranslation('signup');
     const router = useRouter();
     const [direction, setdirection] = useState(null);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
     }, [router.locale]);
@@ -52,8 +55,11 @@ const SignUp = ({ hospitals }) => {
             gender,
             role: 'DOCTOR'
         })
-            .then(() => {
+            .then((res) => {
                 setLoading(false);
+                console.log(res);
+                dispatch(setUser(res.data));
+                router.push('/overview');
             })
             .catch((err) => {
                 console.log(err);

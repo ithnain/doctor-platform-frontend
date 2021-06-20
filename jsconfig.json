@@ -7,8 +7,7 @@
             "@assets/*": ["./public/assets/*"],
             "@redux/*": ["./src/redux/*"],
             "@styles/*": ["./styles/*"],
-                        "@utils/*": ["./src/utils/*"]
-
+            "@utils/*": ["./src/utils/*"]
         }
     },
     "exclude": ["node_modules", "build"]
