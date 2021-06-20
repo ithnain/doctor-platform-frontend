@@ -16,5 +16,8 @@
     "emailError": "من فضلك ادخل كلمة السر",
     "emptyPassword": "من فضلك ادخل كامة المرور",
     "weakPassword": "كلمة مرور ضعيفة",
-    "now": "الأن"
+    "now": "الأن",
+    "male": "Male",
+    "female": "Female",
+    "gender": "Gender"
 }

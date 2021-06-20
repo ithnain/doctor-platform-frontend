@@ -16,5 +16,8 @@
     "emailError": "Please input your email!",
     "emptyPassword": "Please enter your password",
     "weakPassword": "Weak Password",
-    "now": "now"
+    "now": "now",
+    "male": "Male",
+    "female": "Female",
+    "gender": "Gender"
 }

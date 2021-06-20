@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import { Layout, Menu, Row, Col } from 'antd';
 import 'antd/dist/antd.css';
+
+import { Col, Layout, Menu, Row } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+
+import Head from 'next/head';
+import HeaderMenu from './Header';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import styles from './Layout.module.scss';
-const { Content, Sider, Header } = Layout;
-import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { clearUser } from '@redux/actions/user';
 import sideNavIcons from './sidenav.json';
-import HeaderMenu from './Header';
-function SliderLayout({ title, keywords, description, children, btnText }) {
+import styles from './Layout.module.scss';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+
+const { Content, Sider, Header } = Layout;
+function SliderLayout({ title, keywords, description, children }) {
+    const dispatch = useDispatch();
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
@@ -19,16 +25,11 @@ function SliderLayout({ title, keywords, description, children, btnText }) {
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-    // TODO: // change role later
-    const role = 'doctor';
-    const [showAddPatientBtn, setShowAddPatientBtn] = useState(false)
-
-    useEffect(() => {
-        if(role === 'doctor' && path?.includes('doctor')){
-            setShowAddPatientBtn(true)
-        }
-    }, [role])
-
+    const role = 'admin';
+    const logoutHandler = () => {
+        dispatch(clearUser());
+        router.push('/login');
+    };
     return (
         <Layout>
             <Head>
@@ -66,10 +67,15 @@ function SliderLayout({ title, keywords, description, children, btnText }) {
                     ))}
 
                     <Menu.Item
+                        onClick={logoutHandler}
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
                         <span className="nav-text">
-                            <Link href="/cases">Log out</Link>
+                            <button
+                                // href="/login"
+                                handleClick={logoutHandler}>
+                                Log out
+                            </button>
                         </span>
                     </Menu.Item>
                 </Menu>
