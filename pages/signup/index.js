@@ -63,8 +63,10 @@ const SignUp = ({ hospitals }) => {
 
                     if (res?.status === 201) {
                         dispatch(setUser(res.data));
-                        // router.push('/login');
                         toastr.success('User registed successfully');
+                        setTimeout(() => {
+                            router.push('/login');
+                        }, 2000);
                     }
                 } catch (error) {
                     toastr.error('something went wrong');
