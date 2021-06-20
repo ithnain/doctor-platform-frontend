@@ -1,0 +1,22 @@
+[
+    {
+        "name_ar": "النوع الأول",
+        "name_en": "Type 1",
+        "id": "1"
+    },
+    {
+        "name_ar": "النوع الثاني",
+        "name_en": "Type 2",
+        "id": "2"
+    },
+    {
+        "name_ar": "سكري الحمل",
+        "name_en": "GDM",
+        "id": "3"
+    },
+    {
+        "name_ar": "قبل السكري",
+        "name_en": "Pre-Diabetes",
+        "id": "4"
+    }
+]

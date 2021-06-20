@@ -5,6 +5,7 @@
         "*": ["common"],
         "/overview": ["overview"],
         "/login": ["login"],
-        "/signup": ["signup"]
+        "/signup": ["signup"],
+        "/doctor": ["doctor"]
     }
 }

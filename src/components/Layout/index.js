@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { Layout, Menu, Row, Col } from 'antd';
@@ -11,15 +11,24 @@ const { Content, Sider, Header } = Layout;
 import { useRouter } from 'next/router';
 import sideNavIcons from './sidenav.json';
 import HeaderMenu from './Header';
-function SliderLayout({ title, keywords, description, children }) {
+function SliderLayout({ title, keywords, description, children, btnText }) {
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
-    console.log(path);
+    console.log(path, "Path");
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-    const role = 'admin';
+    // TODO: // change role later
+    const role = 'doctor';
+    const [showAddPatientBtn, setShowAddPatientBtn] = useState(false)
+
+    useEffect(() => {
+        if(role === 'doctor' && path?.includes('doctor')){
+            setShowAddPatientBtn(true)
+        }
+    }, [role])
+
     return (
         <Layout>
             <Head>
@@ -74,7 +83,7 @@ function SliderLayout({ title, keywords, description, children }) {
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu />
+                            <HeaderMenu btnText={btnText} showAddPatientBtn={showAddPatientBtn}  />
                         </Header>
                     </Col>
                 </Row>

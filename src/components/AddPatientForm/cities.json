@@ -1,0 +1,27 @@
+[
+    {
+        "name_ar": "الرياض",
+        "name_en": "Riyadh",
+        "id": "1"
+    },
+    {
+        "name_ar": "المدينة",
+        "name_en": "Madinah",
+        "id": "2"
+    },
+    {
+        "name_ar": "مكة",
+        "name_en": "Makkah",
+        "id": "3"
+    },
+    {
+        "name_ar": "جدة",
+        "name_en": "Jeddah",
+        "id": "4"
+    },
+    {
+        "name_ar": "أبها",
+        "name_en": "Abha",
+        "id": "5"
+    }
+]

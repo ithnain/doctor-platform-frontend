@@ -1,22 +1,18 @@
 //import PropTypes from 'prop-types';
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
-import useTranslation from 'next-translate/useTranslation';
-
-
-function Doctor() {
-    const { t } = useTranslation(['doctor']);
+import AddPatientForm from 'src/components/AddPatientForm'
+function createPatient() {
     return (
         <SliderLayout
             title={'Doctor'}
             keywords={'doctor,platform,any word'}
-            btnText={t('registerPatient')}
             description={'this is the doctor page'}>
-            Doctor
+            <AddPatientForm />
         </SliderLayout>
     );
 }
 
-Doctor.propTypes = {};
+createPatient.propTypes = {};
 
-export default Doctor;
+export default createPatient;

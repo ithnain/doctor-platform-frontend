@@ -1,0 +1,37 @@
+[
+    {
+        "name_ar": "المريض نفسه",
+        "name_en": "The patient himself",
+        "id": "Patient"
+    },
+    {
+        "name_ar": "والد المريض",
+        "name_en": "Father of the Patient",
+        "id": "Father"
+    },
+    {
+        "name_ar": "والدة المريض",
+        "name_en": "Mother of the Patient",
+        "id": "Mother"
+    },
+    {
+        "name_ar": "أخ المريض",
+        "name_en": "Brother of the Patient",
+        "id": "Brother"
+    },
+    {
+        "name_ar": "أخت المريض",
+        "name_en": "Sister of the Patient",
+        "id": "Sister"
+    },
+    {
+        "name_ar": "ابن المريض",
+        "name_en": "Son of the Patient",
+        "id": "Son"
+    },
+    {
+        "name_ar": "ابنة المريض",
+        "name_en": "Daughter of the Patient",
+        "id": "Daughter"
+    }
+]

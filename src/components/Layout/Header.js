@@ -9,13 +9,25 @@ import Link from 'next/link';
 import styles from './Layout.module.scss';
 import { Typography, Badge, Menu, Dropdown } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
+import CustomButton from '../CustomBtn';
+import useTranslation from 'next-translate/useTranslation';
 
-function Header() {
+function Header({ showAddPatientBtn, btnText }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
+    const { t } = useTranslation(['doctor']);
+
+    console.log(t('dddd'));
+
     // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
+            {showAddPatientBtn ? (
+                <span className={styles.header__btn}>
+                    <Link href={`/create-patient`} className={styles.linkText}>{btnText}</Link>
+                </span>
+            ) : null}
+
             <div className={styles.header__notifications}>
                 <Badge size="small" offset={[0, 12]} count={5}>
                     {/* <BellOutlined /> */}
