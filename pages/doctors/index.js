@@ -33,31 +33,31 @@ function Doctors() {
                     </Col>{' '}
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="space-between" align="middle">
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>{' '}
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>{' '}
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
-                            <Col xs={12} md={{ span: 8 }}>
+                            <Col xs={24} md={{ span: 8 }}>
                                 <Card></Card>
                             </Col>
                         </Row>
