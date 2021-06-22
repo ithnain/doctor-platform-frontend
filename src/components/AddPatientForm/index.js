@@ -15,23 +15,33 @@ import cities from "./cities.json";
 import types from "./types.json";
 import WTCP from "./WTCP.json";
 import { registerPatient } from '@redux/actions/patient';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
-
+import { useRouter } from "next/router";
 import styles  from './patient-form.module.scss'
 import CustomButton from "../CustomBtn";
 import { api } from "@src/utils/network";
+import { clearUser } from "@src/redux/actions/user";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const index = () => {
   const { t } = useTranslation(['createPatient', 'common']);
   const [form] = Form.useForm();
+  const router = useRouter()
   const dispatch = useDispatch();
- 
-  const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([])
+  const user = useSelector(state => state.user)
+  const [errorsCreatingPatient, setErrorsCreatingPatient] = useState('')
   const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  console.log(api.defaults.headers)
+  useEffect(() => {
+    if(!user || !user.accessToken){
+      dispatch(clearUser())
+      router.push("/login");
+    }
+  }, [user])
 
   useEffect(() => {
     if(createdPatientSuccess){
@@ -51,14 +61,12 @@ const index = () => {
   };
 
   useEffect(() => {
-    if (errorsCreatingPatient?.length) {
+    if (errorsCreatingPatient) {
       notification.error({
         message: t("Error Creating patient"),
-        // description: errorsCreatingPatient.join(" . \n "),
+        description: errorsCreatingPatient,
       });
     }
-
-    return () => false;
   }, [errorsCreatingPatient]);
 
   const onFinish = async (values) => {
@@ -100,29 +108,24 @@ const index = () => {
       isOtherDiabetesComplications,
       otherHealthIssues,
       otherDiabetesComplications,
+      I_C: `${values.i}:${values.c}`
     };
+
     try {
       setLoading(true)
-      const res = await api.post('patient/createPatient', data)
-      console.log("====")
-      console.log(res.data)
-      console.log("====")
+      const res = await api.post('patient/createPatient', data, {headers: {Authorization: `Bearer ${user.accessToken}`}})
       if(res.status === 201){
         dispatch(registerPatient(res.data));
         setCreatedPatientSuccess(true)
         setLoading(false)
       }
     } catch (error) {
-      console.log("---- ERROR")
-      if(error?.response?.data?.message){
-        console.log(error.response.data.message)
-        alert(error.response.data.message)
-        setErrorsCreatingPatient(error.response.data.message)
+      if(error?.response?.data?.error?.message){
+        // TO DO  if RTL ? or LTR
+        setErrorsCreatingPatient(error.response.data.error.message.en)
+      }else {
+        setErrorsCreatingPatient('Something went wrong')
       }
-      console.log(error)
-      console.log(error.response)
-      console.log(error.response.data)
-      console.log(error.response.data.message)
       setLoading(false)
     }
     
@@ -218,6 +221,7 @@ const index = () => {
                   {
                     required: true,
                     message: "Please input patient age",
+                    
                   },
                 ]}
               >
@@ -265,6 +269,7 @@ const index = () => {
                   },
                 ]}
               >
+                {/* Style needed to handle ltr && rtl */}
                 <Radio.Group style={{textAlign: 'left'}}>
                   <Space direction="vertical">
                     <Radio value="INSULIN">
@@ -374,11 +379,11 @@ const index = () => {
                 ]}
               >
                 <Space align="start">
-                  <Form.Item name="i">
+                  <Form.Item name="i" >
                 <Input />
                   </Form.Item>
                 <span >:</span>
-                <Form.Item name="c">
+                <Form.Item name="c" >
                 <Input />
                 </Form.Item>
                 </Space>
@@ -491,7 +496,7 @@ const index = () => {
                 </Checkbox.Group>
               </Form.Item>
               <Form.Item
-                name="notes"
+                name="note"
                 label={
                   <p className={styles.label_form}>
                     {t("Doctor recommendation & notes")}

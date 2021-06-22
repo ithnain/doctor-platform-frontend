@@ -43,11 +43,12 @@ const Login = () => {
             .then((res) => {
                 try {
                     setLoading(false);
-                    console.log(res);
+                    
 
                     if (res?.status === 201) {
+                        console.log(res.data)
                         const {id, role, name} = parseJwt(res.data.accessToken)
-                        dispatch(setUser({id, role, name}));
+                        dispatch(setUser({id, role, name, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken}));
                         addTokenToReq(res?.data?.accessToken)
                         switch (role) {
                             case 'DOCTOR':
