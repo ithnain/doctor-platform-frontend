@@ -14,26 +14,24 @@ import {
 import cities from "./cities.json";
 import types from "./types.json";
 import WTCP from "./WTCP.json";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   createPatientAction,
-//   clearAllAction,
-// } from "src/redux/reducers/patientReducer";
+import { registerPatient } from '@redux/actions/patient';
+import { useDispatch } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 
 import styles  from './patient-form.module.scss'
 import CustomButton from "../CustomBtn";
+import { api } from "@src/utils/network";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const index = () => {
   const { t } = useTranslation(['createPatient', 'common']);
   const [form] = Form.useForm();
-  // const dispatch = useDispatch();
-  // const {  errorsCreatingPatient, createdPatientSuccess, loading } = useSelector(
-  //   (state) => state?.patient
-  // );
-  let errorsCreatingPatient, createdPatientSuccess, loading;
+  const dispatch = useDispatch();
+ 
+  const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([])
+  const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if(createdPatientSuccess){
@@ -56,14 +54,14 @@ const index = () => {
     if (errorsCreatingPatient?.length) {
       notification.error({
         message: t("Error Creating patient"),
-        description: errorsCreatingPatient.join(" . \n "),
+        // description: errorsCreatingPatient.join(" . \n "),
       });
     }
 
     return () => false;
   }, [errorsCreatingPatient]);
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     let treatmentType = "";
     if (values.treatment === "INSULIN") {
       treatmentType = values.insulin_treatment;
@@ -103,7 +101,31 @@ const index = () => {
       otherHealthIssues,
       otherDiabetesComplications,
     };
-    // dispatch(createPatientAction(data));
+    try {
+      setLoading(true)
+      const res = await api.post('patient/createPatient', data)
+      console.log("====")
+      console.log(res.data)
+      console.log("====")
+      if(res.status === 201){
+        dispatch(registerPatient(res.data));
+        setCreatedPatientSuccess(true)
+        setLoading(false)
+      }
+    } catch (error) {
+      console.log("---- ERROR")
+      if(error?.response?.data?.message){
+        console.log(error.response.data.message)
+        alert(error.response.data.message)
+        setErrorsCreatingPatient(error.response.data.message)
+      }
+      console.log(error)
+      console.log(error.response)
+      console.log(error.response.data)
+      console.log(error.response.data.message)
+      setLoading(false)
+    }
+    
   };
 
   return (
@@ -335,11 +357,31 @@ const index = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your ISF and I:C!",
+                    message: "Please input your ISF",
                   },
                 ]}
               >
                 <Input />
+              </Form.Item>
+              <Form.Item
+                name="I_C"
+                label={<p className={styles.label_form}>{t("I:C")}</p>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your I:C!",
+                  },
+                ]}
+              >
+                <Space align="start">
+                  <Form.Item name="i">
+                <Input />
+                  </Form.Item>
+                <span >:</span>
+                <Form.Item name="c">
+                <Input />
+                </Form.Item>
+                </Space>
               </Form.Item>
               <Form.Item
                 name="slidingScale"

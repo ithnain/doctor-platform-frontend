@@ -1,7 +1,7 @@
 import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import API from '@utils/axios';
+import { api } from '@src/utils/network';
 import { ConfigProvider } from 'antd';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
@@ -45,7 +45,7 @@ const SignUp = ({ hospitals }) => {
                 return;
             }
         });
-        API.post('auth/signup', {
+        api.post('auth/signup', {
             email,
             password,
             name,
@@ -316,7 +316,7 @@ const SignUp = ({ hospitals }) => {
 };
 export const getStaticProps = async () => {
     try {
-        const { data } = await API.get(`/hospitals`);
+        const { data } = await api.get(`/hospitals`);
         return {
             props: {
                 hospitals: data

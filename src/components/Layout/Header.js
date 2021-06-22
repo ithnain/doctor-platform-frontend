@@ -12,19 +12,19 @@ import { BellOutlined } from '@ant-design/icons';
 import CustomButton from '../CustomBtn';
 import useTranslation from 'next-translate/useTranslation';
 
-function Header({ showAddPatientBtn, btnText }) {
+function Header({ showAddPatientBtn, textBtn }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
-    const { t } = useTranslation(['doctor']);
 
-    console.log(t('dddd'));
+    
+    console.log(textBtn)
 
     // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
             {showAddPatientBtn ? (
                 <span className={styles.header__btn}>
-                    <Link href={`/create-patient`} className={styles.linkText}>{btnText}</Link>
+                    <Link href={`/create-patient`} className={styles.linkText}>{textBtn}</Link>
                 </span>
             ) : null}
 

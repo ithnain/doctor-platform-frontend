@@ -2,7 +2,7 @@ import 'antd/dist/antd.css';
 
 import { Col, Layout, Menu, Row } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Head from 'next/head';
 import HeaderMenu from './Header';
@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, children }) {
+function SliderLayout({ title, keywords, description, children, textBtn }) {
     const dispatch = useDispatch();
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
@@ -25,7 +25,14 @@ function SliderLayout({ title, keywords, description, children }) {
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-    const role = 'admin';
+    const role = 'doctor';
+
+    const [showAddPatientBtn, setShowAddPatientBtn] = useState(false)
+    useEffect(() =>{
+        if(role === 'doctor' && path?.includes('doctor')){
+            setShowAddPatientBtn(true)
+        }
+    }, [role])
     const logoutHandler = () => {
         dispatch(clearUser());
         router.push('/login');
@@ -89,7 +96,7 @@ function SliderLayout({ title, keywords, description, children }) {
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu btnText={btnText} showAddPatientBtn={showAddPatientBtn}  />
+                            <HeaderMenu textBtn={textBtn} showAddPatientBtn={showAddPatientBtn}  />
                         </Header>
                     </Col>
                 </Row>

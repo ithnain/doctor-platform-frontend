@@ -3,7 +3,7 @@
 import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import API from '@utils/axios';
+import {api , addTokenToReq} from '@utils/network';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
@@ -12,11 +12,15 @@ import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
+import { parseJwt } from '@src/utils/helpers';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@src/redux/actions/user';
 
 const { Text } = Typography;
 
 const Login = () => {
     const { t } = useTranslation(['login', 'common']);
+    const dispatch = useDispatch();
     const router = useRouter();
     const [direction, setdirection] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -32,7 +36,7 @@ const Login = () => {
 
         setLoading(true);
 
-        API.post('auth/signin', {
+        api.post('auth/signin', {
             email,
             password
         })
@@ -42,9 +46,27 @@ const Login = () => {
                     console.log(res);
 
                     if (res?.status === 201) {
-                        // dispatch(setUser(res.data));
-                        // toastr.success('User registed successfully');
-                        router.push('/overview');
+                        const {id, role, name} = parseJwt(res.data.accessToken)
+                        dispatch(setUser({id, role, name}));
+                        addTokenToReq(res?.data?.accessToken)
+                        switch (role) {
+                            case 'DOCTOR':
+                                router.push('/doctor')
+                                break;
+                            case 'SUPERVISOR':
+                                // router.push('/????')
+                                break;
+                            case 'CASE_HANDLER':
+                                // router.push('/????')
+                                break;
+                            case 'ADMIN':
+                                // router.push('/???')
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                        // router.push('/doctor');
                     }
                 } catch (error) {
                     toastr.error('something went wrong');
