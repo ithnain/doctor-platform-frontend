@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 
 
 function Doctor() {
-    const { t } = useTranslation(['doctor']);
+    const { t } = useTranslation('doctor');
     return (
         <SliderLayout
             title={'Doctor'}

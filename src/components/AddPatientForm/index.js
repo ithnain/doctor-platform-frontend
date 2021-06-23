@@ -26,7 +26,7 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 const index = () => {
-  const { t } = useTranslation(['createPatient', 'common']);
+  const { t } = useTranslation('create-patient'); 
   const [form] = Form.useForm();
   const router = useRouter()
   const dispatch = useDispatch();
@@ -124,7 +124,7 @@ const index = () => {
         // TO DO  if RTL ? or LTR
         setErrorsCreatingPatient(error.response.data.error.message.en)
       }else {
-        setErrorsCreatingPatient('Something went wrong')
+        setErrorsCreatingPatient(t('Error in the server'))
       }
       setLoading(false)
     }
@@ -518,7 +518,7 @@ const index = () => {
         <Form.Item >
           <CustomButton
            htmlType="submit"
-           text="Register"
+           text={t("Register")}
            className={`${styles.btn_text}`}
            loading={loading}
            />
