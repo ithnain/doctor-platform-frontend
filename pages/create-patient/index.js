@@ -2,12 +2,17 @@
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
 import AddPatientForm from 'src/components/AddPatientForm'
+import useTranslation from 'next-translate/useTranslation';
+
 function createPatient() {
+    const { t } = useTranslation('doctor'); 
+
+
     return (
         <SliderLayout
-            title={'Doctor'}
-            keywords={'doctor,platform,any word'}
-            description={'this is the doctor page'}>
+            title={t('doctor')}
+            keywords={''}
+            description={''}>
             <AddPatientForm />
         </SliderLayout>
     );

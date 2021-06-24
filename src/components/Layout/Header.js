@@ -16,9 +16,6 @@ function Header({ showAddPatientBtn, textBtn }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
 
-    
-    console.log(textBtn)
-
     // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">

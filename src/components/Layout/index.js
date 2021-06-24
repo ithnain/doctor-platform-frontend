@@ -14,6 +14,7 @@ import sideNavIcons from './sidenav.json';
 import styles from './Layout.module.scss';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { roles } from '@src/utils/ROLE';
 
 const { Content, Sider, Header } = Layout;
 function SliderLayout({ title, keywords, description, children, textBtn }) {
@@ -21,7 +22,6 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
-    console.log(path, "Path");
     const toggle = () => {
         setCollapsed(!collapsed);
     };
@@ -29,7 +29,7 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false)
     useEffect(() =>{
-        if(role === 'doctor' && path?.includes('doctor')){
+        if(role === roles.doctor && path?.includes(roles.doctor)){
             setShowAddPatientBtn(true)
         }
     }, [role])
