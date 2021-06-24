@@ -31,15 +31,16 @@ const index = () => {
   const router = useRouter()
   const dispatch = useDispatch();
   const user = useSelector(state => state.user)
-  const [errorsCreatingPatient, setErrorsCreatingPatient] = useState('')
+  const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([])
   const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
   console.log(api.defaults.headers)
   useEffect(() => {
     if(!user || !user.accessToken){
-      dispatch(clearUser())
-      router.push("/login");
+      // enable this after we have the token in redux
+      // dispatch(clearUser())
+      // router.push("/login");
     }
   }, [user])
 
@@ -61,10 +62,10 @@ const index = () => {
   };
 
   useEffect(() => {
-    if (errorsCreatingPatient) {
+    if (errorsCreatingPatient?.length) {
       notification.error({
         message: t("Error Creating patient"),
-        description: errorsCreatingPatient,
+        description: errorsCreatingPatient.join(', \n'),
       });
     }
   }, [errorsCreatingPatient]);
@@ -101,6 +102,8 @@ const index = () => {
 
     const data = {
       ...values,
+      name: values.name.trim(),
+      note: values.note.trim(),
       treatmentType,
       healthIssues,
       isOtherHealthIssues,
@@ -122,9 +125,11 @@ const index = () => {
     } catch (error) {
       if(error?.response?.data?.error?.message){
         // TO DO  if RTL ? or LTR
-        setErrorsCreatingPatient(error.response.data.error.message.en)
+        setErrorsCreatingPatient([error.response.data.error.message.en])
+      }else if (error?.response?.data?.message?.length) {
+        setErrorsCreatingPatient(error.response.data.message)
       }else {
-        setErrorsCreatingPatient(t('Error in the server'))
+        setErrorsCreatingPatient([t('Error in the server')])
       }
       setLoading(false)
     }
