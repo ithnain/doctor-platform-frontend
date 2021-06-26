@@ -3,7 +3,7 @@
 import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import {api , addTokenToReq} from '@utils/network';
+import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
@@ -36,7 +36,7 @@ const Login = () => {
 
         setLoading(true);
 
-        api.post('auth/signin', {
+        API.post('auth/signin', {
             email,
             password
         })
@@ -49,7 +49,7 @@ const Login = () => {
                         console.log(res.data)
                         const {id, role, name} = parseJwt(res.data.accessToken)
                         dispatch(setUser({id, role, name, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken}));
-                        addTokenToReq(res?.data?.accessToken)
+                        
                         switch (role) {
                             case 'DOCTOR':
                                 router.push('/doctor')
