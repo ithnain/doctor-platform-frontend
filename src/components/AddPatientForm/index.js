@@ -20,7 +20,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from "next/router";
 import styles  from './patient-form.module.scss'
 import CustomButton from "../CustomBtn";
-import { api } from "@src/utils/network";
+import API from "@src/utils/axios";
 import { clearUser } from "@src/redux/actions/user";
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -35,7 +35,6 @@ const index = () => {
   const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  console.log(api.defaults.headers)
   useEffect(() => {
     if(!user || !user.accessToken){
       // enable this after we have the token in redux
@@ -116,7 +115,7 @@ const index = () => {
 
     try {
       setLoading(true)
-      const res = await api.post('patient/createPatient', data, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+      const res = await API.post('patient/createPatient', data, {headers: {Authorization: `Bearer ${user.accessToken}`}})
       if(res.status === 201){
         dispatch(registerPatient(res.data));
         setCreatedPatientSuccess(true)
