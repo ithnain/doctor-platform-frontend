@@ -29,10 +29,10 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
     useEffect(() => {
-        if (role === roles.doctor && path?.includes(roles.doctor)) {
+        if (role === roles.doctor && path?.includes('doctor')) {
             setShowAddPatientBtn(true);
         }
-    }, []);
+    }, [path, role]);
 
     const logoutHandler = () => {
         dispatch(clearUser());
