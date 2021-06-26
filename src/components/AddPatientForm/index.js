@@ -118,7 +118,7 @@ const index = () => {
         try {
             setLoading(true);
             const res = await API.post('patient/createPatient', data, {
-                headers: { Authorization: `Bearer ${user.data.accessToken}` }
+                headers: { Authorization: `Bearer ${user.token}` }
             });
             if (res.status === 201) {
                 dispatch(registerPatient(res.data));
