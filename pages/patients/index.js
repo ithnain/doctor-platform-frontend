@@ -3,7 +3,13 @@
 import SliderLayout from '@components/Layout';
 
 function Patients() {
-    return <SliderLayout>Patients</SliderLayout>;
+    return (
+        <SliderLayout
+            title={'Overview'}
+            keywords={'doctor,platform,any word'}
+            description={'this is the doctor overview'}
+            active={`/patients`}></SliderLayout>
+    );
 }
 
 Patients.propTypes = {};

@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
+import router from 'next/router';
 
 const authenticatedRoute = (Component = null, options = {}) => {
     class AuthenticatedRoute extends React.Component {
         state = {
             loading: true
         };
+
         componentDidMount() {
+            if (router.pathname === '/login' && this.props.isLoggedIn) {
+                router.push('/overview');
+                return;
+            }
             if (this.props.isLoggedIn) {
                 this.setState({ loading: false });
             } else {
-                Router.push('/login');
+                this.setState({ loading: false });
+                router.push('/login');
             }
         }
         render() {
