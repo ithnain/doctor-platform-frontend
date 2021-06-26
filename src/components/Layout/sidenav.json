@@ -1,13 +1,13 @@
 {
-    "admin": {
+    "SUPERVISOR": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
-            { "title": "All Doctors", "image": "stethoscope.svg", "key": "2", "link": "doctors" },
+            { "title": "All Doctors", "image": "stethoscope.svg", "key": "2", "link": "doctors/1" },
             {
                 "title": "Registration",
                 "image": "registration.svg",
                 "key": "3",
-                "link": "registration"
+                "link": "registration/1"
             },
             { "title": "Hospital", "image": "hospital.svg", "key": "4", "link": "hospital" },
             { "title": "My Support Cases", "image": "question.svg", "key": "5", "link": "cases" }

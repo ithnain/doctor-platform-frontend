@@ -1,1 +1,7 @@
-{}
+{
+    "requiredInput": "Please input your Phone",
+    "accept": "accept",
+    "reject": "reject",
+    "email": "Email",
+    "id": "ID"
+}

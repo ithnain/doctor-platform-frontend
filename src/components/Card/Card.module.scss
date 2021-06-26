@@ -11,6 +11,10 @@
     background-color: $white;
     box-shadow: 0px 5px 10px 0px $mediumGrey;
 
+    &__blueText {
+        color: $blueText !important;
+    }
+
     &__content {
         height: 100%;
     }
