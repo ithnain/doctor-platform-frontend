@@ -1,17 +1,16 @@
 @import '@styles/colors';
 @import '@styles/titles';
 
-.patient_register_column_wrapper{
+.patient_register_column_wrapper {
     box-shadow: 0 5px 10px 0 #fafafa;
     border: solid 1px $borderDarkTransparent;
     background-color: $white;
-    padding: 22px  24px;
+    padding: 22px 24px;
     border-radius: 3px;
     margin-top: 7px;
     height: 100%;
-   
 }
-.patient_register_column{
+.patient_register_column {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
@@ -28,7 +27,7 @@
     margin-left: 29px;
 }
 
-.title__registration{
+.title__registration {
     font-weight: bold;
     font-family: 'gothic-bold';
     font-size: 28px;
@@ -37,7 +36,7 @@
     color: $darkBlue !important;
 }
 
-.form_item{
+.form_item {
     align-items: flex-start;
 }
 
@@ -58,11 +57,11 @@
 }
 
 .radio_container {
-    display: flex ;
-    align-self: flex-start ; 
+    display: flex;
+    align-self: flex-start;
 }
 
-.btn_text{
+.btn_text {
     font-weight: bold;
     font-family: 'gothic-bold';
     font-size: 16px;

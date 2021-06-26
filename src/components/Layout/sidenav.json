@@ -13,7 +13,7 @@
             { "title": "My Support Cases", "image": "question.svg", "key": "5", "link": "cases" }
         ]
     },
-    "caseHandler": {
+    "CASEHANDLER": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
             { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },
@@ -26,7 +26,7 @@
             { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
         ]
     },
-    "doctor": {
+    "DOCTOR": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
             { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },

@@ -10,7 +10,11 @@ export default function userReducer(state = initialState, action) {
                 // role: action.payload.role
             };
         case CLEAR_USER:
-            return { ...state, data: {}, accessToken: '', role: '', refreshToken: '', name: '', id: ''};
+            return {
+                ...state,
+                data: {},
+                token: ''
+            };
         default:
             return state;
     }

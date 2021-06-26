@@ -9,14 +9,12 @@ import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
-import authenticatedRoute from '@components/AuthenticatedRoute';
 import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { parseJwt } from '@src/utils/helpers';
 
 const { Text } = Typography;
 
@@ -176,5 +174,5 @@ const Login = ({ direction }) => {
 Login.propTypes = {
     direction: PropTypes.string.isRequired
 };
-// export default Login;
-export default authenticatedRoute(Login);
+export default Login;
+// export default authenticatedRoute(Login);

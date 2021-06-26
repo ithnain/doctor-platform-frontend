@@ -3,7 +3,6 @@
 import SliderLayout from '@components/Layout';
 import useTranslation from 'next-translate/useTranslation';
 
-
 function Doctor() {
     const { t } = useTranslation('doctor');
     return (
@@ -14,7 +13,6 @@ function Doctor() {
             description={'this is the doctor page'}>
             Doctor
         </SliderLayout>
-       
     );
 }
 

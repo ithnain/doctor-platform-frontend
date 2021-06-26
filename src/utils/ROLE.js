@@ -1,5 +1,5 @@
 export const roles = {
-    doctor: 'doctor',
-    supervisor: 'supervisor',
-    caseHandler: 'caseHandler'
-}
+    doctor: 'DOCTOR',
+    supervisor: 'SUPERVISOR',
+    caseHandler: 'CASEHANDLER'
+};
