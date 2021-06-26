@@ -74,10 +74,7 @@ const SignUp = ({ direction, hospitals }) => {
                 setLoading(false);
             });
     };
-    // const onFinishFailed = (errorInfo) => {
-    //     console.log(errorInfo);
-    //     toastr.warning(errorInfo);
-    // };
+
     return (
         <Row>
             <Col
