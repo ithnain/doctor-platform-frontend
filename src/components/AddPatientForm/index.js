@@ -264,7 +264,7 @@ const index = () => {
                                     }
                                 ]}>
                                 {/* Style needed to handle ltr && rtl */}
-                                <Radio.Group style={{ textAlign: 'left' }}>
+                                <Radio.Group className={styles.align_left}>
                                     <Space direction="vertical">
                                         <Radio value="INSULIN">
                                             {<p className={styles.label_form}>{t('Insulin')}</p>}
@@ -406,7 +406,7 @@ const index = () => {
                                     </p>
                                 }>
                                 {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                <Checkbox.Group style={{ textAlign: 'left' }}>
+                                <Checkbox.Group className={styles.align_left}>
                                     <Space direction="vertical">
                                         <Checkbox value="Unawareness_hypoglycemia">
                                             <p className={styles.label_form}>
@@ -443,7 +443,7 @@ const index = () => {
                                     </p>
                                 }>
                                 {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                <Checkbox.Group style={{ textAlign: 'left' }}>
+                                <Checkbox.Group className={styles.align_left}>
                                     <Space direction="vertical">
                                         <Checkbox value="Hypoglycemia">
                                             <p className={styles.label_form}>{t('Hypoglycemia')}</p>
