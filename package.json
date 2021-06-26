@@ -1,6 +1,7 @@
 {
     "name": "doctor-platform-frontend",
     "version": "0.1.2",
+    "version": "0.1.1",
     "private": true,
     "scripts": {
         "dev": "next dev",
