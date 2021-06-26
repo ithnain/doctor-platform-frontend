@@ -7,7 +7,8 @@ function Cases() {
         <SliderLayout
             title={'Cases'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor cases'}>
+            description={'this is the doctor cases'}
+            active={`/cases`}>
             Cases
         </SliderLayout>
     );

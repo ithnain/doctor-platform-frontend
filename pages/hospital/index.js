@@ -7,7 +7,8 @@ function Hospital() {
         <SliderLayout
             title={'Hospital'}
             keywords={'doctor,platform,any word'}
-            description={"this is the doctor's hospital"}>
+            description={"this is the doctor's hospital"}
+            active={`/hospital`}>
             Hospital
         </SliderLayout>
     );

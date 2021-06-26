@@ -5,6 +5,8 @@
         "*": ["common"],
         "/overview": ["overview"],
         "/login": ["login"],
-        "/signup": ["signup"]
+        "/signup": ["signup"],
+        "/doctors/[id]": ["doctors"],
+        "/registration/[page]": ["registration"]
     }
 }

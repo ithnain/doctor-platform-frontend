@@ -1,17 +1,13 @@
 import { Col, ConfigProvider, Row, Typography } from 'antd';
-import { useEffect, useState } from 'react';
 
 import Card from '@components/Card';
-import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+// import { initializeStore } from '@redux/store';
+// import { useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-function Admin() {
+function Admin({ direction, doctors }) {
     const { t } = useTranslation('overview');
-    const router = useRouter();
-    const [direction, setdirection] = useState(null);
-    useEffect(() => {
-        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
-    }, [router.locale]);
     const { Title } = Typography;
     return (
         <Row justify="start" align="middle">
@@ -23,15 +19,11 @@ function Admin() {
                 </Col>
                 <Col xs={24}>
                     <Row gutter={[20, 8]} justify="space-between" align="middle">
-                        <Col xs={24} md={{ span: 8 }}>
-                            <Card></Card>
-                        </Col>
-                        <Col xs={24} md={{ span: 8 }}>
-                            <Card></Card>
-                        </Col>
-                        <Col xs={24} md={{ span: 8 }}>
-                            <Card></Card>
-                        </Col>
+                        {doctors?.map((doctor) => (
+                            <Col xs={24} md={{ span: 8 }} key={doctor.id}>
+                                <Card doctor={doctor} />
+                            </Col>
+                        ))}
                     </Row>
                 </Col>
             </ConfigProvider>
@@ -39,6 +31,9 @@ function Admin() {
     );
 }
 
-Admin.propTypes = {};
+Admin.propTypes = {
+    direction: PropTypes.string.isRequired,
+    doctors: PropTypes.array.isRequired
+};
 
 export default Admin;
