@@ -19,5 +19,7 @@
     "now": "الأن",
     "male": "Male",
     "female": "Female",
-    "gender": "Gender"
+    "gender": "Gender",
+    "idLength": "Your ID must be 10 digits",
+    "invalidPhone": "Phone number is not valid"
 }

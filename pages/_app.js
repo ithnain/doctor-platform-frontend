@@ -3,10 +3,13 @@ import 'normalize.css';
 import 'antd/dist/antd.css';
 import 'toastr/toastr.scss';
 
+import { useEffect, useState } from 'react';
+
 import { PersistGate } from 'redux-persist/integration/react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
+import { useRouter } from 'next/router';
 import { useStore } from '@redux/store';
 
 function MyApp({ Component, pageProps }) {
@@ -14,10 +17,15 @@ function MyApp({ Component, pageProps }) {
     const persistor = persistStore(store, {}, function () {
         persistor.persist();
     });
+    const router = useRouter();
+    const [direction, setdirection] = useState(null);
+    useEffect(() => {
+        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
+    }, [router.locale]);
     return (
         <Provider store={store}>
             <PersistGate loading={<div>loading</div>} persistor={persistor}>
-                <Component {...pageProps} />
+                <Component {...pageProps} direction={direction} />
             </PersistGate>
         </Provider>
     );

@@ -1,18 +1,21 @@
-// import PropTypes from 'prop-types';
-import LangToggle from '@components/LangToggle';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import { Row } from 'antd';
+import { Badge, Dropdown, Menu, Typography } from 'antd';
+
+import { BellOutlined } from '@ant-design/icons';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
 import Image from 'next/image';
+import LangToggle from '@components/LangToggle';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { Row } from 'antd';
 import styles from './Layout.module.scss';
-import { Typography, Badge, Menu, Dropdown } from 'antd';
-import { BellOutlined } from '@ant-design/icons';
 import CustomButton from '../CustomBtn';
 import useTranslation from 'next-translate/useTranslation';
+import { useLocalStorage } from '@src/hooks/useLocalStorage';
 
-function Header({ showAddPatientBtn, textBtn }) {
+
+
+function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
 
@@ -49,11 +52,11 @@ function Header({ showAddPatientBtn, textBtn }) {
                     <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
                 </div>
             </Link>
-            <Text>Abdallah Ali</Text>
+            <Text>{name || hospitalName}</Text>
         </Row>
     );
 }
 
-Header.propTypes = {};
+Header.propTypes = { name: PropTypes.string.isRequired, hospitalName: PropTypes.string.isRequired };
 
 export default Header;

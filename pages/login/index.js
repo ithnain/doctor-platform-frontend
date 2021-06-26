@@ -1,41 +1,34 @@
 // import PropTypes from 'prop-types';
 
 import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
-import { useEffect, useState } from 'react';
 
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
+import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
+import authenticatedRoute from '@components/AuthenticatedRoute';
+import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { parseJwt } from '@src/utils/helpers';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@src/redux/actions/user';
 
 const { Text } = Typography;
 
-const Login = () => {
-    const { t } = useTranslation(['login', 'common']);
+const Login = ({ direction }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation('login');
     const router = useRouter();
-    const [direction, setdirection] = useState(null);
     const [loading, setLoading] = useState(false);
+    const requiredField = t('common:requiredInput');
 
-    useEffect(() => {
-        router.locale === 'ar' ? setdirection('rtl') : setdirection('ltr');
-    }, [router.locale]);
     const onFinish = ({ email, password }) => {
-        console.log({
-            email,
-            password
-        });
-
         setLoading(true);
-
         API.post('auth/signin', {
             email,
             password
@@ -43,31 +36,19 @@ const Login = () => {
             .then((res) => {
                 try {
                     setLoading(false);
-                    
 
                     if (res?.status === 201) {
-                        console.log(res.data)
-                        const {id, role, name} = parseJwt(res.data.accessToken)
-                        dispatch(setUser({id, role, name, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken}));
-                        
-                        switch (role) {
-                            case 'DOCTOR':
-                                router.push('/doctor')
-                                break;
-                            case 'SUPERVISOR':
-                                // router.push('/????')
-                                break;
-                            case 'CASE_HANDLER':
-                                // router.push('/????')
-                                break;
-                            case 'ADMIN':
-                                // router.push('/???')
-                                break;
-                        
-                            default:
-                                break;
-                        }
-                        // router.push('/doctor');
+                        dispatch(setUser(res.data));
+                        // cookie.set('token', res.data.accessToken, { expires: 24 });
+                        fetch('/api/auth/login', {
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ token: res.data.accessToken })
+                        }).then(() => {
+                            router.push('/overview');
+                        });
                     }
                 } catch (error) {
                     toastr.error('something went wrong');
@@ -84,9 +65,9 @@ const Login = () => {
                 setLoading(false);
             });
     };
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo) => {
+    //     toastr.warning('Something went wrong');
+    // };
     return (
         <Row>
             <Col
@@ -126,10 +107,12 @@ const Login = () => {
                                 className="form-container"
                                 layout="vertical"
                                 onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}>
+                                // onFinishFailed={onFinishFailed}
+                            >
                                 <Row justify="space-around" align="middle">
                                     <Col span={23}>
                                         <Form.Item
+                                            validateTrigger={'onBlur'}
                                             label={t('email')}
                                             name="email"
                                             className="dark-blue mb-1"
@@ -152,12 +135,7 @@ const Login = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: t('emptyPassword')
-                                                },
-                                                {
-                                                    pattern:
-                                                        /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                                                    message: t('weakPassword')
+                                                    message: requiredField
                                                 }
                                             ]}>
                                             <Input.Password className={authStyles.input} />
@@ -195,5 +173,8 @@ const Login = () => {
         </Row>
     );
 };
-
-export default Login;
+Login.propTypes = {
+    direction: PropTypes.string.isRequired
+};
+// export default Login;
+export default authenticatedRoute(Login);

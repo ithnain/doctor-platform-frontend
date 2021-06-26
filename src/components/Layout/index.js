@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import { Col, Layout, Menu, Row } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Head from 'next/head';
 import HeaderMenu from './Header';
@@ -12,20 +13,19 @@ import PropTypes from 'prop-types';
 import { clearUser } from '@redux/actions/user';
 import sideNavIcons from './sidenav.json';
 import styles from './Layout.module.scss';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { roles } from '@src/utils/ROLE';
 
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, children, textBtn }) {
+function SliderLayout({ title, keywords, description, active, children }) {
     const dispatch = useDispatch();
+    const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-    const role = 'doctor';
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false)
     useEffect(() =>{
@@ -33,8 +33,17 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
             setShowAddPatientBtn(true)
         }
     }, [role])
+   
     const logoutHandler = () => {
         dispatch(clearUser());
+        // cookie.remove('token');
+        fetch('/api/auth/logout', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
         router.push('/login');
     };
     return (
@@ -47,9 +56,6 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
-                onBreakpoint={(broken) => {
-                    console.log(broken);
-                }}
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
@@ -63,7 +69,7 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
                         src="/assets/logo-dark-notext.png"
                     />
                 </div>
-                <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[path]}>
+                <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
                     {sideNavIcons[role].sidenavData.map((item) => (
                         <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
                             <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
@@ -78,11 +84,7 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
                         <span className="nav-text">
-                            <button
-                                // href="/login"
-                                handleClick={logoutHandler}>
-                                Log out
-                            </button>
+                            <button handleClick={logoutHandler}>Log out</button>
                         </span>
                     </Menu.Item>
                 </Menu>
@@ -90,7 +92,12 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
             <Layout>
                 <Row justify="s tart">
                     <Col xs={24}>
-                        <Header className={styles.header}>
+                        <Header
+                            className={styles.header}
+                            name={name}
+                            hospitalName={hospital.name}
+                            gender={gender}
+                            image={image}>
                             {collapsed ? (
                                 <MenuUnfoldOutlined className="trigger" onClick={toggle} />
                             ) : (
@@ -103,7 +110,6 @@ function SliderLayout({ title, keywords, description, children, textBtn }) {
                 <Content className={styles.content}>
                     <>{children}</>
                 </Content>
-                {/* <Footer className="textCenter">Ant Design ©2018 Created by Ant UED</Footer> */}
             </Layout>
         </Layout>
     );
@@ -118,6 +124,7 @@ SliderLayout.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string.isRequired,
     keywords: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    active: PropTypes.string.isRequired
 };
 export default SliderLayout;
