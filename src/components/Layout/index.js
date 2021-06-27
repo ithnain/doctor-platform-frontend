@@ -17,7 +17,7 @@ import styles from './Layout.module.scss';
 import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, active, children, textBtn }) {
+function SliderLayout({ title, keywords, description, active, children,  }) {
     const dispatch = useDispatch();
     const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
     const [collapsed, setCollapsed] = useState(false);
@@ -103,7 +103,7 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu textBtn={textBtn} showAddPatientBtn={showAddPatientBtn} />
+                            <HeaderMenu  showAddPatientBtn={showAddPatientBtn} />
                         </Header>
                     </Col>
                 </Row>

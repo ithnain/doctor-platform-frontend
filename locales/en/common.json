@@ -3,5 +3,6 @@
     "accept": "accept",
     "reject": "reject",
     "email": "Email",
-    "id": "ID"
+    "id": "ID",
+    "registerPatient": "Register Patient"
 }

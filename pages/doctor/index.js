@@ -9,7 +9,6 @@ function Doctor() {
         <SliderLayout
             title={'Doctor'}
             keywords={'doctor,platform,any word'}
-            textBtn={`${t('registerPatient')} + `}
             description={'this is the doctor page'}>
             Doctor
         </SliderLayout>

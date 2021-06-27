@@ -13,17 +13,19 @@ import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import useTranslation from 'next-translate/useTranslation';
 
-function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
+function Header({ name, hospitalName, showAddPatientBtn, }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
+    const { t } = useTranslation('common');
+
 
     // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
-            {showAddPatientBtn && textBtn ? (
+            {showAddPatientBtn  ? (
                 <span className={styles.header__btn}>
                     <Link href={`/create-patient`} className={styles.linkText}>
-                        {textBtn}
+                    {`${t('registerPatient')} + `}
                     </Link>
                 </span>
             ) : null}
