@@ -29,7 +29,7 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
     useEffect(() => {
-        if (role === roles.doctor && path?.includes('doctor')) {
+        if (role === roles.doctor ) {
             setShowAddPatientBtn(true);
         }
     }, [path, role]);
