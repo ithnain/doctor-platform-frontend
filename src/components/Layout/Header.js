@@ -20,7 +20,7 @@ function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
     // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
-            {showAddPatientBtn ? (
+            {showAddPatientBtn && textBtn ? (
                 <span className={styles.header__btn}>
                     <Link href={`/create-patient`} className={styles.linkText}>
                         {textBtn}
