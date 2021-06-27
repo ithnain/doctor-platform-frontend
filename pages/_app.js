@@ -9,8 +9,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
+import { Spin } from 'antd';
 import { useRouter } from 'next/router';
 import { useStore } from '@redux/store';
+import styles from '@styles/Home.module.scss';
 
 function MyApp({ Component, pageProps }) {
     const store = useStore(pageProps.initialReduxState);
@@ -24,7 +26,13 @@ function MyApp({ Component, pageProps }) {
     }, [router.locale]);
     return (
         <Provider store={store}>
-            <PersistGate loading={<div>loading</div>} persistor={persistor}>
+            <PersistGate
+                loading={
+                    <div className={styles.loading}>
+                        <Spin />
+                    </div>
+                }
+                persistor={persistor}>
                 <Component {...pageProps} direction={direction} />
             </PersistGate>
         </Provider>
