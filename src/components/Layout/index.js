@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 const { Content, Sider, Header } = Layout;
 function SliderLayout({ title, keywords, description, active, children, textBtn }) {
     const dispatch = useDispatch();
-    const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
+    const { name, hospital, role, gender, image } = useSelector((state) => state?.user?.data);
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
