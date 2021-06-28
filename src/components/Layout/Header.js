@@ -1,7 +1,7 @@
 import { Badge, Dropdown, Menu, Typography } from 'antd';
 
 import { BellOutlined } from '@ant-design/icons';
-import CustomButton from '../CustomBtn';
+// import CustomButton from '../CustomBtn';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
 import Image from 'next/image';
@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import useTranslation from 'next-translate/useTranslation';
+
+// import useTranslation from 'next-translate/useTranslation';
 
 function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
     const { Text } = Typography;
@@ -57,6 +58,11 @@ function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
     );
 }
 
-Header.propTypes = { name: PropTypes.string.isRequired, hospitalName: PropTypes.string.isRequired };
+Header.propTypes = {
+    showAddPatientBtn: PropTypes.bool,
+    name: PropTypes.string.isRequired,
+    hospitalName: PropTypes.string.isRequired,
+    textBtn: PropTypes.string
+};
 
 export default Header;
