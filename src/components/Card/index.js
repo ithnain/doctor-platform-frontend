@@ -12,11 +12,33 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-const Card = ({ doctor, actions }) => {
+const Card = ({ doctor, actions, patient=null, canEdit=false, addPatient=false }) => {
+    // Patient => if the card came form myPatient View or Hospital View the patient object will not be null;
+    // canEdit => by default it is false, unless it came from myPatients view, when it is true small edit icon will appear on the top right corner of the card;
+    // addPatient => by default it is false, unless it came from Hospital View then it wii appear in the bottom right corner of the card;
     const { t } = useTranslation('common');
     const router = useRouter();
     const { Title, Text } = Typography;
-    const { id, email, name } = doctor;
+    // define the variable globbaly , I think if we use state it wii be better, then use useEffect to assign the values;
+    let name, id, email, age, diabetesType, watcher;
+
+    // check if it has doctor object or no;
+    if(doctor?.id){
+        id = doctor.id;
+        email = doctor.email;
+        name = doctor.name;
+    }
+
+    // check if it has patient object or no;
+    let isPatientCard = false;
+    if(patient?.id){
+        age = patient.age;
+        diabetesType = patient.diabetesType;
+        watcher = patient.watcher;
+        name = patient.name;
+       isPatientCard = true;
+    }
+    
     return (
         <div className={styles.card}>
             <Row className={styles.card__content} justify="start" align="middle">
@@ -29,31 +51,84 @@ const Card = ({ doctor, actions }) => {
                         </Col>
                         <Col flex span={17} offset={1} align="start">
                             <>
+                            <div className={styles.card__header_wrapper}>
                                 <Title className={styles.card__blueText} level={5}>
                                     {name}
                                 </Title>
+                                {/* If can edit true display edit icon */}
+                                {canEdit ?<h4>edit icon</h4>
+                                 :null}
+                                
+                            </div>
                                 <Space direction="vertical">
-                                    <Text>
-                                        {t('id')}:{' '}
-                                        <span className={styles.card__blueText}>{id}</span>
-                                    </Text>
-                                    <Text>
-                                        {t('email')}:{' '}
-                                        <span className={styles.card__blueText}>{email}</span>
-                                    </Text>
-                                    <Text>
-                                        Ant Design: <span>value</span>
-                                    </Text>
+                                    {/* In case of patent card */}
+                                    {isPatientCard ? (
+                                        <>
+                                            {' '}
+                                            <Text>
+                                                {t('age')}:{' '}
+                                                <span className={styles.card__blueText}>{age}</span>
+                                            </Text>
+                                            <Text>
+                                                {t('patientType')}:{' '}
+                                                <span className={styles.card__blueText}>{diabetesType}</span>
+                                            </Text>
+                                            <Text>
+                                                {t('responsibleOfPatient')}:{' '}
+                                                <span className={styles.card__blueText}>{watcher}</span>
+                                            </Text>
+                                        </>
+                                    ) : (
+                                        <>
+                                        {/* In case of Doctor card */}
+                                            <Text>
+                                                {t('id')}:{' '}
+                                                <span className={styles.card__blueText}>{id}</span>
+                                            </Text>
+
+                                            <Text>
+                                                {t('email')}:{' '}
+                                                <span className={styles.card__blueText}>
+                                                    {email}
+                                                </span>
+                                            </Text>
+                                            <Text>
+                                                Ant Design: <span>value</span>
+                                            </Text>
+                                        </>
+                                    )}
                                     {/* <Link href="/overview">View resume</Link> */}
                                 </Space>
                             </>
                         </Col>
                     </Row>
+                    {/* In Case of patient card display last session and number of Session */}
+                    {isPatientCard ?
+                    <Row className={styles.card__second_row} >
+                        <Col flex offset={1} align="start">
+                            <Space direction="vertical">
+                                <Text>
+                                    {t('lastSessionDate')}:{' '}
+                                    <span className={styles.card__blueText}>{new Date().toLocaleDateString()}</span>
+                                </Text>
+                                <Text>
+                                    {t('numberOfSessionsCompleted')}:{' '}
+                                    <span className={styles.card__blueText}>{new Date().toLocaleDateString()}</span>
+                                </Text>
+                            </Space>
+                        </Col>
+                    </Row>
+                     :null}
+
                 </Col>
+                {/* If action true */}
                 {actions && (
                     <Col span={24}>
                         <Row gutter={[2, 0]} justify="end" align="middle">
                             <Col xs={11} md={8} flex>
+                                {/* If addPatient true  do not display this button 
+                                else if addPatient false and actions is true display this button*/}
+                                {addPatient  ? null :  
                                 <CustomButton
                                     className={`${styles.card__btn} redBtn--outline`}
                                     text={t('reject')}
@@ -70,8 +145,27 @@ const Card = ({ doctor, actions }) => {
                                         });
                                     }}
                                 />
+                                }
                             </Col>
-                            <Col xs={11} md={8} offset={1} flex>
+                            <Col xs={11} md={addPatient ? 16 :8} offset={1} flex>
+                                {/* If addPatient true display the button that add the hospital patient to logged in doctor */}
+                                {addPatient ? <CustomButton
+                                    className={`${styles.card__btn} blueBtn`}
+                                    text={t('addToMyPatient')}
+                                    handleClick={() => {
+                                        API.get(`/supervisor/doctors/reject?doctor=${doctor.id}`, {
+                                            headers: {
+                                                Authorization: `Bearer ${
+                                                    initializeStore().getState().user?.token
+                                                }`
+                                            }
+                                        }).then(() => {
+                                            toastr.success('patient added successfully');
+                                            router.push('/hospital/1');
+                                        });
+                                    }}
+                                /> : 
+                                // this case happen only if the Card will come form Doctors view, If addPatient false display the accept button for doctor
                                 <CustomButton
                                     className={`${styles.card__btn} greenBtn`}
                                     text={t('accept')}
@@ -88,10 +182,12 @@ const Card = ({ doctor, actions }) => {
                                         });
                                     }}
                                 />
+                                }
                             </Col>
                         </Row>
                     </Col>
                 )}
+                
             </Row>
         </div>
     );
@@ -100,7 +196,10 @@ const Card = ({ doctor, actions }) => {
 Card.propTypes = {
     doctor: PropTypes.object.isRequired,
     actions: PropTypes.bool.isRequired,
-    setShow: PropTypes.func.isRequired
+    setShow: PropTypes.func.isRequired,
+    patient: PropTypes.object,
+    canEdit: PropTypes.bool,
+    addPatient: PropTypes.bool
 };
 
 export default Card;

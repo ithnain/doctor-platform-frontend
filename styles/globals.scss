@@ -183,6 +183,20 @@ a {
         outline: none;
     }
 }
+.ant-btn.blueBtn {
+    background-color: $darkBlue;
+    color: $white;
+    transition: 0.2s all ease-in-out;
+
+    &:hover {
+        background-color: $white;
+        color: $darkBlue;
+        filter: opacity(80%);
+        border: 1px solid $darkBlue;
+        outline: none;
+    }
+}
+
 
 .ant-pagination-item-active,
 .ant-pagination-item {

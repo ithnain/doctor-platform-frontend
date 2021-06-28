@@ -3,5 +3,11 @@
     "accept": "accept",
     "reject": "reject",
     "email": "Email",
-    "id": "ID"
+    "id": "ID",
+    "age": "Age",
+    "patientType": "Patient type",
+    "responsibleOfPatient": "Responsible of patient",
+    "lastSessionDate": "Last session date",
+    "numberOfSessionsCompleted": "Number of sessions completed",
+    "addToMyPatient": "Add to my patients"
 }
