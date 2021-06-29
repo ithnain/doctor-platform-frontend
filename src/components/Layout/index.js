@@ -17,7 +17,7 @@ import styles from './Layout.module.scss';
 import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, active, children,  }) {
+function SliderLayout({ title, keywords, description, active, children }) {
     const dispatch = useDispatch();
     const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
     const [collapsed, setCollapsed] = useState(false);
@@ -29,13 +29,12 @@ function SliderLayout({ title, keywords, description, active, children,  }) {
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
     useEffect(() => {
-        if (role === roles.doctor ) {
+        if (role === roles.doctor) {
             setShowAddPatientBtn(true);
         }
     }, [path, role]);
 
     const logoutHandler = () => {
-        dispatch(clearUser());
         // cookie.remove('token');
         fetch('/api/auth/logout', {
             method: 'post',
@@ -43,6 +42,8 @@ function SliderLayout({ title, keywords, description, active, children,  }) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({})
+        }).then(() => {
+            dispatch(clearUser());
         });
         router.push('/login');
     };
@@ -103,7 +104,7 @@ function SliderLayout({ title, keywords, description, active, children,  }) {
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu  showAddPatientBtn={showAddPatientBtn} />
+                            <HeaderMenu showAddPatientBtn={showAddPatientBtn} />
                         </Header>
                     </Col>
                 </Row>
