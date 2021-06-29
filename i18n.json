@@ -1,14 +1,15 @@
 {
-    "locales": ["en", "ar"],
-    "defaultLocale": "en",
-    "pages": {
-        "*": ["common"],
-        "/overview": ["overview"],
-        "/login": ["login"],
-        "/signup": ["signup"],
-        "/doctor": ["doctor"],
-        "/create-patient": ["create-patient"],
-        "/doctors/[id]": ["doctors"],
-        "/registration/[page]": ["registration"]
-    }
+  "locales": ["en", "ar"],
+  "defaultLocale": "en",
+  "pages": {
+    "*": ["common"],
+    "/overview": ["overview"],
+    "/login": ["login"],
+    "/signup": ["signup"],
+    "/doctor": ["doctor"],
+    "/create-patient": ["create-patient"],
+    "/doctors/[id]": ["doctors"],
+    "/registration/[page]": ["registration"],
+    "/patient": ["patient"]
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "PatientProfile": "Patient Profile",
+  "patient": "patient",
+  "information": "information",
+  "Age": "Age",
+  "phone": "phone",
+  "CoveredTopics": "Covered Topics",
+  "Diabetes": "Diabetes",
+  "patientType": "patient Type",
+  "ResponsableOfPatient": "Responsable of Patient",
+  "PatientIsOn": "Patient is",
+  "ISF": "ISF",
+  "IC": "IC",
+  "Sliding Sclae": "Sliding Sclae",
+  "Critical Health Issue": "Critical Health Issue",
+  "Medical Condition": "Medical Condition",
+  "view history": "view history",
+  "DoctorRecommendationNotes": "Doctor Recommendation & notes"
+}
