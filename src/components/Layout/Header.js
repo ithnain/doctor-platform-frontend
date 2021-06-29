@@ -1,7 +1,6 @@
 import { Badge, Dropdown, Menu, Typography } from 'antd';
 
 import { BellOutlined } from '@ant-design/icons';
-// import CustomButton from '../CustomBtn';
 import Image from 'next/image';
 import LangToggle from '@components/LangToggle';
 import Link from 'next/link';
@@ -10,6 +9,10 @@ import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import useTranslation from 'next-translate/useTranslation';
+
+// import CustomButton from '../CustomBtn';
+// import en from '@src/i18n/en';
+// import ar from '@src/i18n/ar';
 
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
@@ -62,7 +65,8 @@ function Header({ name, hospitalName, showAddPatientBtn }) {
 Header.propTypes = {
     showAddPatientBtn: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
-    hospitalName: PropTypes.string.isRequired
+    hospitalName: PropTypes.string.isRequired,
+    textBtn: PropTypes.string
 };
 
 export default Header;
