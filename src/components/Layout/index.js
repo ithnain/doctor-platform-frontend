@@ -35,17 +35,17 @@ function SliderLayout({ title, keywords, description, active, children }) {
     }, [path, role]);
 
     const logoutHandler = () => {
-        // cookie.remove('token');
-        fetch('/api/auth/logout', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        }).then(() => {
-            dispatch(clearUser());
+        router.push('/login').then(() => {
+            fetch('/api/auth/logout', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            }).then(() => {
+                dispatch(clearUser());
+            });
         });
-        router.push('/login');
     };
     return (
         <Layout>
