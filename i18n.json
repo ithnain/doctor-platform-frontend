@@ -8,7 +8,7 @@
         "/signup": ["signup"],
         "/doctor": ["doctor"],
         "/create-patient": ["create-patient"],
-        "/doctors/[id]": ["doctors"],
+        "/doctors/[page]": ["doctors"],
         "/registration/[page]": ["registration"]
     }
 }

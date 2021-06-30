@@ -37,7 +37,7 @@ function Doctors({ direction, doctors, totalCount }) {
                         </Title>
                     </Col>
                     <Col xs={24}>
-                        <Row gutter={[20, 8]} justify="start" align="middle">
+                        <Row gutter={[20, 8]} justify="start" align="top">
                             {doctors.map((doctor) => (
                                 <Col xs={24} md={12} lg={8} key={doctor.id}>
                                     <Card doctor={doctor} />
