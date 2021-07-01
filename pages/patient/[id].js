@@ -1,0 +1,198 @@
+import React from "react";
+import patienProfileSyle from "@styles/PatientProfile.module.scss";
+import useTranslation from "next-translate/useTranslation";
+import { Col } from "antd";
+import {
+  PersonIcon,
+  GenderIcon,
+  EditIcon,
+} from "../../src/utils/svg/patientProfile";
+
+import { useRouter } from "next/router";
+import API from "@utils/axios";
+import NotFound from "../../src/components/NonFound/idex";
+
+const Task = ({ patient }) => {
+  const { t } = useTranslation();
+
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+  if (!patient) return <NotFound />;
+  return (
+    <div style={{ direction: "ltr" }} className={patienProfileSyle.wrapper}>
+      <AvatarWithEdit name={patient.name} />
+      <UserCardInfo
+        age={patient.age}
+        phone_number={patient.phone_number}
+        city={patient.city}
+      />
+      <DividerLine />
+      <DbCarInfo
+        t={t}
+        ISF={patient.ISF}
+        sliding_scale={patient.sliding_scale}
+        is_other_health_issues={ipatient.s_other_health_issues}
+        I_C={patient.I_C}
+        health_issues={patient.health_issues}
+      />
+      <DividerLine />
+      <NotesCard note={patient.note} t={t} />
+    </div>
+  );
+};
+
+const UserCardInfo = ({ age, phone_number, city }) => (
+  <div className={patienProfileSyle.UserCardInfoWrapper}>
+    <h6 className={patienProfileSyle.labelWidht}>Patient Information</h6>
+    <div style={{ flex: 1 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          flexWrap: "wrap",
+        }}
+      >
+        <RenderInfoText title="Age" info={age} />
+        <RenderInfoText title="Coverd Topics" info="xxx,xxxxx,xxxxx" />
+        <div />
+      </div>
+      <RenderInfoText title="Phone" info={phone_number} />
+      <RenderInfoText title="City" info={city} />
+    </div>
+  </div>
+);
+const DbCarInfo = ({
+  t,
+  ISF,
+  sliding_scale,
+  is_other_health_issues,
+  I_C,
+  health_issues,
+}) => (
+  // not found Patient Type   responsable of patient // pateint is on //
+  <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+    <h6 className={patienProfileSyle.labelWidht}>DataBase Information</h6>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flex: 1,
+        flexWrap: "wrap",
+      }}
+    >
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            width: "100%",
+            flexWrap: "wrap",
+          }}
+        >
+          <RenderInfoText title={t("patientType")} info="I" />
+          <RenderInfoText title={t("CoveredTopics")} info="xxx,xxxxx,xxxxx" />
+          <div />
+        </div>
+        <RenderInfoText title={t("patientType")} info="xxxxxxxxxxxx" />
+        <RenderInfoText title={t("ResponsableOfPatient")} info="Paris" />
+        <RenderInfoText title={t("PatientIsOn")} info="Paris" />
+        <RenderInfoText title={t("ISF")} info={ISF} />
+        <RenderInfoText title={t("IC")} info={I_C} />
+        <RenderInfoText title={t("SlidingSclae")} info={sliding_scale} />
+        <RenderInfoText
+          title={t("CriticalHealthIssue")}
+          info={health_issues[0]}
+        />
+      </div>
+      <a className={patienProfileSyle.basicButton}>View History </a>
+    </div>
+  </div>
+);
+
+const NotesCard = ({ note, t }) => (
+  <div className={patienProfileSyle.NotesCardWrapper}>
+    <Col>
+      <h6 className={patienProfileSyle.NotesCardWrapperName}>
+        {t("DataBase")}
+      </h6>
+      <h6 className={patienProfileSyle.NotesCardWrapperName}>
+        {t("information")}
+      </h6>
+    </Col>
+    <div className={patienProfileSyle.NotesCardWrapperInformation}>
+      <div className={patienProfileSyle.NotesCardWrapperInformationNote}>
+        <h6 style={{ margin: 0 }}>{t("DoctorRecommendationNotes")}</h6>
+        <p className={patienProfileSyle.NotesCardWrapperInformationNoteText}>
+          {note}
+        </p>
+      </div>
+      <div
+        className={
+          patienProfileSyle.NotesCardWrapperInformationViewHistoyWrapper
+        }
+      >
+        <a
+          className={
+            patienProfileSyle.NotesCardWrapperInformationViewHistoyWrapperBtn
+          }
+        >
+          {t("ViewAllNotes")}
+        </a>
+        <a className={patienProfileSyle.basicButtonBlue}>{t("EditNotes")}</a>
+      </div>
+    </div>
+  </div>
+);
+
+const AvatarWithEdit = ({ name }) => (
+  <div className={patienProfileSyle.avatarWrapper}>
+    <div className={patienProfileSyle.avatarWrapperIconAndName}>
+      <PersonIcon />
+      <h3 className={patienProfileSyle.avatarWrapperIconAndNameAvatarName}>
+        {name}
+      </h3>
+      <GenderIcon />
+    </div>
+    <EditIcon />
+  </div>
+);
+
+const RenderInfoText = ({ title, info }) => (
+  <h6 className={patienProfileSyle.infoTexthead}>
+    <b className={patienProfileSyle.infoTextvalue}>{title} :</b>{" "}
+    <b className={patienProfileSyle.infoTextvalueValue}> {info}</b>
+  </h6>
+);
+const DividerLine = () => <div className={patienProfileSyle.dvider} />;
+
+export async function getStaticPaths() {
+  const res = await API.get(
+    "patient/getPatients?page=1&limit=10&doctorId=1ff985fb-8a51-43e1-8342-1cc71a6192f5"
+  );
+  const patient = res.data;
+
+  const paths = patient.data.map((p) => ({
+    params: { id: p.id },
+  }));
+
+  return { paths, fallback: true };
+}
+
+export async function getStaticProps({ params }) {
+  console.log("params", params);
+
+  let patient = null;
+  try {
+    const res = await API.get(`patient/patient?id=${params.id}`);
+    patient = res.data;
+  } catch (error) {}
+
+  return { props: { patient } };
+}
+
+export default Task;

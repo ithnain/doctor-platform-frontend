@@ -11,9 +11,13 @@
   "PatientIsOn": "Patient is",
   "ISF": "ISF",
   "IC": "IC",
-  "Sliding Sclae": "Sliding Sclae",
-  "Critical Health Issue": "Critical Health Issue",
+  "SlidingSclae": "Sliding Sclae",
+  "CriticalHealthIssue": "Critical Health Issue",
   "Medical Condition": "Medical Condition",
-  "view history": "view history",
-  "DoctorRecommendationNotes": "Doctor Recommendation & notes"
+  "viewHistory": "view history",
+  "DoctorRecommendationNotes": "Doctor Recommendation & notes",
+  "DatatBaseInformation": "Database information",
+  "DataBase": "Database",
+  "ViewAllNotes": "view all notes",
+  "EditNotes": "Edit notes"
 }

@@ -10,7 +10,6 @@
         "format": "prettier --write ."
     },
     "dependencies": {
-        "@ant-design/icons": "^4.6.2",
         "antd": "^4.16.2",
         "axios": "^0.21.1",
         "cookie": "^0.4.1",
@@ -21,6 +20,7 @@
         "normalize.css": "^8.0.1",
         "react": "17.0.2",
         "react-dom": "17.0.2",
+        "react-lottie": "^1.2.3",
         "react-redux": "^7.2.4",
         "redux": "^4.1.0",
         "redux-devtools-extension": "^2.13.9",

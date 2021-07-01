@@ -1,0 +1,108 @@
+@import "./colors";
+@import "./responsive";
+
+.wrapper {
+  background-color: #ffffff;
+  width: 95%;
+  margin: 5rem auto;
+}
+.dvider {
+  background-color: #ccc;
+  width: 100%;
+  height: 1px;
+  margin: 8px 10px;
+}
+.infoTexthead {
+  margin: 0;
+}
+.infoTextvalue {
+  margin: 0px 4px;
+}
+.infoTextvalueValue {
+  color: #005792;
+}
+.avatarWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+.avatarWrapperIconAndName {
+  display: flex;
+  align-items: center;
+}
+.avatarWrapperIconAndNameAvatar {
+  width: 70px;
+  height: 70px;
+  border: 1px solid;
+}
+.avatarWrapperIconAndNameAvatarName {
+  padding: 0px 8px;
+  color: black;
+  font-weight: 900;
+  font-size: 1 rem;
+}
+.avatarWrapperIconAndNameAvatarIcon {
+  padding: 0px 8px;
+}
+.NotesCardWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.NotesCardWrapperName {
+  width: 70px;
+  color: #8798ad;
+}
+.NotesCardWrapperInformation {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.NotesCardWrapperInformationNote {
+  flex: 1;
+  min-width: 200px;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.NotesCardWrapperInformationNoteText {
+  max-width: 100%;
+  padding-right: 8px;
+  margin: 0px;
+  color: #005792;
+}
+.NotesCardWrapperInformationViewHistoyWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.NotesCardWrapperInformationViewHistoyWrapperBtn {
+  padding: 4px 8px;
+  border: solid 2px #ee3d60;
+  margin: 3px 0;
+  text-align: center;
+  color: #ee3d60;
+  &:hover {
+    color: #ee3d60;
+  }
+}
+.UserCardInfoWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.labelWidht {
+  width: 70px;
+  color: #8798ad;
+}
+.basicButton {
+  @extend .NotesCardWrapperInformationViewHistoyWrapperBtn;
+}
+.basicButtonBlue {
+  border-color: #015792;
+  &:hover {
+    color: #015792;
+  }
+
+  @extend .NotesCardWrapperInformationViewHistoyWrapperBtn;
+}
