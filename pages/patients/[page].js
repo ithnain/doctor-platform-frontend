@@ -9,7 +9,7 @@ import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-function Patients({direction, patients, totalCount}) {
+function Patients({ direction, patients, totalCount }) {
     const { t } = useTranslation('patients');
     const router = useRouter();
     const { Title } = Typography;
@@ -30,7 +30,7 @@ function Patients({direction, patients, totalCount}) {
             keywords={'doctor,platform,any word'}
             description={'this is the doctor overview'}
             active={`/patients/${+router.query.page}`}>
-                 <ConfigProvider direction={direction}>
+            <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
                         <Title level={3} align="start">
@@ -65,7 +65,7 @@ function Patients({direction, patients, totalCount}) {
                     </Col>
                 </Row>
             </ConfigProvider>
-            </SliderLayout>
+        </SliderLayout>
     );
 }
 
@@ -75,21 +75,18 @@ Patients.propTypes = {
     totalCount: PropTypes.string.isRequired
 };
 export const getServerSideProps = async ({ req, query }) => {
-    
     try {
         const res = await API.get(`/patient/getPatients?page=${query.page}&limit=9`, {
             headers: {
                 Authorization: `Bearer ${req.cookies.token}`
             }
         });
-       
-        const { data } = res;
 
-        console.log(res.data.length)
+        const { data } = res;
         return {
             props: {
-                patients: res.data,
-                totalCount: res.data.length
+                patients: data.data,
+                totalCount: data.totalCount
             }
         };
     } catch (error) {
@@ -102,4 +99,3 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 };
 export default authenticatedRoute(Patients, { pathAfterFailure: '/login' });
-

@@ -18,8 +18,8 @@ import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
 function SliderLayout({ title, keywords, description, active, children, textBtn }) {
+    const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
     const dispatch = useDispatch();
-    const { name, hospital, role, gender, image } = useSelector((state) => state?.user?.data);
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
@@ -29,22 +29,23 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
     useEffect(() => {
-        if (role === roles.doctor ) {
+        if (role === roles.doctor) {
             setShowAddPatientBtn(true);
         }
     }, [path, role]);
 
     const logoutHandler = () => {
-        dispatch(clearUser());
-        // cookie.remove('token');
-        fetch('/api/auth/logout', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
+        router.push('/login').then(() => {
+            fetch('/api/auth/logout', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            }).then(() => {
+                dispatch(clearUser());
+            });
         });
-        router.push('/login');
     };
     return (
         <Layout>
@@ -70,14 +71,15 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
                     />
                 </div>
                 <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
-                    {sideNavIcons[role].sidenavData.map((item) => (
-                        <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
-                            <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
-                            <span className="nav-text">
-                                <Link href={`/${item.link}`}>{item.title}</Link>
-                            </span>
-                        </Menu.Item>
-                    ))}
+                    {role &&
+                        sideNavIcons[role].sidenavData.map((item) => (
+                            <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
+                                <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
+                                <span className="nav-text">
+                                    <Link href={`/${item.link}`}>{item.title}</Link>
+                                </span>
+                            </Menu.Item>
+                        ))}
 
                     <Menu.Item
                         onClick={logoutHandler}
@@ -103,7 +105,7 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu textBtn={textBtn} showAddPatientBtn={showAddPatientBtn} />
+                            <HeaderMenu showAddPatientBtn={showAddPatientBtn} />
                         </Header>
                     </Col>
                 </Row>
@@ -115,7 +117,7 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
     );
 }
 SliderLayout.defaultProps = {
-    title: '',
+    title: ' ',
     description: 'Follow up patients',
     keywords: 'patient,doctor'
 };
