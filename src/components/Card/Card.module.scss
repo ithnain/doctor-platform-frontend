@@ -2,7 +2,8 @@
 
 .card {
     width: 100%;
-    min-height: 225px;
+    min-height: 190px;
+    height: auto;
     // margin: 30px 5.2px 104px 31.3px;
     padding: 8px 11.8px;
     border-radius: 8px;
@@ -16,7 +17,8 @@
     }
 
     &__content {
-        height: 100%;
+        min-height: 190px;
+        height: auto
     }
 
     &__img {
@@ -35,11 +37,11 @@
         background-color: $white;
     }
 
-    &__second_row{
+    &__second_row {
         margin-top: 20px;
     }
 
-    &__header_wrapper{
+    &__header_wrapper {
         display: flex;
         justify-content: space-between;
     }
