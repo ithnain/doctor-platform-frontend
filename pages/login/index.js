@@ -49,14 +49,10 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    console.log("error")
-                    console.log("error")
                     toastr.error('something went wrong');
                 }
             })
             .catch((err) => {
-                console.log("EEEEEE")
-                console.log(err)
                 console.log(err?.response)
                 if (err.response?.data?.message) {
                     toastr.error(err.response.data?.message);

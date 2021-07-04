@@ -41,7 +41,7 @@ function Patients({ direction, patients, totalCount }) {
                         <Row gutter={[20, 8]} justify="start" align="middle">
                             {patients.map((patient) => (
                                 <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card patient={patient} canEdit={true} />
+                                    <Card patient={patient} canEdit={true} direction={direction}/>
                                 </Col>
                             ))}
                         </Row>
@@ -90,7 +90,6 @@ export const getServerSideProps = async ({ req, query }) => {
             }
         };
     } catch (error) {
-        console.log(error);
         return {
             props: {
                 patients: []

@@ -11,7 +11,7 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = false }) => {
+const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = false, direction}) => {
     // Patient => if the card came form myPatient View or Hospital View the patient object will not be null;
     // canEdit => by default it is false, unless it came from myPatients view, when it is true small edit icon will appear on the top right corner of the card;
     // addPatient => by default it is false, unless it came from Hospital View then it wii appear in the bottom right corner of the card;
@@ -57,16 +57,14 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
         router.push('/patients/1');
         
     } catch (err) {
-        console.log(err)
         let message = 'Server Error';
         if(err?.response?.data?.error?.message?.en){
-            // if(direction === 'rtl'){
+            if(direction === 'rtl'){
                 message = err?.response?.data?.error?.message?.ar;
-            // }else {
-                // message = err?.response?.data?.error?.message?.en;
-            // }
+            }else {
+                message = err?.response?.data?.error?.message?.en;
+            }
         }
-
         toastr.error(message);
     }
     }
@@ -237,7 +235,8 @@ Card.propTypes = {
     setShow: PropTypes.func.isRequired,
     patient: PropTypes.object,
     canEdit: PropTypes.bool,
-    addPatient: PropTypes.bool
+    addPatient: PropTypes.bool,
+    direction: PropTypes.string
 };
 
 export default Card;

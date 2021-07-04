@@ -26,9 +26,9 @@ function Hospital({direction, patients, totalCount}) {
 
     return (
         <SliderLayout
-            title={'Overview'}
+            title={'Hospital'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}
+            description={'this is the hospital patients page'}
             active={`/hospital/${+router.query.page}`}>
                  <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
@@ -41,7 +41,7 @@ function Hospital({direction, patients, totalCount}) {
                         <Row gutter={[20, 8]} justify="start" align="middle">
                             {patients.map((patient) => (
                                 <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card  patient={patient} addPatient actions />
+                                    <Card  patient={patient} addPatient actions direction={direction}/>
                                 </Col>
                             ))}
                         </Row>
@@ -84,7 +84,6 @@ export const getServerSideProps = async ({ req, query }) => {
         });
         
         const { data } = res;
-
         return {
             props: {
                 patients:  data.data,
@@ -92,7 +91,6 @@ export const getServerSideProps = async ({ req, query }) => {
             }
         };
     } catch (error) {
-        console.log(error);
         console.log(error?.response?.data);
         return {
             props: {
