@@ -4,5 +4,9 @@
     "reject": "reject",
     "email": "Email",
     "id": "ID",
-    "registerPatient": "Register Patient"
+    "registerPatient": "Register Patient",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile",
+    "phone": "Phone",
+    "speciality": "speciality"
 }
