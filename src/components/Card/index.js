@@ -4,7 +4,6 @@ import { Space, Typography } from 'antd';
 import API from '@utils/axios';
 import CustomButton from '@components/CustomBtn';
 import Image from 'next/image';
-// import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { initializeStore } from '@redux/store';
 import styles from './Card.module.scss';
@@ -41,7 +40,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
 
     return (
         <div className={styles.card}>
-            <Row className={styles.card__content} justify="start" align="middle">
+            <Row className={styles.card__content} justify="start" align="top">
                 <Col span={24}>
                     <Row justify="start">
                         <Col span={6} flex>
@@ -134,7 +133,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                 {/* If action true */}
                 {actions && (
                     <Col span={24}>
-                        <Row gutter={[2, 0]} justify="end" align="middle">
+                        <Row gutter={[2, 0]} justify="end" align="bottom">
                             <Col xs={11} md={8} flex>
                                 {/* If addPatient true  do not display this button 
                                 else if addPatient false and actions is true display this button*/}

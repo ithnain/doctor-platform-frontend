@@ -1,4 +1,5 @@
 import { CLEAR_USER, SET_USER } from '../../types';
+
 const initialState = { accessToken: '', role: '', refreshToken: '', name: '', id: '' };
 export default function userReducer(state = initialState, action) {
     switch (action.type) {
