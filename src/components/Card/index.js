@@ -39,6 +39,39 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
         isPatientCard = true;
     }
 
+    // add patient to Doctor
+    const addPatientToDoctor = async () => {
+        try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${
+                    initializeStore().getState().user?.token
+                }`
+            }
+        }
+        const data = { patientId: patient.id }
+       const result = await  API.patch(
+            `/patient/addPatientToDoctor`, data, config  
+        );
+        console.log(result)
+        toastr.success('patient added successfully');
+        router.push('/patients/1');
+        
+    } catch (err) {
+        console.log(err)
+        let message = 'Server Error';
+        if(err?.response?.data?.error?.message?.en){
+            // if(direction === 'rtl'){
+                message = err?.response?.data?.error?.message?.ar;
+            // }else {
+                // message = err?.response?.data?.error?.message?.en;
+            // }
+        }
+
+        toastr.error(message);
+    }
+    }
+
     return (
         <div className={styles.card}>
             <Row className={styles.card__content} justify="start" align="middle">
@@ -166,21 +199,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                                     <CustomButton
                                         className={`${styles.card__btn} blueBtn`}
                                         text={t('addToMyPatient')}
-                                        handleClick={() => {
-                                            API.get(
-                                                `/supervisor/doctors/reject?doctor=${doctor.id}`,
-                                                {
-                                                    headers: {
-                                                        Authorization: `Bearer ${
-                                                            initializeStore().getState().user?.token
-                                                        }`
-                                                    }
-                                                }
-                                            ).then(() => {
-                                                toastr.success('patient added successfully');
-                                                router.push('/hospital/1');
-                                            });
-                                        }}
+                                        handleClick={addPatientToDoctor}
                                     />
                                 ) : (
                                     // this case happen only if the Card will come form Doctors view, If addPatient false display the accept button for doctor

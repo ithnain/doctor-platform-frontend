@@ -77,7 +77,7 @@ Hospital.propTypes = {
 export const getServerSideProps = async ({ req, query }) => {
     
     try {
-        const res = await API.get(`/patient/getPatients?page=${query.page}&limit=9`, {
+        const res = await API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`, {
             headers: {
                 Authorization: `Bearer ${req.cookies.token}`
             }
@@ -85,15 +85,15 @@ export const getServerSideProps = async ({ req, query }) => {
         
         const { data } = res;
 
-        console.log(res.data.length)
         return {
             props: {
-                patients: res.data,
-                totalCount: res.data.length
+                patients:  data.data,
+                totalCount: data.totalCount
             }
         };
     } catch (error) {
         console.log(error);
+        console.log(error?.response?.data);
         return {
             props: {
                 patients: []

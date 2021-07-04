@@ -26,9 +26,9 @@ function Patients({ direction, patients, totalCount }) {
 
     return (
         <SliderLayout
-            title={'Overview'}
+            title={'Patients'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}
+            description={'this is the doctor patients view'}
             active={`/patients/${+router.query.page}`}>
             <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
