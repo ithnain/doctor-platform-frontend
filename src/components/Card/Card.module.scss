@@ -45,4 +45,8 @@
         display: flex;
         justify-content: space-between;
     }
+
+    &__pointer:hover {
+        cursor: pointer;
+    }
 }

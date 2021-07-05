@@ -52,7 +52,6 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
        const result = await  API.patch(
             `/patient/addPatientToDoctor`, data, config  
         );
-        console.log(result)
         toastr.success('patient added successfully');
         router.push('/patients/1');
         
@@ -88,9 +87,11 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                                     {/* If can edit true display edit icon */}
                                     {canEdit ? (
                                         <Image
+                                            onClick={() => router.push(`/patient/${patient.id}`)}
                                             width={20}
                                             height={20}
                                             src="/assets/icons/edit.svg"
+                                            className={styles.card__pointer}
                                         />
                                     ) : null}
                                 </div>
@@ -153,7 +154,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                                     <Text>
                                         {t('numberOfSessionsCompleted')}:{' '}
                                         <span className={styles.card__blueText}>
-                                            {new Date().toLocaleDateString()}
+                                            5
                                         </span>
                                     </Text>
                                 </Space>
