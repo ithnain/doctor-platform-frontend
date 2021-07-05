@@ -13,9 +13,9 @@ function Profile({ direction, info }) {
 
     return (
         <SliderLayout
-            title={'Registration'}
+            title={'Profile'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}>
+            description={'this is the doctor Profile'}>
             <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
