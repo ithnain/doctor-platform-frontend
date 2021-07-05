@@ -30,7 +30,9 @@ function MyApp({ Component, pageProps }) {
       <PersistGate
         loading={Loader({ loading: true })}
         persistor={persistor}
-        // onBeforeLift={() => GetEnumerationOnStart(store)}
+        onBeforeLift={() => {
+          GetEnumerationOnStart(store);
+        }}
       >
         <Head>
           <title>Doctor Platform </title>
