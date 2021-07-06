@@ -11,7 +11,7 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = false, direction}) => {
+const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = false, direction, profile}) => {
     // Patient => if the card came form myPatient View or Hospital View the patient object will not be null;
     // canEdit => by default it is false, unless it came from myPatients view, when it is true small edit icon will appear on the top right corner of the card;
     // addPatient => by default it is false, unless it came from Hospital View then it wii appear in the bottom right corner of the card;
@@ -73,11 +73,27 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
             <Row className={styles.card__content} justify="start" align="top">
                 <Col span={24}>
                     <Row justify="start">
-                        <Col span={6} flex>
-                            <div className={styles.card__img}>
-                                <Image width={75} height={75} src="/assets/images/doctor-200.jpg" />
-                            </div>
-                        </Col>
+                        {profile ? (
+                            <Col span={2} flex>
+                                <div className={styles.card__img}>
+                                    <Image
+                                        width={75}
+                                        height={75}
+                                        src="/assets/images/doctor-200.jpg"
+                                    />
+                                </div>
+                            </Col>
+                        ) : (
+                            <Col span={6} flex>
+                                <div className={styles.card__img}>
+                                    <Image
+                                        width={75}
+                                        height={75}
+                                        src="/assets/images/doctor-200.jpg"
+                                    />
+                                </div>
+                            </Col>
+                        )}
                         <Col flex span={17} offset={1} align="start">
                             <>
                                 <div className={styles.card__header_wrapper}>
@@ -139,6 +155,33 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                                 </Space>
                             </>
                         </Col>
+                        {profile && (
+                            <Col span={4} flex>
+                                <div className={styles.card__img}>
+                                    <div className={styles.card__img}>
+                                        <CustomButton
+                                            className={`${styles.card__btn} redBtn redBtn--outline`}
+                                            text={t('editProfile')}
+                                            // handleClick={() => {
+                                            //     API.get(
+                                            //         `/supervisor/doctors/reject?doctor=${doctor.id}`,
+                                            //         {
+                                            //             headers: {
+                                            //                 Authorization: `Bearer ${
+                                            //                     initializeStore().getState().user?.token
+                                            //                 }`
+                                            //             }
+                                            //         }
+                                            //     ).then(() => {
+                                            //         toastr.success('User rejected successfully');
+                                            //         router.push('/doctors/1');
+                                            //     });
+                                            // }}
+                                        />
+                                    </div>
+                                </div>
+                            </Col>
+                        )}
                     </Row>
                     {/* In Case of patient card display last session and number of Session */}
                     {isPatientCard ? (
@@ -164,7 +207,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                 </Col>
                 {/* If action true */}
                 {actions && (
-                    <Col span={24}>
+                    <Col span={24} className={styles.card__content__actions}>
                         <Row gutter={[2, 0]} justify="end" align="bottom">
                             <Col xs={11} md={8} flex>
                                 {/* If addPatient true  do not display this button 
@@ -237,7 +280,8 @@ Card.propTypes = {
     patient: PropTypes.object,
     canEdit: PropTypes.bool,
     addPatient: PropTypes.bool,
-    direction: PropTypes.string
+    direction: PropTypes.string,
+    profile: PropTypes.bool.isRequired
 };
 
 export default Card;
