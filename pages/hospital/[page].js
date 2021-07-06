@@ -9,7 +9,7 @@ import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-function Hospital({direction, patients, totalCount}) {
+function Hospital({ direction, patients, totalCount }) {
     const { t } = useTranslation('hospital');
     const router = useRouter();
     const { Title } = Typography;
@@ -30,7 +30,7 @@ function Hospital({direction, patients, totalCount}) {
             keywords={'doctor,platform,any word'}
             description={'this is the hospital patients page'}
             active={`/hospital/${+router.query.page}`}>
-                 <ConfigProvider direction={direction}>
+            <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
                         <Title level={3} align="start">
@@ -41,7 +41,12 @@ function Hospital({direction, patients, totalCount}) {
                         <Row gutter={[20, 8]} justify="start" align="middle">
                             {patients.map((patient) => (
                                 <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card  patient={patient} addPatient actions direction={direction}/>
+                                    <Card
+                                        patient={patient}
+                                        addPatient
+                                        actions
+                                        direction={direction}
+                                    />
                                 </Col>
                             ))}
                         </Row>
@@ -65,7 +70,7 @@ function Hospital({direction, patients, totalCount}) {
                     </Col>
                 </Row>
             </ConfigProvider>
-            </SliderLayout>
+        </SliderLayout>
     );
 }
 
@@ -75,18 +80,17 @@ Hospital.propTypes = {
     totalCount: PropTypes.string.isRequired
 };
 export const getServerSideProps = async ({ req, query }) => {
-    
     try {
         const res = await API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`, {
             headers: {
                 Authorization: `Bearer ${req.cookies.token}`
             }
         });
-        
+
         const { data } = res;
         return {
             props: {
-                patients:  data.data,
+                patients: data.data,
                 totalCount: data.totalCount
             }
         };
@@ -100,4 +104,3 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 };
 export default authenticatedRoute(Hospital, { pathAfterFailure: '/login' });
-

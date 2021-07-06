@@ -1,6 +1,7 @@
 // import PropTypes from 'prop-types';
 // import styles from './Patients.module.scss';
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
+
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
@@ -41,7 +42,7 @@ function Patients({ direction, patients, totalCount }) {
                         <Row gutter={[20, 8]} justify="start" align="middle">
                             {patients.map((patient) => (
                                 <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card patient={patient} canEdit={true} direction={direction}/>
+                                    <Card patient={patient} canEdit={true} direction={direction} />
                                 </Col>
                             ))}
                         </Row>

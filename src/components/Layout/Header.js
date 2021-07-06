@@ -14,7 +14,6 @@ import useTranslation from 'next-translate/useTranslation';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
 
-
 // import CustomButton from '../CustomBtn';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
