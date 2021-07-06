@@ -9,7 +9,7 @@ const { Option } = Select;
 function LangChanger({ abs }) {
     const router = useRouter();
     const comp = (
-        <div>
+        <div className={styles.languageDrop}>
             <Select
                 defaultValue={router.locale}
                 bordered={false}
@@ -31,7 +31,7 @@ function LangChanger({ abs }) {
     return (
         <>
             {abs ? (
-                <Row className={styles.languageDrop}>
+                <Row className={styles.languageDrop__abs}>
                     <Col>{comp}</Col>
                 </Row>
             ) : (
