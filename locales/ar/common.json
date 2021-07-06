@@ -1,8 +1,12 @@
 {
     "requiredInput": "Please input your Phone",
-    "accept": "accept",
-    "reject": "reject",
-    "email": "Email",
+    "accept": "قبول",
+    "reject": "رفض",
+    "email": "بريد الألكتروني",
     "id": "ID",
-    "registerPatient": "إضافة مريض"
+    "registerPatient": "إضافة مريض",
+    "myProfile": "حسابي",
+    "editProfile": "Edit Profile",
+    "phone": "رقم",
+    "speciality": "تخصص"
 }

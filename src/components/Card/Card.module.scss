@@ -2,7 +2,7 @@
 
 .card {
     width: 100%;
-    min-height: 190px;
+    max-height: 245px;
     height: auto;
     // margin: 30px 5.2px 104px 31.3px;
     padding: 8px 11.8px;
@@ -17,8 +17,14 @@
     }
 
     &__content {
-        min-height: 190px;
-        height: auto
+        // min-height: 190px;
+        text-transform: capitalize;
+        padding: 8px 0;
+        height: auto;
+
+        &__actions {
+            margin-top: 24px;
+        }
     }
 
     &__img {

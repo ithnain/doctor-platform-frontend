@@ -14,7 +14,6 @@ import useTranslation from 'next-translate/useTranslation';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
 
-
 // import CustomButton from '../CustomBtn';
 // import en from '@src/i18n/en';
 // import ar from '@src/i18n/ar';
@@ -57,7 +56,7 @@ function Header({ name, hospitalName, showAddPatientBtn }) {
                 <LangToggle setLang={setLang} />
             </div>
 
-            <Link href="/">
+            <Link href="/doctor/profile">
                 <div className={styles.header__img}>
                     <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
                 </div>
