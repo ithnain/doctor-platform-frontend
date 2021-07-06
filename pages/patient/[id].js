@@ -2,17 +2,13 @@ import React from "react";
 import patienProfileSyle from "@styles/PatientProfile.module.scss";
 import useTranslation from "next-translate/useTranslation";
 import { Col } from "antd";
-import {
-  PersonIcon,
-  GenderIcon,
-  EditIcon,
-} from "../../src/utils/svg/patientProfile";
+import { PersonIcon, GenderIcon, EditIcon } from "@utils/svg/patientProfile";
+import authenticatedRoute from "@components/AuthenticatedRoute";
 
 import { useRouter } from "next/router";
 import API from "@utils/axios";
-import NotFound from "../../src/components/NonFound/idex";
 
-const Task = ({ patient }) => {
+const PatientProfile = ({ patient }) => {
   const { t } = useTranslation();
 
   const router = useRouter();
@@ -20,7 +16,7 @@ const Task = ({ patient }) => {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  if (!patient) return <NotFound />;
+  if (!patient) return <h1>not found</h1>;
   return (
     <div style={{ direction: "ltr" }} className={patienProfileSyle.wrapper}>
       <AvatarWithEdit name={patient.name} />
@@ -170,29 +166,20 @@ const RenderInfoText = ({ title, info }) => (
 );
 const DividerLine = () => <div className={patienProfileSyle.dvider} />;
 
-export async function getStaticPaths() {
-  const res = await API.get(
-    "patient/getPatients?page=1&limit=10&doctorId=1ff985fb-8a51-43e1-8342-1cc71a6192f5"
-  );
-  const patient = res.data;
-
-  const paths = patient.data.map((p) => ({
-    params: { id: p.id },
-  }));
-
-  return { paths, fallback: true };
-}
-
-export async function getStaticProps({ params }) {
-  console.log("params", params);
-
+export async function getServerSideProps({ params, req }) {
   let patient = null;
   try {
-    const res = await API.get(`patient/patient?id=${params.id}`);
+    const res = await API.get(`patient/patient?id=${params.id}`, {
+      headers: {
+        Authorization: `Bearer ${req.cookies.token}`,
+      },
+    });
     patient = res.data;
   } catch (error) {}
 
   return { props: { patient } };
 }
 
-export default Task;
+export default authenticatedRoute(PatientProfile, {
+  pathAfterFailure: "/login",
+});
