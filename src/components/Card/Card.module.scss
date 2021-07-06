@@ -25,6 +25,8 @@
         &__actions {
             margin-top: 24px;
         }
+        min-height: 190px;
+        height: auto;
     }
 
     &__img {
@@ -41,5 +43,18 @@
         height: 36px;
         border-radius: 8px;
         background-color: $white;
+    }
+
+    &__second_row {
+        margin-top: 20px;
+    }
+
+    &__header_wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__pointer:hover {
+        cursor: pointer;
     }
 }

@@ -9,14 +9,14 @@
                 "key": "3",
                 "link": "registration/1"
             },
-            { "title": "Hospital", "image": "hospital.svg", "key": "4", "link": "hospital" },
+            { "title": "Hospital", "image": "hospital.svg", "key": "4", "link": "hospital/1" },
             { "title": "My Support Cases", "image": "question.svg", "key": "5", "link": "cases" }
         ]
     },
     "CASEHANDLER": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
-            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },
+            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital/1" },
             {
                 "title": "Patient Transfer",
                 "image": "hospital.svg",
@@ -29,8 +29,8 @@
     "DOCTOR": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
-            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital" },
-            { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients" },
+            { "title": "Hospital", "image": "hospital.svg", "key": "2", "link": "hospital/1" },
+            { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients/1" },
             { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
         ]
     }

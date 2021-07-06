@@ -53,6 +53,7 @@ const Login = ({ direction }) => {
                 }
             })
             .catch((err) => {
+                console.log(err?.response);
                 if (err.response?.data?.message) {
                     toastr.error(err.response.data?.message);
                 } else if (err.message) {

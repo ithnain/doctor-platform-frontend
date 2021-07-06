@@ -9,6 +9,8 @@
         "/doctor": ["doctor"],
         "/doctor/profile": ["common"],
         "/create-patient": ["create-patient"],
+        "/patients/[page]": ["patients"],
+        "/hospital/[page]": ["hospital"],
         "/doctors/[page]": ["doctors"],
         "/registration/[page]": ["registration"]
     }
