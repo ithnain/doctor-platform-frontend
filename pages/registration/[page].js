@@ -88,7 +88,6 @@ export const getServerSideProps = async ({ req, query }) => {
             }
         };
     } catch (error) {
-        console.log(error);
         return {
             props: {
                 doctors: []

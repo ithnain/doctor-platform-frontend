@@ -1,6 +1,8 @@
 // import PropTypes from 'prop-types';
 // import styles from './Patients.module.scss';
+
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
+
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
@@ -95,7 +97,6 @@ export const getServerSideProps = async ({ req, query }) => {
             }
         };
     } catch (error) {
-        console.log(error?.response?.data);
         return {
             props: {
                 patients: []

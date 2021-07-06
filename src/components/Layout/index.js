@@ -64,7 +64,7 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
                 className={styles.sider}>
                 <div className={styles.sider__logo}>
                     <Image
-                        preview={false}
+                        // preview={false}
                         width={80}
                         height={80}
                         src="/assets/logo-dark-notext.png"
@@ -128,6 +128,6 @@ SliderLayout.propTypes = {
     keywords: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
     active: PropTypes.string.isRequired,
-    textBtn: PropTypes.string.isRequired
+    textBtn: PropTypes.string
 };
 export default SliderLayout;

@@ -276,13 +276,13 @@ const Card = ({
 
 Card.propTypes = {
     doctor: PropTypes.object.isRequired,
-    actions: PropTypes.bool.isRequired,
-    setShow: PropTypes.func.isRequired,
+    actions: PropTypes.bool,
+    setShow: PropTypes.func,
     patient: PropTypes.object,
     canEdit: PropTypes.bool,
     addPatient: PropTypes.bool,
     direction: PropTypes.string,
-    profile: PropTypes.bool.isRequired
+    profile: PropTypes.bool
 };
 
 export default Card;
