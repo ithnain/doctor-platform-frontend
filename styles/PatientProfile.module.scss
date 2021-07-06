@@ -1,6 +1,8 @@
 @import "./colors";
 @import "./responsive";
 
+$IconWidth: 70px;
+$MarginName: 1rem;
 .wrapper {
   background-color: #ffffff;
   width: 95%;
@@ -13,18 +15,25 @@
   margin: 8px 10px;
 }
 .infoTexthead {
-  margin: 0;
+  margin: 4px 0px;
+  text-align: start;
+  display: flex;
+  align-items: center;
 }
 .infoTextvalue {
-  margin: 0px 4px;
+  font-size: 0.65rem;
+  color: #002c44;
 }
 .infoTextvalueValue {
+  font-size: 0.6rem;
   color: #005792;
+  font-weight: normal;
+  padding: 0 4px;
 }
 .avatarWrapper {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   align-items: center;
 }
 .avatarWrapperIconAndName {
@@ -32,15 +41,14 @@
   align-items: center;
 }
 .avatarWrapperIconAndNameAvatar {
-  width: 70px;
-  height: 70px;
   border: 1px solid;
 }
 .avatarWrapperIconAndNameAvatarName {
-  padding: 0px 8px;
   color: black;
-  font-weight: 900;
-  font-size: 1 rem;
+  font-weight: bold;
+  font-size: 1.9rem;
+  font-weight: bold;
+  margin: auto $MarginName;
 }
 .avatarWrapperIconAndNameAvatarIcon {
   padding: 0px 8px;
@@ -51,7 +59,7 @@
   width: 100%;
 }
 .NotesCardWrapperName {
-  width: 70px;
+  width: paddIngWidht;
   color: #8798ad;
 }
 .NotesCardWrapperInformation {
@@ -65,6 +73,9 @@
   min-width: 200px;
   flex-wrap: wrap;
   flex-direction: column;
+  text-align: start;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 .NotesCardWrapperInformationNoteText {
   max-width: 100%;
@@ -77,9 +88,13 @@
   flex-direction: column;
 }
 .NotesCardWrapperInformationViewHistoyWrapperBtn {
-  padding: 4px 8px;
-  border: solid 2px #ee3d60;
-  margin: 3px 0;
+  padding: 8px 16px;
+  border: solid 1px #ee3d60;
+  border-radius: 8px;
+  font-size: 0.5rem;
+  font-weight: normal;
+
+  margin: 4px 1rem;
   text-align: center;
   color: #ee3d60;
   &:hover {
@@ -94,15 +109,68 @@
 .labelWidht {
   width: 70px;
   color: #8798ad;
+  text-align: start;
 }
 .basicButton {
   @extend .NotesCardWrapperInformationViewHistoyWrapperBtn;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 .basicButtonBlue {
   border-color: #015792;
+  color: #015792;
   &:hover {
     color: #015792;
   }
 
   @extend .NotesCardWrapperInformationViewHistoyWrapperBtn;
+}
+.header {
+  font-size: 1.75rem;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: start;
+  color: #042c42;
+  margin: 20px 20px 20px 8px;
+}
+.personIconWrapper {
+  width: $IconWidth;
+  display: flex;
+}
+.columOneTwoWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  flex-wrap: wrap;
+  //backgroundColor: "red",
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+.columOneTwoWrapperColumOne {
+  flex: 1;
+  align-items: flex-start;
+  text-align: start;
+  min-width: 300;
+}
+.columOneTwoWrapperColumTwo {
+  flex: 1;
+  align-items: flex-start;
+  display: flex;
+  align-self: center;
+  min-width: 200px;
+}
+.diabetsInformationWrapper {
+  display: flex;
+  align-items: center;
+  width: "100%";
+}
+.diabetsInformationWrapperOne {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-wrap: wrap;
 }
