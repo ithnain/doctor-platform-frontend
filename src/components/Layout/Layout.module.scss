@@ -119,9 +119,14 @@
         border-radius: 7px;
         text-transform: none;
         -webkit-appearance: button;
+
+        a {
+            color: $white;
+        }
     }
+
     a {
-        color: $white;
+        color: $darkBlue;
     }
 }
 

@@ -11,3 +11,4 @@ if (IsDev) {
 }
 
 export default compose(applyMiddleware(...middles))(createStore)(reducers);
+

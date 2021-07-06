@@ -18,7 +18,7 @@ function Admin({ direction, doctors }) {
                     </Title>
                 </Col>
                 <Col xs={24}>
-                    <Row gutter={[20, 8]} justify="space-between" align="middle">
+                    <Row gutter={[20, 8]} justify="space-between" align="top">
                         {doctors?.map((doctor) => (
                             <Col xs={24} md={{ span: 8 }} key={doctor.id}>
                                 <Card doctor={doctor} />

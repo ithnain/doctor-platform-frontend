@@ -1,5 +1,6 @@
+// import PropTypes from 'prop-types';
+// import styles from './Patients.module.scss';
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
-
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
@@ -8,10 +9,9 @@ import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-function Doctors({ direction, doctors, totalCount }) {
-    const { t } = useTranslation('doctors');
+function Hospital({ direction, patients, totalCount }) {
+    const { t } = useTranslation('hospital');
     const router = useRouter();
-
     const { Title } = Typography;
     const handlePagination = (page) => {
         const currentPath = router.pathname;
@@ -23,24 +23,30 @@ function Doctors({ direction, doctors, totalCount }) {
             query: currentQuery
         });
     };
+
     return (
         <SliderLayout
-            title={'Registration'}
+            title={'Hospital'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}
-            active={`/doctors/${+router.query.page}`}>
+            description={'this is the hospital patients page'}
+            active={`/hospital/${+router.query.page}`}>
             <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
                         <Title level={3} align="start">
-                            {t('allDoctors', { count: totalCount })}
+                            {t('hospitalPatients', { count: totalCount || 0 })}
                         </Title>
                     </Col>
                     <Col xs={24}>
-                        <Row gutter={[20, 8]} justify="start" align="top">
-                            {doctors.map((doctor) => (
-                                <Col xs={24} md={12} lg={8} key={doctor.id}>
-                                    <Card doctor={doctor} />
+                        <Row gutter={[20, 8]} justify="start" align="middle">
+                            {patients.map((patient) => (
+                                <Col xs={24} md={12} lg={8} key={patient.id}>
+                                    <Card
+                                        patient={patient}
+                                        addPatient
+                                        actions
+                                        direction={direction}
+                                    />
                                 </Col>
                             ))}
                         </Row>
@@ -68,32 +74,33 @@ function Doctors({ direction, doctors, totalCount }) {
     );
 }
 
-Doctors.propTypes = {
+Hospital.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired,
+    patients: PropTypes.array.isRequired,
     totalCount: PropTypes.string.isRequired
 };
 export const getServerSideProps = async ({ req, query }) => {
     try {
-        const res = await API.get(`/supervisor/doctors?page=${query.page}&limit=9&status=ACTIVE`, {
+        const res = await API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`, {
             headers: {
                 Authorization: `Bearer ${req.cookies.token}`
             }
         });
+
         const { data } = res;
         return {
             props: {
-                doctors: data.data,
+                patients: data.data,
                 totalCount: data.totalCount
             }
         };
     } catch (error) {
-        console.log(error);
+        console.log(error?.response?.data);
         return {
             props: {
-                doctors: []
+                patients: []
             }
         };
     }
 };
-export default authenticatedRoute(Doctors, { pathAfterFailure: '/login' });
+export default authenticatedRoute(Hospital, { pathAfterFailure: '/login' });

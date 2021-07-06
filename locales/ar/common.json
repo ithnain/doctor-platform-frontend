@@ -1,8 +1,18 @@
 {
     "requiredInput": "Please input your Phone",
-    "accept": "accept",
-    "reject": "reject",
-    "email": "Email",
+    "accept": "قبول",
+    "reject": "رفض",
+    "email": "بريد الألكتروني",
     "id": "ID",
-    "registerPatient": "إضافة مريض"
+    "age": "Age",
+    "patientType": "Patient type",
+    "responsibleOfPatient": "Responsible of patient",
+    "lastSessionDate": "Last session date",
+    "numberOfSessionsCompleted": "Number of sessions completed",
+    "addToMyPatient": "Add to my patients",
+    "registerPatient": "إضافة مريض",
+    "myProfile": "حسابي",
+    "editProfile": "Edit Profile",
+    "phone": "رقم",
+    "speciality": "تخصص"
 }
