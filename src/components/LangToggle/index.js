@@ -42,7 +42,7 @@ function LangChanger({ abs }) {
 }
 
 LangChanger.propTypes = {
-    abs: PropTypes.bool.isRequired
+    abs: PropTypes.bool
 };
 
 export default LangChanger;
