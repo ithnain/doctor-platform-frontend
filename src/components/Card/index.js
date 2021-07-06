@@ -11,7 +11,15 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = false, direction, profile}) => {
+const Card = ({
+    doctor,
+    actions,
+    patient = null,
+    canEdit = false,
+    addPatient = false,
+    profile = false,
+    direction
+}) => {
     // Patient => if the card came form myPatient View or Hospital View the patient object will not be null;
     // canEdit => by default it is false, unless it came from myPatients view, when it is true small edit icon will appear on the top right corner of the card;
     // addPatient => by default it is false, unless it came from Hospital View then it wii appear in the bottom right corner of the card;
@@ -41,32 +49,27 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
     // add patient to Doctor
     const addPatientToDoctor = async () => {
         try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${
-                    initializeStore().getState().user?.token
-                }`
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${initializeStore().getState().user?.token}`
+                }
+            };
+            const data = { patientId: patient.id };
+            const result = await API.patch(`/patient/addPatientToDoctor`, data, config);
+            toastr.success('patient added successfully');
+            router.push('/patients/1');
+        } catch (err) {
+            let message = 'Server Error';
+            if (err?.response?.data?.error?.message?.en) {
+                if (direction === 'rtl') {
+                    message = err?.response?.data?.error?.message?.ar;
+                } else {
+                    message = err?.response?.data?.error?.message?.en;
+                }
             }
+            toastr.error(message);
         }
-        const data = { patientId: patient.id }
-       const result = await  API.patch(
-            `/patient/addPatientToDoctor`, data, config  
-        );
-        toastr.success('patient added successfully');
-        router.push('/patients/1');
-        
-    } catch (err) {
-        let message = 'Server Error';
-        if(err?.response?.data?.error?.message?.en){
-            if(direction === 'rtl'){
-                message = err?.response?.data?.error?.message?.ar;
-            }else {
-                message = err?.response?.data?.error?.message?.en;
-            }
-        }
-        toastr.error(message);
-    }
-    }
+    };
 
     return (
         <div className={styles.card}>
@@ -196,9 +199,7 @@ const Card = ({ doctor, actions, patient = null, canEdit = false, addPatient = f
                                     </Text>
                                     <Text>
                                         {t('numberOfSessionsCompleted')}:{' '}
-                                        <span className={styles.card__blueText}>
-                                            5
-                                        </span>
+                                        <span className={styles.card__blueText}>5</span>
                                     </Text>
                                 </Space>
                             </Col>
