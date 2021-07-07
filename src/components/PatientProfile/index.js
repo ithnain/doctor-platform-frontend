@@ -2,8 +2,6 @@ import React from "react";
 import patienProfileSyle from "@styles/PatientProfile.module.scss";
 import { Col } from "antd";
 import { PersonIcon, GenderIcon, EditIcon } from "@utils/svg/patientProfile";
-import authenticatedRoute from "@components/AuthenticatedRoute";
-import PropTypes from "prop-types";
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
   <div className={patienProfileSyle.UserCardInfoWrapper}>
