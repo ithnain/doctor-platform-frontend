@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
+import authenticatedRoute from '@components/AuthenticatedRoute';
 import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
 import { useDispatch } from 'react-redux';
@@ -91,7 +92,7 @@ const Login = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    // preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"
@@ -174,5 +175,5 @@ const Login = ({ direction }) => {
 Login.propTypes = {
     direction: PropTypes.string.isRequired
 };
-export default Login;
-// export default authenticatedRoute(Login);
+// export default Login;
+export default authenticatedRoute(Login);
