@@ -2,8 +2,6 @@ import { Col, ConfigProvider, Row, Typography } from 'antd';
 
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
-// import { initializeStore } from '@redux/store';
-// import { useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
 function Admin({ direction, doctors }) {

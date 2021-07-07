@@ -5,6 +5,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import API from '@utils/axios';
 import Head from 'next/head';
 import HeaderMenu from './Header';
 import Image from 'next/image';
