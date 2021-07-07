@@ -5,6 +5,8 @@ import 'toastr/toastr.scss';
 
 import { useEffect, useState } from 'react';
 
+import Head from 'next/head';
+import Loader from '../src/components/loader';
 import { PersistGate } from 'redux-persist/integration/react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
@@ -24,12 +26,15 @@ function MyApp({ Component, pageProps }) {
     }, [router.locale]);
     return (
         <Provider store={store}>
-            <PersistGate loading={<div>loading</div>} persistor={persistor}>
+            <PersistGate loading={Loader({ loading: true })} persistor={persistor}>
+                <Head>
+                    <title>Doctor Platform </title>
+                </Head>
                 <Component {...pageProps} direction={direction} />
             </PersistGate>
         </Provider>
     );
 }
-MyApp.propTypes = { Component: PropTypes.func, pageProps: PropTypes.object };
+MyApp.propTypes = { Component: PropTypes.object, pageProps: PropTypes.object };
 
 export default MyApp;

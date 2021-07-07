@@ -34,7 +34,7 @@ function Placeholder(props) {
                         fontWeight={700}
                         letterSpacing="-.01em">
                         <tspan x={6.422} y={31}>
-                            {'EXPLOR'}
+                            {'EXPLORE'}
                         </tspan>
                     </text>
                     <text

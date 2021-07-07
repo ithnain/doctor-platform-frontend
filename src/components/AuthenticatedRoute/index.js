@@ -10,10 +10,9 @@ const authenticatedRoute = (Component = null, options = {}) => {
 
         componentDidMount() {
             if (router.pathname === '/login' && this.props.isLoggedIn) {
+                this.setState({ loading: true });
                 router.push('/overview');
-                return;
-            }
-            if (this.props.isLoggedIn) {
+            } else if (this.props.isLoggedIn) {
                 this.setState({ loading: false });
             } else {
                 this.setState({ loading: false });
@@ -32,7 +31,7 @@ const authenticatedRoute = (Component = null, options = {}) => {
     }
 
     return connect((state) => ({
-        isLoggedIn: state?.user.token
+        isLoggedIn: state?.user.accessToken
     }))(AuthenticatedRoute);
 };
 

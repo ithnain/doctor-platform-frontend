@@ -17,11 +17,9 @@ import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
 import WTCP from './WTCP.json';
 import cities from './cities.json';
-import { clearUser } from '@src/redux/actions/user';
 import { registerPatient } from '@redux/actions/patient';
 import styles from './patient-form.module.scss';
 import types from './types.json';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
 const { Title, Text } = Typography;
@@ -30,7 +28,6 @@ const { Option } = Select;
 const index = () => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
-    const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
