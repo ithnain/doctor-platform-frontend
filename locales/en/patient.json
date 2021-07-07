@@ -1,7 +1,9 @@
 {
   "PatientProfile": "Patient Profile",
   "patient": "patient",
+  "profile": "profile",
   "information": "information",
+  "patientInformation": "patient information",
   "Age": "Age",
   "phone": "phone",
   "CoveredTopics": "Covered Topics",
@@ -19,5 +21,9 @@
   "DatatBaseInformation": "Database information",
   "DataBase": "Database",
   "ViewAllNotes": "view all notes",
-  "EditNotes": "Edit notes"
+  "EditNotes": "Edit notes",
+  "Notes": "Notes",
+  "MedicalConditions": "Medical Conditions",
+  "Loding": "Loading ....",
+  "NotFOund": "Not Found .."
 }

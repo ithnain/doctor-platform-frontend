@@ -6,8 +6,7 @@ export const PersonIcon = () => (
     data-name="Group 16401"
     xmlns="http://www.w3.org/2000/svg"
     width="31.319"
-    height="39"
-    viewBox="0 0 31.319 39"
+    height="30"
   >
     <path
       id="Path_950"
