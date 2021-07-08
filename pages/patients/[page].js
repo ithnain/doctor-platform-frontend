@@ -40,27 +40,39 @@ function Patients({ direction, patients, totalCount }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patients.map((patient) => (
-                                <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card patient={patient} canEdit={true} direction={direction} />
+                            {patients.length >= 1 ? (
+                                patients.map((patient) => (
+                                    <Col xs={24} md={12} lg={8} key={patient.id}>
+                                        <Card
+                                            patient={patient}
+                                            canEdit={true}
+                                            direction={direction}
+                                        />
+                                    </Col>
+                                ))
+                            ) : (
+                                <Col xs={24}>
+                                    <h4>{t('noPatients')}</h4>
                                 </Col>
-                            ))}
+                            )}
                         </Row>
                     </Col>
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                <Pagination
-                                    current={+router.query.page}
-                                    onChange={handlePagination}
-                                    showTotal={(totalCount, range) =>
-                                        `${range[0]}-${range[1]} of ${totalCount} items`
-                                    }
-                                    defaultPageSize={9}
-                                    defaultCurrent={1}
-                                    total={totalCount}
-                                    showSizeChanger={false}
-                                />
+                                {patients.length >= 1 && (
+                                    <Pagination
+                                        current={+router.query.page}
+                                        onChange={handlePagination}
+                                        showTotal={(totalCount, range) =>
+                                            `${range[0]}-${range[1]} of ${totalCount} items`
+                                        }
+                                        defaultPageSize={9}
+                                        defaultCurrent={1}
+                                        total={totalCount}
+                                        showSizeChanger={false}
+                                    />
+                                )}
                             </Col>
                         </Row>
                     </Col>
