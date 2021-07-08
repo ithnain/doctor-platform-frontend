@@ -5,7 +5,6 @@ import API from '@utils/axios';
 import CustomButton from '@components/CustomBtn';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import { initializeStore } from '@redux/store';
 import styles from './Card.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
@@ -49,13 +48,8 @@ const Card = ({
     // add patient to Doctor
     const addPatientToDoctor = async () => {
         try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${initializeStore().getState().user?.token}`
-                }
-            };
-            const data = { patientId: patient.id };
-            const result = await API.patch(`/patient/addPatientToDoctor`, data, config);
+            // const data = { patientId: patient.id };
+            // const result = await API.patch(`/patient/addPatientToDoctor`, data);
             toastr.success('patient added successfully');
             router.push('/patients/1');
         } catch (err) {
@@ -167,15 +161,7 @@ const Card = ({
                                             text={t('editProfile')}
                                             handleClick={() => {
                                                 API.get(
-                                                    `/supervisor/doctors/reject?doctor=${doctor.id}`,
-                                                    {
-                                                        headers: {
-                                                            Authorization: `Bearer ${
-                                                                initializeStore().getState().user
-                                                                    ?.token
-                                                            }`
-                                                        }
-                                                    }
+                                                    `/supervisor/doctors/reject?doctor=${doctor.id}`
                                                 ).then(() => {
                                                     toastr.success('User rejected successfully');
                                                     router.push('/doctors/1');
@@ -220,15 +206,7 @@ const Card = ({
                                         text={t('reject')}
                                         handleClick={() => {
                                             API.get(
-                                                `/supervisor/doctors/reject?doctor=${doctor.id}`,
-                                                {
-                                                    headers: {
-                                                        Authorization: `Bearer ${
-                                                            initializeStore().getState().user
-                                                                ?.accessToken
-                                                        }`
-                                                    }
-                                                }
+                                                `/supervisor/doctors/reject?doctor=${doctor.id}`
                                             ).then(() => {
                                                 toastr.success('User rejected successfully');
                                                 router.push('/doctors/1');
@@ -252,15 +230,7 @@ const Card = ({
                                         text={t('accept')}
                                         handleClick={() => {
                                             API.get(
-                                                `/supervisor/doctors/accept?doctor=${doctor.id}`,
-                                                {
-                                                    headers: {
-                                                        Authorization: `Bearer ${
-                                                            initializeStore().getState().user
-                                                                ?.accessToken
-                                                        }`
-                                                    }
-                                                }
+                                                `/supervisor/doctors/accept?doctor=${doctor.id}`
                                             ).then(() => {
                                                 router.push('/doctors/1');
                                                 toastr.success('User accepted successfully');
