@@ -9,14 +9,7 @@ export const UserCardInfo = ({ age, phone_number, city, t }) => (
       "information"
     )}`}</h6>
 
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        flex: 1,
-        flexWrap: "wrap",
-      }}
-    >
+    <div className={patienProfileSyle.userinfoCard}>
       <div style={{ flex: 1 }}>
         <div className={patienProfileSyle.columOneTwoWrapper}>
           <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
