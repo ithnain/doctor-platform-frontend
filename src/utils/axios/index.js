@@ -6,7 +6,7 @@ const API = axios.create({
     // baseURL: `http://localhost:3003/v1/`,
     timeout: 30000,
     headers: {
-        Authorization: `Bearer ${initializeStore().getState().user?.token}`
+        Authorization: `Bearer ${initializeStore().getState().user?.accessToken}`
     }
 });
 

@@ -165,21 +165,22 @@ const Card = ({
                                         <CustomButton
                                             className={`${styles.card__btn} redBtn redBtn--outline`}
                                             text={t('editProfile')}
-                                            // handleClick={() => {
-                                            //     API.get(
-                                            //         `/supervisor/doctors/reject?doctor=${doctor.id}`,
-                                            //         {
-                                            //             headers: {
-                                            //                 Authorization: `Bearer ${
-                                            //                     initializeStore().getState().user?.token
-                                            //                 }`
-                                            //             }
-                                            //         }
-                                            //     ).then(() => {
-                                            //         toastr.success('User rejected successfully');
-                                            //         router.push('/doctors/1');
-                                            //     });
-                                            // }}
+                                            handleClick={() => {
+                                                API.get(
+                                                    `/supervisor/doctors/reject?doctor=${doctor.id}`,
+                                                    {
+                                                        headers: {
+                                                            Authorization: `Bearer ${
+                                                                initializeStore().getState().user
+                                                                    ?.token
+                                                            }`
+                                                        }
+                                                    }
+                                                ).then(() => {
+                                                    toastr.success('User rejected successfully');
+                                                    router.push('/doctors/1');
+                                                });
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -223,7 +224,8 @@ const Card = ({
                                                 {
                                                     headers: {
                                                         Authorization: `Bearer ${
-                                                            initializeStore().getState().user?.token
+                                                            initializeStore().getState().user
+                                                                ?.accessToken
                                                         }`
                                                     }
                                                 }
@@ -254,7 +256,8 @@ const Card = ({
                                                 {
                                                     headers: {
                                                         Authorization: `Bearer ${
-                                                            initializeStore().getState().user?.token
+                                                            initializeStore().getState().user
+                                                                ?.accessToken
                                                         }`
                                                     }
                                                 }

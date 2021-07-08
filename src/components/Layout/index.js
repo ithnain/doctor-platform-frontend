@@ -5,21 +5,47 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import API from '@utils/axios';
 import Head from 'next/head';
 import HeaderMenu from './Header';
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { clearUser } from '@redux/actions/user';
+import moment from 'moment';
 import { roles } from '@src/utils/ROLE';
 import sideNavIcons from './sidenav.json';
 import styles from './Layout.module.scss';
+import { updateToken } from '@redux/actions/user';
 import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
-function SliderLayout({ title, keywords, description, active, children, textBtn }) {
-    const { name, hospital, role, gender, image } = useSelector((state) => state.user.data);
+function SliderLayout({ title, keywords, description, active, children }) {
+    const { name, hospital, role, gender, image, refreshToken, refreshTokenDate } = useSelector(
+        (state) => state.user.data
+    );
     const dispatch = useDispatch();
+    useEffect(() => {
+        if (moment(refreshTokenDate) <= moment()) {
+            API.post('auth/refrsh', {
+                token: `${refreshToken}`
+            }).then((res) => {
+                dispatch(updateToken(res.data.accessToken));
+                fetch('/api/auth/login', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token: res.data.accessToken })
+                });
+            });
+        }
+    }, []);
+    useEffect(() => {
+        if (role === roles.doctor) {
+            setShowAddPatientBtn(true);
+        }
+    }, [path, role]);
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
     const path = router.pathname;
@@ -28,11 +54,6 @@ function SliderLayout({ title, keywords, description, active, children, textBtn 
     };
 
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
-    useEffect(() => {
-        if (role === roles.doctor) {
-            setShowAddPatientBtn(true);
-        }
-    }, [path, role]);
 
     const logoutHandler = () => {
         router.push('/login').then(() => {
