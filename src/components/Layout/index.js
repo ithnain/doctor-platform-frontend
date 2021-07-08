@@ -30,7 +30,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
             API.post('auth/refrsh', {
                 token: `${refreshToken}`
             }).then((res) => {
-                dispatch(updateToken(res.data.accessToken));
+                dispatch(updateToken(res.data));
                 fetch('/api/auth/login', {
                     method: 'post',
                     headers: {

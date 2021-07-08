@@ -12,7 +12,12 @@ export default function userReducer(state = initialState, action) {
         case UPDATE_TOKEN:
             return {
                 ...state,
-                accessToken: action.payload
+                data: {
+                    ...state.data,
+                    refreshToken: action.payload.user.refreshToken,
+                    refreshTokenDate: action.payload.user.refreshTokenDate
+                },
+                accessToken: action.payload.accessToken
             };
         case CLEAR_USER:
             return {
