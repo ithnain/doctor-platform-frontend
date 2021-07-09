@@ -1,68 +1,55 @@
-import React from 'react';
-import patienProfileSyle from '@styles/PatientProfile.module.scss';
-import useTranslation from 'next-translate/useTranslation';
-import authenticatedRoute from '@components/AuthenticatedRoute';
-import SliderLayout from '@components/Layout';
-import PropTypes from 'prop-types';
-
-import { useRouter } from 'next/router';
-import API from '@utils/axios';
-
 import {
-    UserCardInfo,
-    DbCarInfo,
-    NotesCard,
     AvatarWithEdit,
-    DividerLine
+    DbCarInfo,
+    DividerLine,
+    NotesCard,
+    UserCardInfo
 } from '@components/PatientProfile';
 
+import API from '@utils/axios';
+import { ConfigProvider } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SliderLayout from '@components/Layout';
+import authenticatedRoute from '@components/AuthenticatedRoute';
+import patienProfileSyle from '@styles/PatientProfile.module.scss';
+import useTranslation from 'next-translate/useTranslation';
+
 const PatientProfile = ({ patient, direction }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('patient');
 
-    const router = useRouter();
-
-    if (router.isFallback) {
-        return <div>{t('Loding')}</div>;
-    }
     if (!patient) return <h1>{t('NotFOund')}</h1>;
     return (
-        <div>
-            <SliderLayout
-                title={'PtientProfile'}
-                keywords={'PtientProfile'}
-                description={'this is patinet profile'}
-                active={`/patient`}>
-                <div
-                    style={{
-                        direction
-                    }}>
-                    <h6 className={patienProfileSyle.header}>{`${t('patient')} ${t(
-                        'profile'
-                    )}`}</h6>
+        <SliderLayout
+            title={'PtientProfile'}
+            keywords={'PtientProfile'}
+            description={'this is patinet profile'}
+            active={`/patient`}>
+            <ConfigProvider direction={direction}>
+                <h6 className={patienProfileSyle.header}>{`${t('patient')} ${t('profile')}`}</h6>
 
-                    <div>
-                        <AvatarWithEdit name={patient.name} />
-                        <UserCardInfo
-                            t={t}
-                            age={patient.age}
-                            phone_number={patient.phone_number}
-                            city={patient.city}
-                        />
-                        <DividerLine />
-                        <DbCarInfo
-                            t={t}
-                            ISF={patient.ISF}
-                            sliding_scale={patient.sliding_scale}
-                            is_other_health_issues={patient.s_other_health_issues}
-                            I_C={patient.I_C}
-                            health_issues={patient.health_issues}
-                        />
-                        <DividerLine />
-                        <NotesCard note={patient.note} t={t} />
-                    </div>
+                <div>
+                    <AvatarWithEdit name={patient.name} />
+                    <UserCardInfo
+                        t={t}
+                        age={patient.age}
+                        phone_number={patient.phone_number}
+                        city={patient.city}
+                    />
+                    <DividerLine />
+                    <DbCarInfo
+                        t={t}
+                        ISF={patient.ISF}
+                        sliding_scale={patient.sliding_scale}
+                        is_other_health_issues={patient.s_other_health_issues}
+                        I_C={patient.I_C}
+                        health_issues={patient.health_issues}
+                    />
+                    <DividerLine />
+                    <NotesCard note={patient.note} t={t} />
                 </div>
-            </SliderLayout>
-        </div>
+            </ConfigProvider>
+        </SliderLayout>
     );
 };
 
