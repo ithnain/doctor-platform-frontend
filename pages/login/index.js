@@ -8,6 +8,7 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
+import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import { setUser } from '@redux/actions/user';
@@ -38,7 +39,6 @@ const Login = ({ direction }) => {
 
                     if (res?.status === 201) {
                         dispatch(setUser(res.data));
-                        // cookie.set('token', res.data.accessToken, { expires: 24 });
                         fetch('/api/auth/login', {
                             method: 'post',
                             headers: {
@@ -50,7 +50,8 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    toastr.error('something went wrong');
+                    direction === 'rtl' ? Toast(error.ar) : Toast(error.en);
+                    // toastr.error('something went wrong');
                 }
             })
             .catch((err) => {

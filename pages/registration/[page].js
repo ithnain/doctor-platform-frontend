@@ -38,27 +38,33 @@ function Registration({ direction, doctors, totalCount }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="top">
-                            {doctors.map((doctor) => (
-                                <Col xs={24} md={12} lg={8} key={doctor.id}>
-                                    <Card actions doctor={doctor} />
-                                </Col>
-                            ))}
+                            {doctors.length >= 1 ? (
+                                doctors.map((doctor) => (
+                                    <Col xs={24} md={12} lg={8} key={doctor.id}>
+                                        <Card actions doctor={doctor} />
+                                    </Col>
+                                ))
+                            ) : (
+                                <h4>{t('noDoctors')}</h4>
+                            )}
                         </Row>
                     </Col>
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                <Pagination
-                                    current={+router.query.page}
-                                    onChange={handlePagination}
-                                    showTotal={(totalCount, range) =>
-                                        `${range[0]}-${range[1]} of ${totalCount} items`
-                                    }
-                                    defaultPageSize={9}
-                                    defaultCurrent={1}
-                                    total={totalCount}
-                                    showSizeChanger={false}
-                                />
+                                {doctors.length >= 1 && (
+                                    <Pagination
+                                        current={+router.query.page}
+                                        onChange={handlePagination}
+                                        showTotal={(totalCount, range) =>
+                                            `${range[0]}-${range[1]} of ${totalCount} items`
+                                        }
+                                        defaultPageSize={9}
+                                        defaultCurrent={1}
+                                        total={totalCount}
+                                        showSizeChanger={false}
+                                    />
+                                )}
                             </Col>
                         </Row>
                     </Col>
