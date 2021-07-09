@@ -5,9 +5,9 @@ import {
     NotesCard,
     UserCardInfo
 } from '@components/PatientProfile';
+import { Col, ConfigProvider, Row } from 'antd';
 
 import API from '@utils/axios';
-import { ConfigProvider } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import SliderLayout from '@components/Layout';
@@ -21,33 +21,38 @@ const PatientProfile = ({ patient, direction }) => {
     if (!patient) return <h1>{t('NotFOund')}</h1>;
     return (
         <SliderLayout
-            title={'PtientProfile'}
-            keywords={'PtientProfile'}
+            title={'PatientProfile'}
+            keywords={'PatientProfile'}
             description={'this is patinet profile'}
             active={`/patient`}>
             <ConfigProvider direction={direction}>
-                <h6 className={patienProfileSyle.header}>{`${t('patient')} ${t('profile')}`}</h6>
-
-                <div>
-                    <AvatarWithEdit name={patient.name} />
-                    <UserCardInfo
-                        t={t}
-                        age={patient.age}
-                        phone_number={patient.phone_number}
-                        city={patient.city}
-                    />
-                    <DividerLine />
-                    <DbCarInfo
-                        t={t}
-                        ISF={patient.ISF}
-                        sliding_scale={patient.sliding_scale}
-                        is_other_health_issues={patient.s_other_health_issues}
-                        I_C={patient.I_C}
-                        health_issues={patient.health_issues}
-                    />
-                    <DividerLine />
-                    <NotesCard note={patient.note} t={t} />
-                </div>
+                <Row>
+                    <Col xs={24}>
+                        <h6 className={patienProfileSyle.header}>{`${t('patient')} ${t(
+                            'profile'
+                        )}`}</h6>
+                    </Col>
+                    <Col xs={24}>
+                        <AvatarWithEdit name={patient.name} />
+                        <UserCardInfo
+                            t={t}
+                            age={patient.age}
+                            phone_number={patient.phone_number}
+                            city={patient.city}
+                        />
+                        <DividerLine />
+                        <DbCarInfo
+                            t={t}
+                            ISF={patient.ISF}
+                            sliding_scale={patient.sliding_scale}
+                            is_other_health_issues={patient.s_other_health_issues}
+                            I_C={patient.I_C}
+                            health_issues={patient.health_issues}
+                        />
+                        <DividerLine />
+                        <NotesCard note={patient.note} t={t} />
+                    </Col>
+                </Row>
             </ConfigProvider>
         </SliderLayout>
     );

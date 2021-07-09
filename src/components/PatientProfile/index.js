@@ -1,13 +1,13 @@
-import React from 'react';
-import patienProfileSyle from '@styles/PatientProfile.module.scss';
-import PropTypes from 'prop-types';
+import { EditIcon, GenderIcon, PersonIcon } from '@utils/svg/patientProfile';
 
 import { Col } from 'antd';
-import { PersonIcon, GenderIcon, EditIcon } from '@utils/svg/patientProfile';
+import PropTypes from 'prop-types';
+import React from 'react';
+import patienProfileSyle from '@styles/PatientProfile.module.scss';
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
     <div className={patienProfileSyle.UserCardInfoWrapper}>
-        <h6 className={patienProfileSyle.labelWidht}>{`${t('patinet')} ${t('information')}`}</h6>
+        <h6 className={patienProfileSyle.labelWidht}>{`${t('patient')} ${t('information')}`}</h6>
 
         <div className={patienProfileSyle.userinfoCard}>
             <div className={patienProfileSyle.flex1}>
