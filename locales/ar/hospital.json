@@ -1,3 +1,4 @@
 {
-    "hospitalPatients": "مرضى المستشفى  ({{count}})"
+    "hospitalPatients": "مرضى المستشفى  ({{count}})",
+    "noPatients": "No Patients assigned yet"
 }

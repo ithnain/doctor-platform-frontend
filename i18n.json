@@ -7,10 +7,12 @@
         "/login": ["login"],
         "/signup": ["signup"],
         "/doctor": ["doctor"],
+        "/doctor/profile": ["common"],
         "/create-patient": ["create-patient"],
-        "/doctors/[id]": ["doctors"],
         "/patients/[page]": ["patients"],
         "/hospital/[page]": ["hospital"],
-        "/registration/[page]": ["registration"]
+        "/doctors/[page]": ["doctors"],
+        "/registration/[page]": ["registration"],
+        "/patient/[id]": ["patient"]
     }
 }

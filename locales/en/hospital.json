@@ -1,3 +1,4 @@
 {
-    "hospitalPatients": "Hospital patients ({{count}})"
+    "hospitalPatients": "Hospital patients ({{count}})",
+    "noPatients": "No Patients assigned yet"
 }

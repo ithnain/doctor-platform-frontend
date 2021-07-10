@@ -1,6 +1,8 @@
 // import PropTypes from 'prop-types';
 // import styles from './Patients.module.scss';
+
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
+
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
@@ -26,9 +28,9 @@ function Patients({ direction, patients, totalCount }) {
 
     return (
         <SliderLayout
-            title={'Overview'}
+            title={'Patients'}
             keywords={'doctor,platform,any word'}
-            description={'this is the doctor overview'}
+            description={'this is the doctor patients view'}
             active={`/patients/${+router.query.page}`}>
             <ConfigProvider direction={direction}>
                 <Row justify="start" align="middle" gutter={[20, 20]}>
@@ -39,27 +41,39 @@ function Patients({ direction, patients, totalCount }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patients.map((patient) => (
-                                <Col xs={24} md={12} lg={8} key={patient.id}>
-                                    <Card patient={patient} canEdit={true} />
+                            {patients.length >= 1 ? (
+                                patients.map((patient) => (
+                                    <Col xs={24} md={12} lg={8} key={patient.id}>
+                                        <Card
+                                            patient={patient}
+                                            canEdit={true}
+                                            direction={direction}
+                                        />
+                                    </Col>
+                                ))
+                            ) : (
+                                <Col xs={24}>
+                                    <h4>{t('noPatients')}</h4>
                                 </Col>
-                            ))}
+                            )}
                         </Row>
                     </Col>
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                <Pagination
-                                    current={+router.query.page}
-                                    onChange={handlePagination}
-                                    showTotal={(totalCount, range) =>
-                                        `${range[0]}-${range[1]} of ${totalCount} items`
-                                    }
-                                    defaultPageSize={9}
-                                    defaultCurrent={1}
-                                    total={totalCount}
-                                    showSizeChanger={false}
-                                />
+                                {patients.length >= 1 && (
+                                    <Pagination
+                                        current={+router.query.page}
+                                        onChange={handlePagination}
+                                        showTotal={(totalCount, range) =>
+                                            `${range[0]}-${range[1]} of ${totalCount} items`
+                                        }
+                                        defaultPageSize={9}
+                                        defaultCurrent={1}
+                                        total={totalCount}
+                                        showSizeChanger={false}
+                                    />
+                                )}
                             </Col>
                         </Row>
                     </Col>
@@ -90,7 +104,6 @@ export const getServerSideProps = async ({ req, query }) => {
             }
         };
     } catch (error) {
-        console.log(error);
         return {
             props: {
                 patients: []

@@ -1,7 +1,8 @@
+import AddPatientForm from 'src/components/AddPatientForm';
 //import PropTypes from 'prop-types';
 // import styles from './Doctor.module.scss';
 import SliderLayout from '@components/Layout';
-import AddPatientForm from 'src/components/AddPatientForm';
+import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
 
 function createPatient() {
@@ -16,4 +17,4 @@ function createPatient() {
 
 createPatient.propTypes = {};
 
-export default createPatient;
+export default authenticatedRoute(createPatient);

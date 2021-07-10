@@ -8,7 +8,9 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
+import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
+import authenticatedRoute from '@components/AuthenticatedRoute';
 import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
 import { useDispatch } from 'react-redux';
@@ -37,7 +39,6 @@ const Login = ({ direction }) => {
 
                     if (res?.status === 201) {
                         dispatch(setUser(res.data));
-                        // cookie.set('token', res.data.accessToken, { expires: 24 });
                         fetch('/api/auth/login', {
                             method: 'post',
                             headers: {
@@ -49,15 +50,11 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    console.log("error")
-                    console.log("error")
-                    toastr.error('something went wrong');
+                    direction === 'rtl' ? Toast(error.ar) : Toast(error.en);
+                    // toastr.error('something went wrong');
                 }
             })
             .catch((err) => {
-                console.log("EEEEEE")
-                console.log(err)
-                console.log(err?.response)
                 if (err.response?.data?.message) {
                     toastr.error(err.response.data?.message);
                 } else if (err.message) {
@@ -96,7 +93,7 @@ const Login = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    // preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"
@@ -179,5 +176,5 @@ const Login = ({ direction }) => {
 Login.propTypes = {
     direction: PropTypes.string.isRequired
 };
-export default Login;
-// export default authenticatedRoute(Login);
+// export default Login;
+export default authenticatedRoute(Login);

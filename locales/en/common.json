@@ -10,5 +10,9 @@
     "lastSessionDate": "Last session date",
     "numberOfSessionsCompleted": "Number of sessions completed",
     "addToMyPatient": "Add to my patients",
-    "registerPatient": "Register Patient"
+    "registerPatient": "Register Patient",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile",
+    "phone": "Phone",
+    "speciality": "speciality"
 }

@@ -4,23 +4,15 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistReducer } from 'redux-persist';
 import rootReducer from './reducers';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-// import thunk from 'redux-thunk';
 import { useMemo } from 'react';
 
 const persistConfig = {
-    key: 'primary',
-    storage
+    key: 'doctorPlatform',
+    storage,
+    whitelist: ['user']
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let store;
-
-// const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
-// // export default store;
-// export default () => {
-//   let store = createStore(persistedReducer)
-//   let persistor = persistStore(store)
-//   return { store, persistor }
-// }
 
 function makeStore(initialState) {
     return createStore(persistedReducer, initialState, composeWithDevTools(applyMiddleware()));

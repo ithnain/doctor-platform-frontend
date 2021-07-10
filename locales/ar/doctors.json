@@ -1,1 +1,1 @@
-{ "allDoctors": "All Doctors ({{count}})" }
+{ "allDoctors": "All Doctors ({{count}})", "noDoctors": "No doctors Avaliable right now" }

@@ -10,14 +10,19 @@ const authenticatedRoute = (Component = null, options = {}) => {
 
         componentDidMount() {
             if (router.pathname === '/login' && this.props.isLoggedIn) {
-                this.setState({ loading: false });
                 router.push('/overview');
                 return;
             }
             if (this.props.isLoggedIn) {
                 this.setState({ loading: false });
-            } else {
-                router.push('/login');
+                return;
+            }
+            if (this.props.isLoggedIn === '') {
+                this.setState({ loading: true });
+                router.push('/login').then(() => {
+                    this.setState({ loading: false });
+                });
+                return;
             }
         }
         render() {
@@ -32,7 +37,7 @@ const authenticatedRoute = (Component = null, options = {}) => {
     }
 
     return connect((state) => ({
-        isLoggedIn: state?.user.token
+        isLoggedIn: state?.user.accessToken
     }))(AuthenticatedRoute);
 };
 
