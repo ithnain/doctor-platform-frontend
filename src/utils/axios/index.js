@@ -4,7 +4,7 @@ import { initializeStore } from '@redux/store';
 const API = axios.create({
     baseURL:
         process.env.NODE_ENV === 'production'
-            ? 'http://157.175.95.127:3000/v1/'
+            ? `https://doctorsapi.ithnain.com/v1/`
             : `http://157.175.95.127:3003/v1/`,
     timeout: 30000
 });
