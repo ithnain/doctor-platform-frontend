@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
 function SliderLayout({ title, keywords, description, active, children }) {
-    const { name, hospital, role, gender, image, refreshToken, refreshTokenDate } = useSelector(
+    const { name, role, gender, image, refreshToken, refreshTokenDate } = useSelector(
         (state) => state.user.data
     );
     const dispatch = useDispatch();
@@ -115,12 +115,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
             <Layout>
                 <Row justify="s tart">
                     <Col xs={24}>
-                        <Header
-                            className={styles.header}
-                            name={name}
-                            hospitalName={hospital.name}
-                            gender={gender}
-                            image={image}>
+                        <Header className={styles.header} name={name} gender={gender} image={image}>
                             {collapsed ? (
                                 <MenuUnfoldOutlined className="trigger" onClick={toggle} />
                             ) : (
