@@ -41,7 +41,7 @@ function Patients({ direction, patients, totalCount }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patients.length >= 1 ? (
+                            {patients && patients.length >= 1 ? (
                                 patients.map((patient) => (
                                     <Col xs={24} md={12} lg={8} key={patient.id}>
                                         <Card
@@ -61,7 +61,7 @@ function Patients({ direction, patients, totalCount }) {
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                {patients.length >= 1 && (
+                                {patients && patients.length >= 1 && (
                                     <Pagination
                                         current={+router.query.page}
                                         onChange={handlePagination}
@@ -106,7 +106,7 @@ export const getServerSideProps = async ({ req, query }) => {
     } catch (error) {
         return {
             props: {
-                patients: []
+                patients: null
             }
         };
     }

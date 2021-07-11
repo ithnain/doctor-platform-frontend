@@ -36,7 +36,7 @@ export const getServerSideProps = async ({ req }) => {
     } catch (error) {
         return {
             props: {
-                doctors: []
+                doctors: null
             }
         };
     }

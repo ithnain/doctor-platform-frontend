@@ -38,7 +38,7 @@ function Registration({ direction, doctors, totalCount }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="top">
-                            {doctors.length >= 1 ? (
+                            {doctors && doctors.length >= 1 ? (
                                 doctors.map((doctor) => (
                                     <Col xs={24} md={12} lg={8} key={doctor.id}>
                                         <Card actions doctor={doctor} />
@@ -52,7 +52,7 @@ function Registration({ direction, doctors, totalCount }) {
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                {doctors.length >= 1 && (
+                                {doctors && doctors.length >= 1 && (
                                     <Pagination
                                         current={+router.query.page}
                                         onChange={handlePagination}
@@ -96,7 +96,7 @@ export const getServerSideProps = async ({ req, query }) => {
     } catch (error) {
         return {
             props: {
-                doctors: []
+                doctors: null
             }
         };
     }
