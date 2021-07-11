@@ -13,6 +13,15 @@ const authenticatedRoute = (Component = null, options = {}) => {
                 router.push('/overview');
                 return;
             }
+            if (router.pathname === '/' && this.props.isLoggedIn) {
+                router.push('/overview');
+                return;
+            } else if (router.pathname === '/' && !this.props.isLoggedIn) {
+                this.setState({ loading: true });
+                router.push('/login').then(() => {
+                    this.setState({ loading: false });
+                });
+            }
             if (this.props.isLoggedIn) {
                 this.setState({ loading: false });
                 return;
