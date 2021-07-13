@@ -26,13 +26,14 @@ const Card = ({
     const router = useRouter();
     const { Title, Text } = Typography;
     // define the variable globbaly , I think if we use state it wii be better, then use useEffect to assign the values;
-    let name, id, email, age, diabetesType, watcher;
+    let name, email, age, nationalID, diabetesType, watcher;
 
     // check if it has doctor object or no;
     if (doctor?.id) {
-        id = doctor.id;
+        // id = doctor.id;
         email = doctor.email;
         name = doctor.name;
+        nationalID = doctor.national_id;
     }
 
     // check if it has patient object or no;
@@ -133,8 +134,10 @@ const Card = ({
                                         <>
                                             {/* In case of Doctor card */}
                                             <Text>
-                                                {t('id')}:{' '}
-                                                <span className={styles.card__blueText}>{id}</span>
+                                                {t('nationalID')}:{' '}
+                                                <span className={styles.card__blueText}>
+                                                    {nationalID}
+                                                </span>
                                             </Text>
 
                                             <Text>
@@ -142,9 +145,6 @@ const Card = ({
                                                 <span className={styles.card__blueText}>
                                                     {email}
                                                 </span>
-                                            </Text>
-                                            <Text>
-                                                Ant Design: <span>value</span>
                                             </Text>
                                         </>
                                     )}

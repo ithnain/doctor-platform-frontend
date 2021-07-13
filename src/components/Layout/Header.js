@@ -10,23 +10,11 @@ import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import useTranslation from 'next-translate/useTranslation';
 
-// import CustomButton from '../CustomBtn';
-// import en from '@src/i18n/en';
-// import ar from '@src/i18n/ar';
-
-// import CustomButton from '../CustomBtn';
-// import en from '@src/i18n/en';
-// import ar from '@src/i18n/ar';
-
-// import en from '@src/i18n/en';
-// import ar from '@src/i18n/ar';
-
-function Header({ name, hospitalName, showAddPatientBtn }) {
+function Header({ name, showAddPatientBtn }) {
     const { Text } = Typography;
     const [, setLang] = useLocalStorage('storageLang', 'en');
     const { t } = useTranslation('common');
 
-    // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
             {showAddPatientBtn ? (
@@ -61,15 +49,14 @@ function Header({ name, hospitalName, showAddPatientBtn }) {
                     <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
                 </div>
             </Link>
-            <Text>{name || hospitalName}</Text>
+            {name && <Text> {name} </Text>}
         </Row>
     );
 }
 
 Header.propTypes = {
     showAddPatientBtn: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    hospitalName: PropTypes.string.isRequired,
+    name: PropTypes.string,
     textBtn: PropTypes.string
 };
 

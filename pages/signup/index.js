@@ -100,7 +100,7 @@ const SignUp = ({ direction, hospitals }) => {
                         <Col span={24} type="flex" justify="start">
                             <Row justify="center">
                                 <Image
-                                    // preview={false}
+                                    preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-signup"
