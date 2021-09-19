@@ -1,5 +1,4 @@
 {
-    "forgetPassword": "نسيت كلمة المرور",
     "newHere": "Don't have an account yet?",
     "register": "Register",
     "now": "Now",
@@ -7,7 +6,9 @@
     "username": "Username",
     "password": "Password",
     "email": "Email",
+    "forgetPassword": "Forget password",
+    "resetPassword": "Reset Password",
     "emailError": "Please input your email!",
-    "emptyPassword": "Please enter your password",
-    "weakPassword": "Weak Password"
+    "weakPassword": "Weak Password",
+    "emptyPassword": "Please enter your password"
 }

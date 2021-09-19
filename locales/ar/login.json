@@ -9,5 +9,6 @@
     "email": "البريد الالكتروني",
     "emailError": "من فضلك ادخل كلمة السر",
     "emptyPassword": "من فضلك ادخل كامة المرور",
-    "weakPassword": "كلمة مرور ضعيفة"
+    "weakPassword": "كلمة مرور ضعيفة",
+    "resetPassword": "تغيير كلمة المرور"
 }

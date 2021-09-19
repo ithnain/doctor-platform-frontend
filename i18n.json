@@ -13,6 +13,7 @@
         "/hospital/[page]": ["hospital"],
         "/doctors/[page]": ["doctors"],
         "/registration/[page]": ["registration"],
-        "/patient/[id]": ["patient"]
+        "/patient/[id]": ["patient"],
+        "/forgetpassword": ["forgetpassword"]
     }
 }
