@@ -313,7 +313,8 @@ const SignUp = ({ direction, hospitals }) => {
                                             className="dark-blue mb-1"
                                             rules={[
                                                 {
-                                                    required: true,
+                                                    required:
+                                                        doctorStatus === 'partner' ? true : false,
                                                     message: requiredField
                                                 },
                                                 {
