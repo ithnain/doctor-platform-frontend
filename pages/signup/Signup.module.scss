@@ -12,9 +12,11 @@
     padding-bottom: 0;
     cursor: pointer;
     margin-bottom: 0.1vw;
-    margin-left: -22.5%;
     justify-content: center;
     align-content: space-between;
+    text-align: center;
+    float: left;
+
 
     picture {
         height: 100%;
@@ -31,8 +33,9 @@
         width: 100%;
         font-weight: 900;
         color: $darkBlue;
-        font-size: 1.15vw;
+        font-size: 1vw;
     }
+
 
     p {
         height: 100%;
@@ -43,5 +46,18 @@
     &.active {
         background-color: $activeBox;
         border: 2px solid transparent;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .doctorStatusBox {
+        display: grid;
+
+        grid-template-rows: 50% 50%;
+
+        h3 {
+            font-size: 1.5vw;
+        }
+
     }
 }

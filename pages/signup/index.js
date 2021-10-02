@@ -114,7 +114,7 @@ const SignUp = ({ direction, hospitals }) => {
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
                             </Row>
                             <Row justify="start">
-                                <Col span={11}>
+                                <Col span={11} flex>
                                     <button
                                         onClick={() => handleDoctorStatus('partner')}
                                         className={
