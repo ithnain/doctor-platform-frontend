@@ -6,20 +6,22 @@
     height: 12vw;
     background-color: transparent;
     display: grid;
-    grid-template-rows: 65% 20% 15%;
+    grid-template-rows: 65% 30%;
     grid-column-gap: 2px;
     padding: 1vw 0.8vw;
     padding-bottom: 0;
     cursor: pointer;
     margin-bottom: 0.1vw;
     margin-left: -22.5%;
+    justify-content: center;
+    align-content: space-between;
 
     picture {
         height: 100%;
-        width: 100%;
+        width: 95%;
 
         img {
-            width: 100%;
+            width: 80%;
             height: 100%;
         }
     }
@@ -29,17 +31,17 @@
         width: 100%;
         font-weight: 900;
         color: $darkBlue;
-        font-size: 0.8vw;
+        font-size: 1.15vw;
     }
 
     p {
         height: 100%;
         width: 100%;
-        font-size: 0.6vw;
+        font-size: 0.9vw;
     }
 
     &.active {
         background-color: $activeBox;
-        border: none;
+        border: 2px solid transparent;
     }
 }

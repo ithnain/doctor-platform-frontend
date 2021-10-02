@@ -112,8 +112,8 @@ const SignUp = ({ direction, hospitals }) => {
                             </Row>
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
-                            </Row>{' '}
-                            <Row justify="start">
+                            </Row>
+                            <Row justify="center">
                                 <Col span={11}>
                                     <button
                                         onClick={() => handleDoctorStatus('partner')}
@@ -142,7 +142,7 @@ const SignUp = ({ direction, hospitals }) => {
                                             />
                                         </picture>
                                         <h3>{t('partnerDoctor')}</h3>
-                                        <p>{t('ifPartner')}</p>
+                                        {/* <p>{t('ifPartner')}</p> */}
                                     </button>
                                 </Col>
                                 <Col span={11}>
@@ -168,12 +168,12 @@ const SignUp = ({ direction, hospitals }) => {
                                                 srcSet="/assets/images/doctor@3x.png"
                                             />
                                             <img
-                                                srcSet="/assets/images/doctor@2x.png"
+                                                srcSet="/assets/images/doctor.png"
                                                 alt="Medical team for partners"
                                             />
                                         </picture>
                                         <h3>{t('individualDoctor')}</h3>
-                                        <p>{t('ifIndividual')}</p>
+                                        {/* <p>{t('ifIndividual')}</p> */}
                                     </button>
                                 </Col>
                             </Row>

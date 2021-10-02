@@ -22,7 +22,7 @@
     "gender": "Gender",
     "idLength": "Your ID must be 10 digits",
     "invalidPhone": "Phone number is not valid",
-    "partnerDoctor": "Doctor in a partner hospital",
+    "partnerDoctor": "In a partner hospital",
     "ifPartner": "if you work in a partner hospital",
     "individualDoctor": "Individual doctor",
     "ifIndividual": "if you work individually"
