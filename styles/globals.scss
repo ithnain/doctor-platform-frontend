@@ -22,6 +22,11 @@ body {
     }
 }
 
+.gotLight {
+    font-family: 'gothic' !important;
+
+}
+
 a {
     color: inherit;
 }
@@ -233,10 +238,32 @@ a {
     }
 }
 
-.mb-0 {
-    margin-bottom: 0 !important;
+.ml-2 {
+    margin-left: 0.75rem !important;
 }
 
-.mb-1 {
-    margin-bottom: 0.5rem !important;
+.w-100 {
+    width: 100%;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+.create .ant-col.ant-form-item-control {
+    width: 100%;
+    align-items: baseline;
+
+    *:not(.ant-radio) {
+        flex-grow: 1;
+        width: 100%;
+        text-align: initial;
+
+    }
+
+    .ant-radio,
+    .ant-checkbox {
+        width: 16.5px;
+    }
+
 }
