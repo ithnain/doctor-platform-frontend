@@ -15,5 +15,9 @@
     "editProfile": "Edit Profile",
     "phone": "Phone",
     "speciality": "speciality",
-    "nationalID": "National ID"
+    "nationalID": "National ID",
+
+    "forgetPassword": "Forget password",
+    "resetPassword": "Reset Password",
+    "emailError": "Please input your email!"
 }
