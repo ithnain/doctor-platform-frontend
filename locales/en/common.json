@@ -1,4 +1,5 @@
 {
+    "requiredInput": "Please fill this input",
     "accept": "accept",
     "reject": "reject",
     "email": "Email",

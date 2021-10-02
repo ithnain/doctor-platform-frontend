@@ -7,6 +7,7 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
+import Style from './Signup.module.scss';
 import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ const SignUp = ({ direction, hospitals }) => {
     const { t } = useTranslation('signup');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [doctorStatus, setDoctorStatus] = useState('partner');
     const requiredField = t('common:requiredInput');
 
     const onFinish = ({
@@ -74,7 +76,9 @@ const SignUp = ({ direction, hospitals }) => {
                 setLoading(false);
             });
     };
-
+    const handleDoctorStatus = (newState) => {
+        setDoctorStatus(newState);
+    };
     return (
         <Row>
             <Col
@@ -97,8 +101,8 @@ const SignUp = ({ direction, hospitals }) => {
                     className={authStyles.authRightSide}>
                     <Row type="flex" justify="center" align="middle">
                         <LangChanger abs={true} />
-                        <Col span={24} type="flex" justify="start">
-                            <Row justify="center">
+                        <Col span={18} type="flex" justify="start">
+                            <Row justify="start">
                                 <Image
                                     preview={false}
                                     width={100}
@@ -106,8 +110,72 @@ const SignUp = ({ direction, hospitals }) => {
                                     className="logo-signup"
                                 />
                             </Row>
-                            <Row justify="space-around">
+                            <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
+                            </Row>{' '}
+                            <Row justify="start">
+                                <Col span={11}>
+                                    <button
+                                        onClick={() => handleDoctorStatus('partner')}
+                                        className={
+                                            doctorStatus === 'partner'
+                                                ? `${Style.doctorStatusBox} ${Style.active}`
+                                                : `${Style.doctorStatusBox}`
+                                        }>
+                                        <picture>
+                                            <source
+                                                media="(max-width: 799px)"
+                                                srcSet="/assets/images/medical-team.png"
+                                            />
+                                            <source
+                                                media="(min-width: 800px)"
+                                                srcSet="/assets/images/medical-team@2x.png"
+                                            />
+
+                                            <source
+                                                media="(min-width: 1200px)"
+                                                srcSet="/assets/images/medical-team@3x.png"
+                                            />
+                                            <img
+                                                srcSet="/assets/images/medical-team@2x.png"
+                                                alt="Medical team for partners"
+                                            />
+                                        </picture>
+                                        <h3>{t('partnerDoctor')}</h3>
+                                        <p>{t('ifPartner')}</p>
+                                    </button>
+                                </Col>
+                                <Col span={11}>
+                                    <button
+                                        onClick={() => handleDoctorStatus('individual')}
+                                        className={
+                                            doctorStatus === 'individual'
+                                                ? `${Style.doctorStatusBox} ${Style.active}`
+                                                : `${Style.doctorStatusBox}`
+                                        }>
+                                        <picture>
+                                            <source
+                                                media="(max-width: 799px)"
+                                                srcSet="/assets/images/doctor.png"
+                                            />
+                                            <source
+                                                media="(min-width: 800px)"
+                                                srcSet="/assets/images/doctor@2x.png"
+                                            />
+
+                                            <source
+                                                media="(min-width: 1200px)"
+                                                srcSet="/assets/images/doctor@3x.png"
+                                            />
+                                            <img
+                                                srcSet="/assets/images/doctor@2x.png"
+                                                alt="Medical team for partners"
+                                            />
+                                        </picture>
+                                        <h3>{t('individualDoctor')}</h3>
+                                        <p>{t('ifIndividual')}</p>
+                                    </button>
+                                </Col>
                             </Row>
                             <Form
                                 // {...layout}
@@ -117,8 +185,42 @@ const SignUp = ({ direction, hospitals }) => {
                                 onFinish={onFinish}
                                 // onFinishFailed={onFinishFailed}
                             >
-                                <Row justify="space-around" align="middle">
-                                    <Col span={11}>
+                                {doctorStatus === 'partner' && (
+                                    <Row justify="start">
+                                        <Col span={22}>
+                                            <Form.Item
+                                                label={t('HospitalName')}
+                                                name="hospital"
+                                                className="dark-blue mb-1"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: requiredField
+                                                    }
+                                                ]}>
+                                                <Select size="medium">
+                                                    {hospitals?.length ? (
+                                                        hospitals.map((hospital) => {
+                                                            return (
+                                                                <Select.Option
+                                                                    key={hospital.id}
+                                                                    value={hospital.id}>
+                                                                    {hospital.name}
+                                                                </Select.Option>
+                                                            );
+                                                        })
+                                                    ) : (
+                                                        <Select.Option key={Math.random()} disabled>
+                                                            {t('noHospitals')}
+                                                        </Select.Option>
+                                                    )}
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                )}
+                                <Row justify="start">
+                                    <Col span={22}>
                                         <Form.Item
                                             label={t('DoctorName')}
                                             name="name"
@@ -132,7 +234,7 @@ const SignUp = ({ direction, hospitals }) => {
                                             <Input className={authStyles.input} />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={11}>
+                                    {/* <Col span={11}>
                                         <Form.Item
                                             label={t('ID')}
                                             name="nationalId"
@@ -146,18 +248,73 @@ const SignUp = ({ direction, hospitals }) => {
                                             ]}>
                                             <Input className={authStyles.input} />
                                         </Form.Item>
+                                    </Col> */}
+                                </Row>
+
+                                <Row justify="start">
+                                    <Col span={22}>
+                                        <Form.Item
+                                            label={t('Specialty')}
+                                            name="specialty"
+                                            className="dark-blue mb-1"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: requiredField
+                                                }
+                                            ]}>
+                                            <Input className={authStyles.input} />
+                                        </Form.Item>
                                     </Col>
                                 </Row>
 
-                                <Row justify="space-around" align="middle">
-                                    <Col span={11}>
+                                <Row justify="start">
+                                    <Col span={22}>
+                                        <Form.Item
+                                            label={t('email')}
+                                            name="email"
+                                            className="dark-blue mb-1"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    type: 'email',
+                                                    message: requiredField
+                                                }
+                                            ]}>
+                                            <Input className={authStyles.input} />
+                                        </Form.Item>
+                                    </Col>
+                                    {/* <Col span={11}>
+                                        <Form.Item
+                                            label={t('password')}
+                                            className="mb-1"
+                                            name="password"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: requiredField
+                                                },
+                                                {
+                                                    pattern:
+                                                        /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                                                    message: t('weakPassword')
+                                                }
+                                            ]}>
+                                            <Input.Password className={authStyles.input} />
+                                        </Form.Item>
+                                    </Col> */}
+                                </Row>
+
+                                <Row justify="start">
+                                    <Col span={22}>
                                         <Form.Item
                                             label={t('Phone')}
                                             name="phoneNumber"
                                             className="dark-blue mb-1"
                                             rules={[
                                                 {
-                                                    required: true,
+                                                    required:
+                                                        doctorStatus === 'partner' ? true : false,
                                                     message: requiredField
                                                 },
                                                 {
@@ -171,7 +328,7 @@ const SignUp = ({ direction, hospitals }) => {
                                             />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={11}>
+                                    {/* <Col span={11}>
                                         <Form.Item
                                             label={t('gender')}
                                             name="gender"
@@ -191,10 +348,11 @@ const SignUp = ({ direction, hospitals }) => {
                                                 </Select.Option>
                                             </Select>
                                         </Form.Item>
-                                    </Col>
+                                    </Col> */}
                                 </Row>
-                                <Row justify="space-around" align="middle">
-                                    <Col span={11}>
+
+                                <Row justify="start">
+                                    {/* <Col span={22}>
                                         <Form.Item
                                             label={t('email')}
                                             name="email"
@@ -208,8 +366,8 @@ const SignUp = ({ direction, hospitals }) => {
                                             ]}>
                                             <Input className={authStyles.input} />
                                         </Form.Item>
-                                    </Col>
-                                    <Col span={11}>
+                                    </Col> */}
+                                    <Col span={22}>
                                         <Form.Item
                                             label={t('password')}
                                             className="mb-1"
@@ -227,52 +385,6 @@ const SignUp = ({ direction, hospitals }) => {
                                             ]}>
                                             <Input.Password className={authStyles.input} />
                                         </Form.Item>
-                                    </Col>
-                                </Row>
-                                <Row justify="space-around" align="middle">
-                                    <Col span={11}>
-                                        <Form.Item
-                                            label={t('Specialty')}
-                                            name="specialty"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Input className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={11}>
-                                        <Form.Item
-                                            label={t('HospitalName')}
-                                            name="hospital"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Select size="medium">
-                                                {hospitals?.length ? (
-                                                    hospitals.map((hospital) => {
-                                                        return (
-                                                            <Select.Option
-                                                                key={hospital.id}
-                                                                value={hospital.id}>
-                                                                {hospital.name}
-                                                            </Select.Option>
-                                                        );
-                                                    })
-                                                ) : (
-                                                    <Select.Option key={Math.random()} disabled>
-                                                        {t('noHospitals')}
-                                                    </Select.Option>
-                                                )}
-                                            </Select>
-                                        </Form.Item>{' '}
                                     </Col>
                                 </Row>
 
