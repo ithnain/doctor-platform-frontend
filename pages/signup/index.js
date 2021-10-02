@@ -113,7 +113,7 @@ const SignUp = ({ direction, hospitals }) => {
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
                             </Row>
-                            <Row justify="center">
+                            <Row justify="start">
                                 <Col span={11}>
                                     <button
                                         onClick={() => handleDoctorStatus('partner')}
@@ -168,7 +168,7 @@ const SignUp = ({ direction, hospitals }) => {
                                                 srcSet="/assets/images/doctor@3x.png"
                                             />
                                             <img
-                                                srcSet="/assets/images/doctor.png"
+                                                srcSet="/assets/images/doctor@3x.png"
                                                 alt="Medical team for partners"
                                             />
                                         </picture>
