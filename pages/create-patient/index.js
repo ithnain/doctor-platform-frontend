@@ -6,10 +6,10 @@ import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
 
 function createPatient() {
-    const { t } = useTranslation('doctor');
+    const { t } = useTranslation('create-patient');
 
     return (
-        <SliderLayout title={t('doctor')} keywords={''} description={''}>
+        <SliderLayout title={t('Register Patient')} keywords={''} description={''}>
             <AddPatientForm />
         </SliderLayout>
     );

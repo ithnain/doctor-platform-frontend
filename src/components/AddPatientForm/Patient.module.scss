@@ -8,8 +8,9 @@
     padding: 22px 24px;
     border-radius: 3px;
     margin-top: 7px;
-    height: 100%;
+    height: auto;
 }
+
 .patient_register_column {
     display: flex;
     flex-grow: 1;
@@ -23,6 +24,7 @@
 .register_btn {
     padding: 0 50px;
 }
+
 .inner_radio {
     margin-left: 29px;
 }
@@ -38,10 +40,19 @@
 
 .form_item {
     align-items: flex-start;
+
+}
+
+.diabetesKet {
+    background: #F4f4f4;
+    padding: 5px;
+    border-radius: 8px;
 }
 
 .title_form {
+    margin-top: 8px;
     font-family: 'gothic';
+    display: flex;
     font-size: 12px;
     line-height: 15px;
     letter-spacing: 0px;
@@ -54,6 +65,9 @@
     font-size: 12px;
     letter-spacing: 0px;
     color: $darkBlue !important;
+    align-items: inherit;
+    margin: 0;
+
 }
 
 .radio_container {

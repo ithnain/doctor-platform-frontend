@@ -25,22 +25,22 @@ function SliderLayout({ title, keywords, description, active, children }) {
         (state) => state.user.data
     );
     const dispatch = useDispatch();
-    useEffect(() => {
-        if (moment(refreshTokenDate) <= moment()) {
-            API.post('auth/refrsh', {
-                token: `${refreshToken}`
-            }).then((res) => {
-                dispatch(updateToken(res.data));
-                fetch('/api/auth/login', {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ token: res.data.accessToken })
-                });
-            });
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (moment(refreshTokenDate) <= moment()) {
+    //         API.post('auth/refrsh', {
+    //             token: `${refreshToken}`
+    //         }).then((res) => {
+    //             dispatch(updateToken(res.data));
+    //             fetch('/api/auth/login', {
+    //                 method: 'post',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({ token: res.data.accessToken })
+    //             });
+    //         });
+    //     }
+    // }, []);
     useEffect(() => {
         if (role === roles.doctor) {
             setShowAddPatientBtn(true);
