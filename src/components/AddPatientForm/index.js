@@ -12,7 +12,7 @@ import {
     notification
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { insulineDoses, insulineTypes } from './insuline';
+// import { insulineDoses, insulineTypes } from './insuline';
 import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
@@ -32,7 +32,11 @@ const index = () => {
     const user = useSelector((state) => state.user);
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
     const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false);
+    const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [insulineTypes, setInsulineTypes] = useState([]);
+    const [ICMASK, setICMASK] = useState(null);
+    const [ISFMASK, setISFMASK] = useState(null);
 
     useEffect(() => {
         if (!user || !user.data.accessToken) {
@@ -41,7 +45,11 @@ const index = () => {
             // router.push("/login");
         }
     }, [user]);
-
+    useEffect(() => {
+        API.get('/insuline-type').then((data) => {
+            setInsulineTypes(data.data);
+        });
+    }, []);
     useEffect(() => {
         if (createdPatientSuccess) {
             notification.success({
@@ -72,6 +80,15 @@ const index = () => {
         acuteSelect,
         chronicSelect
     }) => {
+        if (ic) {
+            ic = ic.substring(0, 1) + ':' + ic.substring(1, ic.length);
+            setICMASK(ic);
+            console.log(ICMASK);
+        }
+        if (isf) {
+            isf = isf.substring(0, 1) + ':' + isf.substring(1, isf.length);
+            setISFMASK(isf);
+        }
         if (acuteArray) {
             setAcuteShow(true);
             !acuteArray && setAcuteArray([]);
@@ -151,6 +168,11 @@ const index = () => {
     }, [acuteArray]);
     useEffect(() => {
         console.log(insulineTypeSelect, insulineDoseSelect);
+        insulineTypeSelect &&
+            setInsulineDoseSelectArray(
+                insulineTypes.filter((type) => type.type === insulineTypeSelect)
+            );
+        console.log(insulineDoseSelectArray);
     }, [insulineDoseSelect, insulineTypeSelect]);
     useEffect(() => {
         if (errorsCreatingPatient?.length) {
@@ -164,36 +186,36 @@ const index = () => {
         setDuration(dateString);
     }
     const onFinish = async (values) => {
-        console.log(values, insulineTypeSelect, insulineDoseSelect);
+        // console.log(values, insulineTypeSelect, insulineDoseSelect);
 
-        let treatmentType = '';
-        if (values?.treatment === 'INSULIN') {
-            treatmentType = values?.insulin_treatment;
-        } else {
-            treatmentType = values?.treatment;
-        }
-        let healthIssues = values?.healthIssues;
-        let isOtherHealthIssues = false;
-        let otherHealthIssues = '';
-        if (healthIssues && healthIssues.length) {
-            let i = healthIssues?.indexOf('Other');
-            if (i > -1) {
-                healthIssues.splice(i, 1);
-                isOtherHealthIssues = true;
-                otherHealthIssues = values?.otherHealthIssues;
-            }
-        }
-        let diabetesComplications = values?.diabetesComplications;
-        let isOtherDiabetesComplications = false;
-        let otherDiabetesComplications = '';
-        if (diabetesComplications && diabetesComplications?.length) {
-            let j = diabetesComplications?.indexOf('Other');
-            if (j !== -1) {
-                diabetesComplications.splice(j, 1);
-                isOtherDiabetesComplications = true;
-                otherDiabetesComplications = values?.otherDiabetesComplications;
-            }
-        }
+        // let treatmentType = '';
+        // if (values?.treatment === 'INSULIN') {
+        //     treatmentType = values?.insulin_treatment;
+        // } else {
+        //     treatmentType = values?.treatment;
+        // }
+        // let healthIssues = values?.healthIssues;
+        // let isOtherHealthIssues = false;
+        // let otherHealthIssues = '';
+        // if (healthIssues && healthIssues.length) {
+        //     let i = healthIssues?.indexOf('Other');
+        //     if (i > -1) {
+        //         healthIssues.splice(i, 1);
+        //         isOtherHealthIssues = true;
+        //         otherHealthIssues = values?.otherHealthIssues;
+        //     }
+        // }
+        // let diabetesComplications = values?.diabetesComplications;
+        // let isOtherDiabetesComplications = false;
+        // let otherDiabetesComplications = '';
+        // if (diabetesComplications && diabetesComplications?.length) {
+        //     let j = diabetesComplications?.indexOf('Other');
+        //     if (j !== -1) {
+        //         diabetesComplications.splice(j, 1);
+        //         isOtherDiabetesComplications = true;
+        //         otherDiabetesComplications = values?.otherDiabetesComplications;
+        //     }
+        // }
 
         const data = {
             name: values?.name.trim(),
@@ -507,69 +529,198 @@ const index = () => {
                                                                             }
                                                                         ]}>
                                                                         <Select placeholder="Type">
-                                                                            {insulineTypes.map(
-                                                                                (type) => {
-                                                                                    return (
-                                                                                        <Option
-                                                                                            key={
-                                                                                                type.id
-                                                                                            }
-                                                                                            value={
-                                                                                                type.name
-                                                                                            }>
-                                                                                            {
-                                                                                                type.name
-                                                                                            }
-                                                                                        </Option>
-                                                                                    );
-                                                                                }
-                                                                            )}
+                                                                            {insulineTypes.length >=
+                                                                                1 &&
+                                                                                insulineTypes.map(
+                                                                                    (type) => {
+                                                                                        return (
+                                                                                            <Option
+                                                                                                key={
+                                                                                                    type.id
+                                                                                                }
+                                                                                                value={
+                                                                                                    type.type
+                                                                                                }>
+                                                                                                {
+                                                                                                    type.type
+                                                                                                }
+                                                                                            </Option>
+                                                                                        );
+                                                                                    }
+                                                                                )}
                                                                         </Select>
                                                                     </Form.Item>
                                                                 </Col>
                                                                 <Col xs={11}>
-                                                                    <Form.Item
-                                                                        name="insulineDose"
-                                                                        rules={[
-                                                                            {
-                                                                                required: true,
-                                                                                message:
-                                                                                    'Please select insuline type'
-                                                                            }
-                                                                        ]}>
-                                                                        <Select placeholder="Dose">
-                                                                            {insulineDoses.map(
-                                                                                (type) => {
-                                                                                    return (
-                                                                                        <Option
-                                                                                            key={
-                                                                                                type.id
-                                                                                            }
-                                                                                            value={
-                                                                                                type.name
-                                                                                            }>
-                                                                                            {
-                                                                                                type.name
-                                                                                            }
-                                                                                        </Option>
-                                                                                    );
+                                                                    {insulineDoseSelectArray[0]
+                                                                        ?.choices?.length >= 1 && (
+                                                                        <Form.Item
+                                                                            name="insulineDose"
+                                                                            rules={[
+                                                                                {
+                                                                                    required: true,
+                                                                                    message:
+                                                                                        'Please select insuline dose'
                                                                                 }
-                                                                            )}
-                                                                        </Select>
-                                                                    </Form.Item>
+                                                                            ]}>
+                                                                            <Select placeholder="Dose">
+                                                                                {insulineDoseSelectArray[0]?.choices.map(
+                                                                                    (type) => {
+                                                                                        return (
+                                                                                            <Option
+                                                                                                key={
+                                                                                                    type
+                                                                                                }
+                                                                                                value={
+                                                                                                    type
+                                                                                                }>
+                                                                                                {
+                                                                                                    type
+                                                                                                }
+                                                                                            </Option>
+                                                                                        );
+                                                                                    }
+                                                                                )}
+                                                                            </Select>
+                                                                        </Form.Item>
+                                                                    )}
                                                                 </Col>
                                                             </Row>
+
+                                                            {insulineDoseSelectArray.length === 1 &&
+                                                                insulineDoseSelectArray[0]
+                                                                    ?.input === 'MEAL_TIME' && (
+                                                                    <Row
+                                                                        className="w1-00"
+                                                                        justify="space-around">
+                                                                        <Col xs={7}>
+                                                                            <Form.Item
+                                                                                name="breakfast"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t(
+                                                                                            'breakfast'
+                                                                                        )}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                        <Col xs={7}>
+                                                                            <Form.Item
+                                                                                name="dinner"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t(
+                                                                                            'dinner'
+                                                                                        )}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                        <Col xs={7}>
+                                                                            <Form.Item
+                                                                                name="lunch"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t('lunch')}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                    </Row>
+                                                                )}
+                                                            {insulineDoseSelectArray.length === 1 &&
+                                                                insulineDoseSelectArray[0]
+                                                                    ?.input ===
+                                                                    'HOW_MANY_TIMES_A_DAY' && (
+                                                                    <Row
+                                                                        className="w1-00"
+                                                                        justify="space-around">
+                                                                        <Col xs={21}>
+                                                                            <Form.Item
+                                                                                name="units"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t('units')}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                    </Row>
+                                                                )}
+
+                                                            {insulineDoseSelectArray.length === 1 &&
+                                                                insulineDoseSelectArray[0]
+                                                                    ?.input ===
+                                                                    'WHAT_TIME_AND_HOW_MANY' && (
+                                                                    <Row
+                                                                        className="w1-00"
+                                                                        justify="space-around">
+                                                                        <Col xs={11}>
+                                                                            <Form.Item
+                                                                                name="time"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t('time')}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                        <Col xs={11}>
+                                                                            <Form.Item
+                                                                                name="unit"
+                                                                                label={
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.label_form
+                                                                                        }>
+                                                                                        {t('unit')}
+                                                                                    </p>
+                                                                                }>
+                                                                                <Input />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                    </Row>
+                                                                )}
                                                             <Row
                                                                 className="w1-00"
                                                                 justify="space-around">
                                                                 <Col xs={11}>
-                                                                    <Form.Item name="isf">
-                                                                        <Select placeholder="ISF"></Select>
+                                                                    <Form.Item
+                                                                        value={ISFMASK}
+                                                                        name="isf">
+                                                                        <Input
+                                                                            placeholder="ISF"
+                                                                            value={ISFMASK}
+                                                                        />
                                                                     </Form.Item>
                                                                 </Col>
                                                                 <Col xs={11}>
                                                                     <Form.Item name="ic">
-                                                                        <Select placeholder="I:C"></Select>
+                                                                        <Input
+                                                                            placeholder="I:C"
+                                                                            value={ICMASK}
+                                                                        />
                                                                     </Form.Item>
                                                                 </Col>
                                                             </Row>
