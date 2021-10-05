@@ -838,7 +838,7 @@ const index = () => {
 
                                     <Form.Item
                                         name="factorsEffectinglearning"
-                                        className={styles.form_item}
+                                        className={` ${styles.form_item}`}
                                         label={
                                             <p className={styles.label_form}>
                                                 {t('Factors which may affect Learning')}
