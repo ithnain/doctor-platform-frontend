@@ -4,10 +4,12 @@ import {
     DatePicker,
     Form,
     Input,
+    InputNumber,
     Radio,
     Row,
     Select,
     Space,
+    TimePicker,
     Typography,
     notification
 } from 'antd';
@@ -25,7 +27,7 @@ import useTranslation from 'next-translate/useTranslation';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const index = () => {
+const index = ({ direction }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const dispatch = useDispatch();
@@ -35,8 +37,11 @@ const index = () => {
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
     const [insulineTypes, setInsulineTypes] = useState([]);
-    const [ICMASK, setICMASK] = useState(null);
+    const [IMASK, setIMASK] = useState(null);
+    const [CMASK, setCMASK] = useState(null);
+
     const [ISFMASK, setISFMASK] = useState(null);
+    const format = 'HH:mm';
 
     useEffect(() => {
         if (!user || !user.data.accessToken) {
@@ -75,18 +80,20 @@ const index = () => {
         treatmentType,
         insulineType,
         insulineDose,
-        ic,
+        I,
+        C,
         isf,
         acuteSelect,
         chronicSelect
     }) => {
-        if (ic) {
-            ic = ic.substring(0, 1) + ':' + ic.substring(1, ic.length);
-            setICMASK(ic);
-            console.log(ICMASK);
+        if (I) {
+            setIMASK(I);
+        }
+        if (C) {
+            setCMASK(C);
         }
         if (isf) {
-            isf = isf.substring(0, 1) + ':' + isf.substring(1, isf.length);
+            isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
             setISFMASK(isf);
         }
         if (acuteArray) {
@@ -148,7 +155,13 @@ const index = () => {
         }
         if (
             (treatmentType === undefined || treatmentType === 'Insuline') &&
-            (isf || ic || insulineTypeSelect || insulineDoseSelect || insulineType || insulineDose)
+            (isf ||
+                I ||
+                C ||
+                insulineTypeSelect ||
+                insulineDoseSelect ||
+                insulineType ||
+                insulineDose)
         ) {
             setCurrentTreatmentShow(true);
             insulineType && setInsulineType(insulineType);
@@ -186,40 +199,13 @@ const index = () => {
         setDuration(dateString);
     }
     const onFinish = async (values) => {
-        // console.log(values, insulineTypeSelect, insulineDoseSelect);
-
-        // let treatmentType = '';
-        // if (values?.treatment === 'INSULIN') {
-        //     treatmentType = values?.insulin_treatment;
-        // } else {
-        //     treatmentType = values?.treatment;
-        // }
-        // let healthIssues = values?.healthIssues;
-        // let isOtherHealthIssues = false;
-        // let otherHealthIssues = '';
-        // if (healthIssues && healthIssues.length) {
-        //     let i = healthIssues?.indexOf('Other');
-        //     if (i > -1) {
-        //         healthIssues.splice(i, 1);
-        //         isOtherHealthIssues = true;
-        //         otherHealthIssues = values?.otherHealthIssues;
-        //     }
-        // }
-        // let diabetesComplications = values?.diabetesComplications;
-        // let isOtherDiabetesComplications = false;
-        // let otherDiabetesComplications = '';
-        // if (diabetesComplications && diabetesComplications?.length) {
-        //     let j = diabetesComplications?.indexOf('Other');
-        //     if (j !== -1) {
-        //         diabetesComplications.splice(j, 1);
-        //         isOtherDiabetesComplications = true;
-        //         otherDiabetesComplications = values?.otherDiabetesComplications;
-        //     }
-        // }
+        console.log(values, insulineTypeSelect, insulineDoseSelect);
 
         const data = {
-            name: values?.name.trim(),
-            remarkableNote: values?.remarkableNote.trim(),
+            name: values?.name?.trim(),
+            gender: values.gender,
+            age: Number(values.age),
+            remarkableNote: values?.remarkableNote?.trim(),
             diabetesType: values?.diabetesType,
             diabetesStatus: values?.diabetesStatus,
             diabetesDuration: values?.diabetesDuration._d,
@@ -232,14 +218,19 @@ const index = () => {
             recommendationGlycemicRange: values?.recommendationGlycemicRange,
             doctorNote: values?.doctorNote,
             medicalHistory: values?.medicalHistory,
-            otherHealthIssues: values?.otherHealthIssues || values.OotherHealthIssues,
+            otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
+            units: values?.insulineUnit,
+            insulineTime: values?.insulineTime._d,
             currentTreatments: [
                 {
                     type: values?.treatmentType,
                     doseType: values?.insulineType,
                     numberOfDoses: values?.insulineDose,
-                    I_C: values?.ic,
-                    ISF: values?.isf
+                    I_C: `${values?.I}:${values.C}`,
+                    ISF: values?.isf,
+                    breakfast: values.breakfast,
+                    lunch: values.lunch,
+                    dinner: values.dinner
                 }
             ],
             acutes: {
@@ -278,7 +269,10 @@ const index = () => {
     };
 
     return (
-        <div className={` ${styles.form_container}`}>
+        <div
+            className={
+                direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
+            }>
             <Title className={styles.title__registration}>{t('Register Patient')}</Title>
             <Form
                 form={form}
@@ -289,10 +283,10 @@ const index = () => {
                 scrollToFirstError>
                 <Row type="flex" justify="space-around" align="flex-start">
                     <Col lg={7} xs={24} className={styles.patient_register_column}>
-                        <Row type="flex">
+                        <Row type="flex" justify="start">
                             <Col xs={24}>
                                 <div className={styles.title_form}>
-                                    <Text className={styles.title_form}>
+                                    <Text className={styles.title_form} align="start">
                                         {t('Patient Information')}
                                     </Text>
                                 </div>
@@ -370,13 +364,7 @@ const index = () => {
                                             <p className={styles.label_form}>
                                                 {t('Doctor recommendation & notes')}
                                             </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message: 'Please input patient age'
-                                            }
-                                        ]}>
+                                        }>
                                         <div className="w-100">
                                             <Input.TextArea
                                                 className="w-100"
@@ -606,7 +594,7 @@ const index = () => {
                                                                                         )}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <InputNumber placeholder="Breakfast" />
                                                                             </Form.Item>
                                                                         </Col>
                                                                         <Col xs={7}>
@@ -622,7 +610,7 @@ const index = () => {
                                                                                         )}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <InputNumber placeholder="Dinner" />
                                                                             </Form.Item>
                                                                         </Col>
                                                                         <Col xs={7}>
@@ -636,7 +624,7 @@ const index = () => {
                                                                                         {t('lunch')}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <InputNumber placeholder="Lunch" />
                                                                             </Form.Item>
                                                                         </Col>
                                                                     </Row>
@@ -650,7 +638,7 @@ const index = () => {
                                                                         justify="space-around">
                                                                         <Col xs={21}>
                                                                             <Form.Item
-                                                                                name="units"
+                                                                                name="insulineUnit"
                                                                                 label={
                                                                                     <p
                                                                                         className={
@@ -659,7 +647,7 @@ const index = () => {
                                                                                         {t('units')}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <InputNumber placeholder="Units" />
                                                                             </Form.Item>
                                                                         </Col>
                                                                     </Row>
@@ -674,7 +662,7 @@ const index = () => {
                                                                         justify="space-around">
                                                                         <Col xs={11}>
                                                                             <Form.Item
-                                                                                name="time"
+                                                                                name="insulineTime"
                                                                                 label={
                                                                                     <p
                                                                                         className={
@@ -683,12 +671,14 @@ const index = () => {
                                                                                         {t('time')}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <TimePicker
+                                                                                    format={format}
+                                                                                />
                                                                             </Form.Item>
                                                                         </Col>
                                                                         <Col xs={11}>
                                                                             <Form.Item
-                                                                                name="unit"
+                                                                                name="insulineUnit"
                                                                                 label={
                                                                                     <p
                                                                                         className={
@@ -697,7 +687,7 @@ const index = () => {
                                                                                         {t('unit')}
                                                                                     </p>
                                                                                 }>
-                                                                                <Input />
+                                                                                <InputNumber placeholder="units" />
                                                                             </Form.Item>
                                                                         </Col>
                                                                     </Row>
@@ -709,19 +699,36 @@ const index = () => {
                                                                     <Form.Item
                                                                         value={ISFMASK}
                                                                         name="isf">
-                                                                        <Input
+                                                                        <InputNumber
                                                                             placeholder="ISF"
                                                                             value={ISFMASK}
                                                                         />
                                                                     </Form.Item>
                                                                 </Col>
                                                                 <Col xs={11}>
-                                                                    <Form.Item name="ic">
-                                                                        <Input
-                                                                            placeholder="I:C"
-                                                                            value={ICMASK}
-                                                                        />
-                                                                    </Form.Item>
+                                                                    <Row justify="space-between">
+                                                                        <Col xs={11}>
+                                                                            <Form.Item
+                                                                                name="I"
+                                                                                value={IMASK}>
+                                                                                <InputNumber
+                                                                                    className="w-100"
+                                                                                    placeholder="I"
+                                                                                />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                        <Col xs={1}>:</Col>
+                                                                        <Col xs={11}>
+                                                                            <Form.Item
+                                                                                name="C"
+                                                                                value={CMASK}>
+                                                                                <InputNumber
+                                                                                    className="w-100"
+                                                                                    placeholder="C"
+                                                                                />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                                                    </Row>
                                                                 </Col>
                                                             </Row>
                                                         </>
@@ -852,7 +859,7 @@ const index = () => {
                                             }
                                         ]}>
                                         {/* Style needed to handle ltr && rtl */}
-                                        <Radio.Group className={styles.align_left}>
+                                        <Radio.Group className={`w-100 ${styles.align_left}`}>
                                             <Space direction="vertical">
                                                 <Radio value="Interpreter required">
                                                     {
@@ -930,13 +937,7 @@ const index = () => {
                                                     'Is the patient on medication that may affect blood glucose ?'
                                                 )}
                                             </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Gender'
-                                            }
-                                        ]}>
+                                        }>
                                         <Radio.Group className={styles.radio_container}>
                                             <Space direction="vertical">
                                                 <Radio value="Yes">
@@ -976,7 +977,13 @@ const index = () => {
                                             <p className={styles.label_form}>
                                                 {t('Any other critical health issues?')}
                                             </p>
-                                        }>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select other healt issues'
+                                            }
+                                        ]}>
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
@@ -1074,7 +1081,14 @@ const index = () => {
                                                                             <Col sm={24}>
                                                                                 <Form.Item
                                                                                     className="w-100 m-0"
-                                                                                    name="DKAtimes">
+                                                                                    name="DKAtimes"
+                                                                                    rules={[
+                                                                                        {
+                                                                                            required: true,
+                                                                                            message:
+                                                                                                'Please select DKA TIMES'
+                                                                                        }
+                                                                                    ]}>
                                                                                     <Input
                                                                                         placeholder="How many times?"
                                                                                         className="m-0 w-100"
@@ -1085,6 +1099,13 @@ const index = () => {
                                                                         <Row>
                                                                             <Col xs={24}>
                                                                                 <Form.Item
+                                                                                    rules={[
+                                                                                        {
+                                                                                            required: true,
+                                                                                            message:
+                                                                                                'Please input severity'
+                                                                                        }
+                                                                                    ]}
                                                                                     name="Severity"
                                                                                     label={
                                                                                         <p
@@ -1226,7 +1247,13 @@ const index = () => {
                                             <p className={styles.label_form}>
                                                 {t('Patients medical history')}
                                             </p>
-                                        }>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select medical history'
+                                            }
+                                        ]}>
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
@@ -1287,14 +1314,7 @@ const index = () => {
                                             <p className={`w-100 ${styles.label_form}`}>
                                                 {t('recommendationGlycemicRange')}
                                             </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message:
-                                                    'Please input recommendation Glycemic Range'
-                                            }
-                                        ]}>
+                                        }>
                                         <Input.TextArea
                                             className={`w-100`}
                                             autoSize={{ minRows: 1, maxRows: 1 }}
@@ -1315,13 +1335,7 @@ const index = () => {
                                     <p className={styles.label_form}>
                                         {t('Doctor recommendation & notes')}
                                     </p>
-                                }
-                                rules={[
-                                    {
-                                        required: false,
-                                        message: 'Please input patient age'
-                                    }
-                                ]}>
+                                }>
                                 <Input.TextArea
                                     className="w-100"
                                     autoSize={{ minRows: 4, maxRows: 6 }}
