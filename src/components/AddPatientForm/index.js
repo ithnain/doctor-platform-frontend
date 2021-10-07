@@ -145,16 +145,16 @@ const index = ({ direction }) => {
             setAcuteArray([...acuteSelect]);
         }
 
-        if (acuteSelect && acuteSelect.includes('diabeticketoacidosis')) {
+        if (acuteSelect && acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(true);
         }
-        if (treatmentType === 'Insuline') {
+        if (treatmentType === 'INSULINE') {
             setCurrentTreatmentShow(true);
         } else {
             setCurrentTreatmentShow(false);
         }
         if (
-            (treatmentType === undefined || treatmentType === 'Insuline') &&
+            (treatmentType === undefined || treatmentType === 'INSULINE') &&
             (isf ||
                 I ||
                 C ||
@@ -173,19 +173,17 @@ const index = ({ direction }) => {
         }
     };
     useEffect(() => {
-        if (acuteArray && acuteArray.includes('diabeticketoacidosis')) {
+        if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(true);
         } else {
             setDiabeticketoacidosis(false);
         }
     }, [acuteArray]);
     useEffect(() => {
-        console.log(insulineTypeSelect, insulineDoseSelect);
         insulineTypeSelect &&
             setInsulineDoseSelectArray(
                 insulineTypes.filter((type) => type.type === insulineTypeSelect)
             );
-        console.log(insulineDoseSelectArray);
     }, [insulineDoseSelect, insulineTypeSelect]);
     useEffect(() => {
         if (errorsCreatingPatient?.length) {
@@ -199,16 +197,16 @@ const index = ({ direction }) => {
         setDuration(dateString);
     }
     const onFinish = async (values) => {
-        console.log(values, insulineTypeSelect, insulineDoseSelect);
-
         const data = {
             name: values?.name?.trim(),
+
             gender: values.gender,
-            age: Number(values.age),
+            age: values.age,
+            phoneNumber: values?.phoneNumber,
             remarkableNote: values?.remarkableNote?.trim(),
             diabetesType: values?.diabetesType,
             diabetesStatus: values?.diabetesStatus,
-            diabetesDuration: values?.diabetesDuration._d,
+            diabetesDuration: values?.diabetesDuration?._d,
             treatmentType: values?.treatmentType,
             reasonForReferral: values?.reasonForReferral,
             factorsEffectinglearning: values?.factorsEffectinglearning,
@@ -220,29 +218,42 @@ const index = ({ direction }) => {
             medicalHistory: values?.medicalHistory,
             otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
             units: values?.insulineUnit,
-            insulineTime: values?.insulineTime._d,
-            currentTreatments: [
-                {
-                    type: values?.treatmentType,
-                    doseType: values?.insulineType,
-                    numberOfDoses: values?.insulineDose,
-                    I_C: `${values?.I}:${values.C}`,
-                    ISF: values?.isf,
-                    breakfast: values.breakfast,
-                    lunch: values.lunch,
-                    dinner: values.dinner
-                }
-            ],
-            acutes: {
-                condition: values?.acuteSelect,
-                times: values?.DKAtimes,
-                severity: values?.Severity
-            },
-            chronics: [
-                {
-                    condition: values?.chronicSelect
-                }
-            ]
+            insulineTime: values?.insulineTime?._d,
+            currentTreatments:
+                values?.treatmentType === 'INSULINE'
+                    ? [
+                          {
+                              treatment: values?.treatmentType,
+                              doseType: values?.insulineType,
+                              numberOfDoses: values?.insulineDose,
+                              I_C: values?.I ? `${values?.I}:${values.C}` : '',
+                              ISF: values?.isf,
+                              breakfast: values?.breakfast,
+                              lunch: values?.lunch,
+                              dinner: values?.dinner
+                          }
+                      ]
+                    : [
+                          {
+                              treatment: values?.treatmentType
+                          }
+                      ],
+            acutes:
+                values?.acuteSelect?.length >= 1
+                    ? {
+                          condition: values?.acuteSelect,
+                          times: Number(values?.DKAtimes),
+                          severity: values?.Severity
+                      }
+                    : [],
+            chronics:
+                values?.chronicSelect?.length >= 1
+                    ? [
+                          {
+                              condition: values?.chronicSelect
+                          }
+                      ]
+                    : []
         };
 
         try {
@@ -433,7 +444,7 @@ const index = ({ direction }) => {
                                         ]}>
                                         <Radio.Group className={styles.align_left}>
                                             <Space direction="vertical">
-                                                <Radio value="Controlled">
+                                                <Radio value="CONTROLLED">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -442,7 +453,7 @@ const index = ({ direction }) => {
                                                     }
                                                 </Radio>
 
-                                                <Radio value="Uncontrolled">
+                                                <Radio value="UNCONTROLLED">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -450,7 +461,7 @@ const index = ({ direction }) => {
                                                         </p>
                                                     }
                                                 </Radio>
-                                                <Radio value="DM with complications">
+                                                <Radio value="DM_WITH_COMPLICATIONS">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -477,7 +488,7 @@ const index = ({ direction }) => {
                                         ]}>
                                         <Radio.Group className={` w-100 ${styles.align_left}`}>
                                             <Space direction="vertical" className="w-100">
-                                                <Radio value="Lifestyle Modification">
+                                                <Radio value="LIFESTYLE_MODIFICATION">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -486,7 +497,7 @@ const index = ({ direction }) => {
                                                     }
                                                 </Radio>
 
-                                                <Radio value="Oral MEdications">
+                                                <Radio value="ORAL_MEDICATION">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -494,7 +505,7 @@ const index = ({ direction }) => {
                                                         </p>
                                                     }
                                                 </Radio>
-                                                <Radio value="Insuline" className="w-100">
+                                                <Radio value="INSULINE" className="w-100">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -775,66 +786,66 @@ const index = ({ direction }) => {
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
-                                                <Checkbox value="forWeightLosing">
+                                                <Checkbox value="FOR_WEIGHT_LOSING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forWeightLosing')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forWeightgaining">
+                                                <Checkbox value="FOR_WEIGHT_GAINING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forWeightgaining')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forRecurrentingHypoglycemia">
+                                                <Checkbox value="FOR_RECURRENTING_HYPOGLYCEMIA">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forRecurrentingHypoglycemia')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forRecurrentingElevatedBloodGlucoseLevels">
+                                                <Checkbox value="FOR_RECURRENTING_ELEVATED_BLOOD_GLUCODE_LEVELS">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t(
                                                             'forRecurrentingElevatedBloodGlucoseLevels'
                                                         )}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="Currently on max oral hypoglycemic agent">
+                                                <Checkbox value="CURRENTLY_ON_MAX_ORAL_HYPOGLYCEMIC_AGENT">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t(
                                                             'Currently on max oral hypoglycemic agent'
                                                         )}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Carb counting classes">
+                                                <Checkbox value="FOR_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Carb counting classes')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Basic carb counting classes">
+                                                <Checkbox value="FOR_BASIC_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Basic carb counting classes')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Advanced Carb counting clases">
+                                                <Checkbox value="FOR_ADVANCED_CARB_COUNTING_CLASES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Advanced Carb counting clases')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For insulin injection">
+                                                <Checkbox value="FOR_INSULIN_INJECTION">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For insulin injection')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Insulin pump preparing">
+                                                <Checkbox value="FOR_INSULIN_PUMP_PREPARING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Insulin pump preparing')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Medical plan adherence">
+                                                <Checkbox value="FOR_MEDICAL_PLAN_ADHERENCE">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Medical plan adherence')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For lifestyle modification ">
+                                                <Checkbox value="FOR_LIFESTYLE_MODIFICATION">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For lifestyle modification ')}
                                                     </p>
@@ -861,7 +872,7 @@ const index = ({ direction }) => {
                                         {/* Style needed to handle ltr && rtl */}
                                         <Radio.Group className={`w-100 ${styles.align_left}`}>
                                             <Space direction="vertical">
-                                                <Radio value="Interpreter required">
+                                                <Radio value="INTERPRETER_REQUIRED">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -870,7 +881,7 @@ const index = ({ direction }) => {
                                                     }
                                                 </Radio>
 
-                                                <Radio value="Visual impairment">
+                                                <Radio value="VISUAL_IMPAIRMENT">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -878,7 +889,7 @@ const index = ({ direction }) => {
                                                         </p>
                                                     }
                                                 </Radio>
-                                                <Radio value="Auditory impairment">
+                                                <Radio value="AUDITORY_IMPAIRMENT">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -1045,19 +1056,19 @@ const index = ({ direction }) => {
                                                         <Checkbox.Group
                                                             className={styles.align_left}>
                                                             <Space direction="vertical">
-                                                                <Checkbox value="Recurrent Hypos">
+                                                                <Checkbox value="RECURRENT_HYPOS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Recurrent Hypos ')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Recurrent Hypers">
+                                                                <Checkbox value="RECURRENT_HYPERS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Recurrent Hypers')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Hyperosmolar Hyperglycaemic State(HHS)">
+                                                                <Checkbox value="HYPEROSMOLAR_HYPERGLYCAEMIC_STATE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1066,7 +1077,7 @@ const index = ({ direction }) => {
                                                                     </p>
                                                                 </Checkbox>
 
-                                                                <Checkbox value="diabeticketoacidosis">
+                                                                <Checkbox value="DIABETIC_KETOACIDOSIS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Diabetic ketoacidosis')}
@@ -1121,7 +1132,7 @@ const index = ({ direction }) => {
                                                                                         className={
                                                                                             styles.radio_container
                                                                                         }>
-                                                                                        <Radio value="Mild">
+                                                                                        <Radio value="MILD">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -1131,7 +1142,7 @@ const index = ({ direction }) => {
                                                                                                 </p>
                                                                                             }
                                                                                         </Radio>
-                                                                                        <Radio value="Moderate">
+                                                                                        <Radio value="MODERATE">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -1141,7 +1152,7 @@ const index = ({ direction }) => {
                                                                                                 </p>
                                                                                             }
                                                                                         </Radio>
-                                                                                        <Radio value="Severe">
+                                                                                        <Radio value="SEVERE">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -1174,7 +1185,7 @@ const index = ({ direction }) => {
                                                         <Checkbox.Group
                                                             className={styles.align_left}>
                                                             <Space direction="vertical">
-                                                                <Checkbox value="Eye problems (retinopathy)">
+                                                                <Checkbox value="EYE_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1182,14 +1193,14 @@ const index = ({ direction }) => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Foot problems">
+                                                                <Checkbox value="FOOT_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Foot problems')}
                                                                     </p>
                                                                 </Checkbox>
 
-                                                                <Checkbox value="Heart attack and stroke">
+                                                                <Checkbox value="HEART_ATTACK_AND_STROKE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1197,13 +1208,13 @@ const index = ({ direction }) => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Kidney problems">
+                                                                <Checkbox value="KIDNEY_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Kidney problems')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Nerve damage (neuropathy)">
+                                                                <Checkbox value="NERVE_DAMAGE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1211,13 +1222,13 @@ const index = ({ direction }) => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Gum disease">
+                                                                <Checkbox value="GUM_DISEASE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Gum disease')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Sexual problems in women">
+                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_WOMEN">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1225,7 +1236,7 @@ const index = ({ direction }) => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Sexual problems in men">
+                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_MEN">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
