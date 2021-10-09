@@ -1,31 +1,17 @@
-import {
-    Checkbox,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    InputNumber,
-    Radio,
-    Row,
-    Select,
-    Space,
-    TimePicker,
-    Typography,
-    notification
-} from 'antd';
+import { Checkbox, Col, Form, Input, Radio, Row, Space, Typography, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { insulineDoses, insulineTypes } from './insuline';
 import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
+import DiabetesInfo from './DiabetesInfo';
+import PatienInfo from './PatienInfo';
 import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
-import types from './types.json';
 import useTranslation from 'next-translate/useTranslation';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
 
 const index = ({ direction }) => {
     const { t } = useTranslation('create-patient');
@@ -37,11 +23,10 @@ const index = ({ direction }) => {
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
     const [insulineTypes, setInsulineTypes] = useState([]);
-    const [IMASK, setIMASK] = useState(null);
-    const [CMASK, setCMASK] = useState(null);
+    // const [IMASK, setIMASK] = useState(null);
+    // const [CMASK, setCMASK] = useState(null);
 
-    const [ISFMASK, setISFMASK] = useState(null);
-    const format = 'HH:mm';
+    // const [ISFMASK, setISFMASK] = useState(null);
 
     useEffect(() => {
         if (!user || !user.data.accessToken) {
@@ -63,14 +48,15 @@ const index = ({ direction }) => {
             form.resetFields();
         }
     }, [createdPatientSuccess]);
-    const [duration, setDuration] = useState('');
     const [diabetesComplicationsShow] = useState([]);
     const [acuteArray, setAcuteArray] = useState(null);
     const [chronicArray, setChronicArray] = useState(null);
+    const [treatmentTypeOption, setTreatmentTypeOption] = useState(null);
+    const [diabeticKetoacidosis, setDiabeticketoacidosis] = useState(false);
+
     const [insulineTypeSelect, setInsulineType] = useState(null);
     const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
 
-    const [diabeticKetoacidosis, setDiabeticketoacidosis] = useState(false);
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
     const [acuteShow, setAcuteShow] = useState(false);
@@ -84,31 +70,32 @@ const index = ({ direction }) => {
         C,
         isf,
         acuteSelect,
-        chronicSelect
+        chronicSelect,
+        diabetesStatus
     }) => {
-        if (I) {
-            setIMASK(I);
-        }
-        if (C) {
-            setCMASK(C);
-        }
+        // if (I) {
+        //     setIMASK(I);
+        // }
+        // if (C) {
+        //     setCMASK(C);
+        // }
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
-            setISFMASK(isf);
         }
-        if (acuteArray) {
-            setAcuteShow(true);
-            !acuteArray && setAcuteArray([]);
-        }
-
-        if (chronicArray) {
-            setChronicShow(true);
-            !chronicArray && setChronicArray([]);
-        }
-        if (Array.isArray(diabetesComplications) && diabetesComplications.length === 0) {
-            setChronicShow(false);
-            setAcuteShow(false);
-        }
+        // if (acuteArray) {
+        //     setAcuteShow(true);
+        //     !acuteArray && setAcuteArray([]);
+        // }
+        // console.log(acuteArray);
+        // console.log(diabetesComplications);
+        // if (chronicArray) {
+        //     setChronicShow(true);
+        //     !chronicArray && setChronicArray([]);
+        // }
+        // if (Array.isArray(diabetesComplications) && diabetesComplications.length === 0) {
+        //     setChronicShow(false);
+        //     setAcuteShow(false);
+        // }
         if (
             Array.isArray(diabetesComplications) &&
             diabetesComplications &&
@@ -120,6 +107,7 @@ const index = ({ direction }) => {
             !diabetesComplications.includes('Acute')
         ) {
             setAcuteShow(false);
+            acuteSelect = [];
         }
         if (
             Array.isArray(diabetesComplications) &&
@@ -132,53 +120,63 @@ const index = ({ direction }) => {
             !diabetesComplications.includes('Chronic')
         ) {
             setChronicShow(false);
+            chronicSelect = [];
         }
-        if (diabetesComplicationsShow === []) {
-            setAcuteShow(false);
-            setChronicShow(false);
-        }
-        if (Array.isArray(chronicSelect) && chronicSelect.length >= 1) {
-            setChronicArray([...chronicSelect]);
-        }
+        // if (diabetesComplicationsShow === []) {
+        //     setAcuteShow(false);
+        //     setChronicShow(false);
+        // }
+        // if (Array.isArray(chronicSelect) && chronicSelect.length >= 1) {
+        //     setChronicArray([...chronicSelect]);
+        // }
 
-        if (Array.isArray(acuteSelect) && acuteSelect.length >= 1) {
-            setAcuteArray([...acuteSelect]);
-        }
+        // if (Array.isArray(acuteSelect) && acuteSelect.length >= 1) {
+        //     setAcuteArray([...acuteSelect]);
+        // }
 
         if (acuteSelect && acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(true);
-        }
-        if (treatmentType === 'INSULINE') {
-            setCurrentTreatmentShow(true);
-        } else {
-            setCurrentTreatmentShow(false);
-        }
-        if (
-            (treatmentType === undefined || treatmentType === 'INSULINE') &&
-            (isf ||
-                I ||
-                C ||
-                insulineTypeSelect ||
-                insulineDoseSelect ||
-                insulineType ||
-                insulineDose)
-        ) {
-            setCurrentTreatmentShow(true);
-            insulineType && setInsulineType(insulineType);
-            insulineDose && setInsulineDoseSelect(insulineDose);
-        }
-        if (treatmentType && treatmentType !== 'Insuline') {
-            insulineType && setInsulineType(null);
-            insulineDose && setInsulineDoseSelect(null);
-        }
-    };
-    useEffect(() => {
-        if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
-            setDiabeticketoacidosis(true);
-        } else {
+        } else if (acuteSelect && !acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(false);
         }
-    }, [acuteArray]);
+        if (treatmentType && treatmentType === 'INSULINE') {
+            setTreatmentTypeOption(treatmentType);
+            setCurrentTreatmentShow(true);
+        } else if (treatmentType && treatmentType !== 'INSULINE') {
+            setTreatmentTypeOption(treatmentType);
+            setCurrentTreatmentShow(false);
+        }
+        // if (treatmentType === 'INSULINE') {
+        //     setCurrentTreatmentShow(true);
+        // } else {
+        //     setCurrentTreatmentShow(false);
+        // }
+        // if (
+        //     (treatmentType === undefined || treatmentType === 'INSULINE') &&
+        //     (isf ||
+        //         I ||
+        //         C ||
+        //         insulineTypeSelect ||
+        //         insulineDoseSelect ||
+        //         insulineType ||
+        //         insulineDose)
+        // ) {
+        //     setCurrentTreatmentShow(true);
+        //     insulineType && setInsulineType(insulineType);
+        //     insulineDose && setInsulineDoseSelect(insulineDose);
+        // }
+        // if (treatmentType && treatmentType !== 'Insuline') {
+        //     insulineType && setInsulineType(null);
+        //     insulineDose && setInsulineDoseSelect(null);
+        // }
+    };
+    // useEffect(() => {
+    //     if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
+    //         setDiabeticketoacidosis(true);
+    //     } else {
+    //         setDiabeticketoacidosis(false);
+    //     }
+    // }, [acuteArray]);
     useEffect(() => {
         insulineTypeSelect &&
             setInsulineDoseSelectArray(
@@ -193,9 +191,7 @@ const index = ({ direction }) => {
             });
         }
     }, [errorsCreatingPatient]);
-    function onChange(date, dateString) {
-        setDuration(dateString);
-    }
+
     const onFinish = async (values) => {
         const data = {
             name: values?.name?.trim(),
@@ -207,7 +203,6 @@ const index = ({ direction }) => {
             diabetesType: values?.diabetesType,
             diabetesStatus: values?.diabetesStatus,
             diabetesDuration: values?.diabetesDuration?._d,
-            treatmentType: values?.treatmentType,
             reasonForReferral: values?.reasonForReferral,
             factorsEffectinglearning: values?.factorsEffectinglearning,
             short_term_goals: values?.short_term_goals,
@@ -295,469 +290,14 @@ const index = ({ direction }) => {
                 <Row type="flex" justify="space-around" align="flex-start">
                     <Col lg={7} xs={24} className={styles.patient_register_column}>
                         <Row type="flex" justify="start">
-                            <Col xs={24}>
-                                <div className={styles.title_form}>
-                                    <Text className={styles.title_form} align="start">
-                                        {t('Patient Information')}
-                                    </Text>
-                                </div>
-
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="name"
-                                        label={<p className={styles.label_form}>{t('Name')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient name'
-                                            }
-                                        ]}>
-                                        <Input placeholder="Omar Saleh" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="gender"
-                                        label={<p className={styles.label_form}>{t('Gender')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Gender'
-                                            }
-                                        ]}>
-                                        <Radio.Group className={styles.radio_container}>
-                                            <Radio value="Male">
-                                                {
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Male')}
-                                                    </p>
-                                                }
-                                            </Radio>
-                                            <Radio value="Female">
-                                                {
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Female')}
-                                                    </p>
-                                                }
-                                            </Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="w-100"
-                                        name="age"
-                                        label={<p className={styles.label_form}>{t('age')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient age'
-                                            }
-                                        ]}>
-                                        <Input placeholder="15" className="w-100" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="phoneNumber"
-                                        label={<p className={styles.label_form}>{t('Phone')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient phone'
-                                            },
-                                            {
-                                                pattern: /^(5)(0|2|3|4|5|6|7|8|9)([0-9]{7})$/,
-                                                message:
-                                                    'Phone number should be in this format 5xxxxxxxx'
-                                            }
-                                        ]}>
-                                        <Input className="w-100" placeholder="5xxxxxxxx" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="w-100"
-                                        name="remarkableNote"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Doctor recommendation & notes')}
-                                            </p>
-                                        }>
-                                        <div className="w-100">
-                                            <Input.TextArea
-                                                className="w-100"
-                                                autoSize={{ minRows: 4, maxRows: 6 }}
-                                            />
-                                        </div>
-                                    </Form.Item>
-                                </div>
-                            </Col>
-                            <Col lg={24} className={styles.patient_register_column}>
-                                <Text className={styles.title_form}>
-                                    {t('diabetes information')}
-                                </Text>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="diabetesType"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes type')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes type'
-                                            }
-                                        ]}>
-                                        <Select placeholder="select patient Diabetes type">
-                                            {types.map((type) => {
-                                                return (
-                                                    <Option key={type.id} value={type.name_en}>
-                                                        {type.name_en}
-                                                    </Option>
-                                                );
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="diabetesDuration"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes duration')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes duration'
-                                            }
-                                        ]}>
-                                        <DatePicker onChange={onChange} className="w-100" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="diabetesStatus"
-                                        className={styles.form_item}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes status')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes status'
-                                            }
-                                        ]}>
-                                        <Radio.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Radio value="CONTROLLED">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Controlled')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-
-                                                <Radio value="UNCONTROLLED">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Uncontrolled')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="DM_WITH_COMPLICATIONS">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('DM with complications')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="treatmentType"
-                                        className={`create w-100 ${styles.form_item}`}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Current Treatment')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Current Treatment '
-                                            }
-                                        ]}>
-                                        <Radio.Group className={` w-100 ${styles.align_left}`}>
-                                            <Space direction="vertical" className="w-100">
-                                                <Radio value="LIFESTYLE_MODIFICATION">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Lifestyle Modification')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-
-                                                <Radio value="ORAL_MEDICATION">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Oral MEdications')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="INSULINE" className="w-100">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Insuline')}
-                                                        </p>
-                                                    }
-                                                    {currentTreatmentShow && (
-                                                        <>
-                                                            <Row
-                                                                className="w1-00"
-                                                                justify="space-around">
-                                                                <Col xs={11}>
-                                                                    <Form.Item
-                                                                        name="insulineType"
-                                                                        rules={[
-                                                                            {
-                                                                                required: true,
-                                                                                message:
-                                                                                    'Please select insuline type'
-                                                                            }
-                                                                        ]}>
-                                                                        <Select placeholder="Type">
-                                                                            {insulineTypes.length >=
-                                                                                1 &&
-                                                                                insulineTypes.map(
-                                                                                    (type) => {
-                                                                                        return (
-                                                                                            <Option
-                                                                                                key={
-                                                                                                    type.id
-                                                                                                }
-                                                                                                value={
-                                                                                                    type.type
-                                                                                                }>
-                                                                                                {
-                                                                                                    type.type
-                                                                                                }
-                                                                                            </Option>
-                                                                                        );
-                                                                                    }
-                                                                                )}
-                                                                        </Select>
-                                                                    </Form.Item>
-                                                                </Col>
-                                                                <Col xs={11}>
-                                                                    {insulineDoseSelectArray[0]
-                                                                        ?.choices?.length >= 1 && (
-                                                                        <Form.Item
-                                                                            name="insulineDose"
-                                                                            rules={[
-                                                                                {
-                                                                                    required: true,
-                                                                                    message:
-                                                                                        'Please select insuline dose'
-                                                                                }
-                                                                            ]}>
-                                                                            <Select placeholder="Dose">
-                                                                                {insulineDoseSelectArray[0]?.choices.map(
-                                                                                    (type) => {
-                                                                                        return (
-                                                                                            <Option
-                                                                                                key={
-                                                                                                    type
-                                                                                                }
-                                                                                                value={
-                                                                                                    type
-                                                                                                }>
-                                                                                                {
-                                                                                                    type
-                                                                                                }
-                                                                                            </Option>
-                                                                                        );
-                                                                                    }
-                                                                                )}
-                                                                            </Select>
-                                                                        </Form.Item>
-                                                                    )}
-                                                                </Col>
-                                                            </Row>
-
-                                                            {insulineDoseSelectArray.length === 1 &&
-                                                                insulineDoseSelectArray[0]
-                                                                    ?.input === 'MEAL_TIME' && (
-                                                                    <Row
-                                                                        className="w1-00"
-                                                                        justify="space-around">
-                                                                        <Col xs={7}>
-                                                                            <Form.Item
-                                                                                name="breakfast"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t(
-                                                                                            'breakfast'
-                                                                                        )}
-                                                                                    </p>
-                                                                                }>
-                                                                                <InputNumber placeholder="Breakfast" />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                        <Col xs={7}>
-                                                                            <Form.Item
-                                                                                name="dinner"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t(
-                                                                                            'dinner'
-                                                                                        )}
-                                                                                    </p>
-                                                                                }>
-                                                                                <InputNumber placeholder="Dinner" />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                        <Col xs={7}>
-                                                                            <Form.Item
-                                                                                name="lunch"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t('lunch')}
-                                                                                    </p>
-                                                                                }>
-                                                                                <InputNumber placeholder="Lunch" />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                    </Row>
-                                                                )}
-                                                            {insulineDoseSelectArray.length === 1 &&
-                                                                insulineDoseSelectArray[0]
-                                                                    ?.input ===
-                                                                    'HOW_MANY_TIMES_A_DAY' && (
-                                                                    <Row
-                                                                        className="w1-00"
-                                                                        justify="space-around">
-                                                                        <Col xs={21}>
-                                                                            <Form.Item
-                                                                                name="insulineUnit"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t('units')}
-                                                                                    </p>
-                                                                                }>
-                                                                                <InputNumber placeholder="Units" />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                    </Row>
-                                                                )}
-
-                                                            {insulineDoseSelectArray.length === 1 &&
-                                                                insulineDoseSelectArray[0]
-                                                                    ?.input ===
-                                                                    'WHAT_TIME_AND_HOW_MANY' && (
-                                                                    <Row
-                                                                        className="w1-00"
-                                                                        justify="space-around">
-                                                                        <Col xs={11}>
-                                                                            <Form.Item
-                                                                                name="insulineTime"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t('time')}
-                                                                                    </p>
-                                                                                }>
-                                                                                <TimePicker
-                                                                                    format={format}
-                                                                                />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                        <Col xs={11}>
-                                                                            <Form.Item
-                                                                                name="insulineUnit"
-                                                                                label={
-                                                                                    <p
-                                                                                        className={
-                                                                                            styles.label_form
-                                                                                        }>
-                                                                                        {t('unit')}
-                                                                                    </p>
-                                                                                }>
-                                                                                <InputNumber placeholder="units" />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                    </Row>
-                                                                )}
-                                                            <Row
-                                                                className="w1-00"
-                                                                justify="space-around">
-                                                                <Col xs={11}>
-                                                                    <Form.Item
-                                                                        value={ISFMASK}
-                                                                        name="isf">
-                                                                        <InputNumber
-                                                                            placeholder="ISF"
-                                                                            value={ISFMASK}
-                                                                        />
-                                                                    </Form.Item>
-                                                                </Col>
-                                                                <Col xs={11}>
-                                                                    <Row justify="space-between">
-                                                                        <Col xs={11}>
-                                                                            <Form.Item
-                                                                                name="I"
-                                                                                value={IMASK}>
-                                                                                <InputNumber
-                                                                                    className="w-100"
-                                                                                    placeholder="I"
-                                                                                />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                        <Col xs={1}>:</Col>
-                                                                        <Col xs={11}>
-                                                                            <Form.Item
-                                                                                name="C"
-                                                                                value={CMASK}>
-                                                                                <InputNumber
-                                                                                    className="w-100"
-                                                                                    placeholder="C"
-                                                                                />
-                                                                            </Form.Item>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </Col>
-                                                            </Row>
-                                                        </>
-                                                    )}
-                                                </Radio>
-                                                <Radio value="Weight loss injection">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Weight loss injection')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </div>
-                            </Col>
+                            <PatienInfo styles={styles} t={t} />
+                            <DiabetesInfo
+                                styles={styles}
+                                t={t}
+                                currentTreatmentShow={currentTreatmentShow}
+                                insulineTypes={insulineTypes}
+                                insulineDoseSelectArray={insulineDoseSelectArray}
+                            />
                         </Row>
                     </Col>
                     <Col lg={7} sm={24} className={styles.patient_register_column}>
