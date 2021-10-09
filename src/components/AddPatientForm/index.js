@@ -169,6 +169,9 @@ const index = ({ direction }) => {
         //     insulineType && setInsulineType(null);
         //     insulineDose && setInsulineDoseSelect(null);
         // }
+        if (insulineType) {
+            setInsulineType(insulineType);
+        }
     };
     // useEffect(() => {
     //     if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
@@ -182,7 +185,7 @@ const index = ({ direction }) => {
             setInsulineDoseSelectArray(
                 insulineTypes.filter((type) => type.type === insulineTypeSelect)
             );
-    }, [insulineDoseSelect, insulineTypeSelect]);
+    }, [insulineTypeSelect]);
     useEffect(() => {
         if (errorsCreatingPatient?.length) {
             notification.error({
@@ -193,6 +196,7 @@ const index = ({ direction }) => {
     }, [errorsCreatingPatient]);
 
     const onFinish = async (values) => {
+        console.log(values);
         const data = {
             name: values?.name?.trim(),
 
@@ -212,12 +216,12 @@ const index = ({ direction }) => {
             doctorNote: values?.doctorNote,
             medicalHistory: values?.medicalHistory,
             otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
-            units: values?.insulineUnit,
             insulineTime: values?.insulineTime?._d,
             currentTreatments:
                 values?.treatmentType === 'INSULINE'
                     ? [
                           {
+                              units: values?.insulineUnit,
                               treatment: values?.treatmentType,
                               doseType: values?.insulineType,
                               numberOfDoses: values?.insulineDose,

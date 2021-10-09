@@ -10,7 +10,7 @@ import {
     TimePicker,
     Typography
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import types from './types.json';
@@ -27,7 +27,6 @@ const DiabetesInfo = ({
     const format = 'HH:mm';
 
     const [, setDuration] = useState('');
-
     function onChange(date, dateString) {
         setDuration(dateString);
     }
