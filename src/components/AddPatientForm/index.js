@@ -48,14 +48,14 @@ const index = ({ direction }) => {
             form.resetFields();
         }
     }, [createdPatientSuccess]);
-    const [diabetesComplicationsShow] = useState([]);
-    const [acuteArray, setAcuteArray] = useState(null);
-    const [chronicArray, setChronicArray] = useState(null);
+    // const [diabetesComplicationsShow] = useState([]);
+    // const [acuteArray, setAcuteArray] = useState(null);
+    // const [chronicArray, setChronicArray] = useState(null);
     const [treatmentTypeOption, setTreatmentTypeOption] = useState(null);
     const [diabeticKetoacidosis, setDiabeticketoacidosis] = useState(false);
 
     const [insulineTypeSelect, setInsulineType] = useState(null);
-    const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
+    // const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
 
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
@@ -65,13 +65,9 @@ const index = ({ direction }) => {
         diabetesComplications,
         treatmentType,
         insulineType,
-        insulineDose,
-        I,
-        C,
         isf,
         acuteSelect,
-        chronicSelect,
-        diabetesStatus
+        chronicSelect
     }) => {
         // if (I) {
         //     setIMASK(I);

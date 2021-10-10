@@ -10,7 +10,7 @@ import {
     TimePicker,
     Typography
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import types from './types.json';
