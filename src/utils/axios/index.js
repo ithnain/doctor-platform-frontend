@@ -2,7 +2,7 @@ import axios from 'axios';
 import { initializeStore } from '@redux/store';
 
 const API = axios.create({
-    baseURL: `https://dev.doctorsapi.ithnain.com`,
+    baseURL: process.env.APP_ENV === 'production'? 'https://doctorsapi.ithnain.com/v1/' : `https://dev.doctorsapi.ithnain.com/v1/`,
     timeout: 30000
 });
 
