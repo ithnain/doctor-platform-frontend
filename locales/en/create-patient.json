@@ -103,5 +103,12 @@
     "Severe": "Severe",
     "Recurrent Hypers": "Recurrent Hypers",
     "Hyperosmolar Hyperglycaemic State(HHS)": "Hyperosmolar Hyperglycaemic State(HHS)",
-    "recommendationGlycemicRange": "recommendation Glycemic Range"
+    "recommendationGlycemicRange": "recommendation Glycemic Range",
+    "breakfast": "breakfast",
+    "dinner": "dinner",
+    "lunch": "lunch",
+    "units": "units",
+    "time": "time",
+    "unit": "unit",
+    "Diabetes duration": "Diabetes duration"
 }

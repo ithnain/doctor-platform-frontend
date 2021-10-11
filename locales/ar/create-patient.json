@@ -102,5 +102,11 @@
     "Moderate": "Moderate",
     "Severe": "Severe",
     "Recurrent Hypers": "Recurrent Hypers",
-    "Hyperosmolar Hyperglycaemic State(HHS)": "Hyperosmolar Hyperglycaemic State(HHS)"
+    "Hyperosmolar Hyperglycaemic State(HHS)": "Hyperosmolar Hyperglycaemic State(HHS)",
+    "breakfast": "breakfast",
+    "dinner": "dinner",
+    "lunch": "lunch",
+    "units": "units",
+    "time": "time",
+    "unit": "unit"
 }

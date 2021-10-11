@@ -1,38 +1,32 @@
-import {
-    Checkbox,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    Radio,
-    Row,
-    Select,
-    Space,
-    Typography,
-    notification
-} from 'antd';
+import { Checkbox, Col, Form, Input, Radio, Row, Space, Typography, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { insulineDoses, insulineTypes } from './insuline';
+// import { insulineDoses, insulineTypes } from './insuline';
 import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
+import DiabetesInfo from './DiabetesInfo';
+import PatienInfo from './PatienInfo';
 import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
-import types from './types.json';
 import useTranslation from 'next-translate/useTranslation';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
 
-const index = () => {
+const index = ({ direction }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
     const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false);
+    const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [insulineTypes, setInsulineTypes] = useState([]);
+    // const [IMASK, setIMASK] = useState(null);
+    // const [CMASK, setCMASK] = useState(null);
+
+    // const [ISFMASK, setISFMASK] = useState(null);
 
     useEffect(() => {
         if (!user || !user.data.accessToken) {
@@ -41,7 +35,11 @@ const index = () => {
             // router.push("/login");
         }
     }, [user]);
-
+    useEffect(() => {
+        API.get('/insuline-type').then((data) => {
+            setInsulineTypes(data.data);
+        });
+    }, []);
     useEffect(() => {
         if (createdPatientSuccess) {
             notification.success({
@@ -50,14 +48,15 @@ const index = () => {
             form.resetFields();
         }
     }, [createdPatientSuccess]);
-    const [duration, setDuration] = useState('');
-    const [diabetesComplicationsShow] = useState([]);
-    const [acuteArray, setAcuteArray] = useState(null);
-    const [chronicArray, setChronicArray] = useState(null);
-    const [insulineTypeSelect, setInsulineType] = useState(null);
-    const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
-
+    // const [diabetesComplicationsShow] = useState([]);
+    // const [acuteArray, setAcuteArray] = useState(null);
+    // const [chronicArray, setChronicArray] = useState(null);
+    const [treatmentTypeOption, setTreatmentTypeOption] = useState(null);
     const [diabeticKetoacidosis, setDiabeticketoacidosis] = useState(false);
+
+    const [insulineTypeSelect, setInsulineType] = useState(null);
+    // const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
+
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
     const [acuteShow, setAcuteShow] = useState(false);
@@ -66,25 +65,33 @@ const index = () => {
         diabetesComplications,
         treatmentType,
         insulineType,
-        insulineDose,
-        ic,
         isf,
         acuteSelect,
         chronicSelect
     }) => {
-        if (acuteArray) {
-            setAcuteShow(true);
-            !acuteArray && setAcuteArray([]);
+        // if (I) {
+        //     setIMASK(I);
+        // }
+        // if (C) {
+        //     setCMASK(C);
+        // }
+        if (isf) {
+            isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
-
-        if (chronicArray) {
-            setChronicShow(true);
-            !chronicArray && setChronicArray([]);
-        }
-        if (Array.isArray(diabetesComplications) && diabetesComplications.length === 0) {
-            setChronicShow(false);
-            setAcuteShow(false);
-        }
+        // if (acuteArray) {
+        //     setAcuteShow(true);
+        //     !acuteArray && setAcuteArray([]);
+        // }
+        // console.log(acuteArray);
+        // console.log(diabetesComplications);
+        // if (chronicArray) {
+        //     setChronicShow(true);
+        //     !chronicArray && setChronicArray([]);
+        // }
+        // if (Array.isArray(diabetesComplications) && diabetesComplications.length === 0) {
+        //     setChronicShow(false);
+        //     setAcuteShow(false);
+        // }
         if (
             Array.isArray(diabetesComplications) &&
             diabetesComplications &&
@@ -96,6 +103,7 @@ const index = () => {
             !diabetesComplications.includes('Acute')
         ) {
             setAcuteShow(false);
+            acuteSelect = [];
         }
         if (
             Array.isArray(diabetesComplications) &&
@@ -108,50 +116,72 @@ const index = () => {
             !diabetesComplications.includes('Chronic')
         ) {
             setChronicShow(false);
+            chronicSelect = [];
         }
-        if (diabetesComplicationsShow === []) {
-            setAcuteShow(false);
-            setChronicShow(false);
-        }
-        if (Array.isArray(chronicSelect) && chronicSelect.length >= 1) {
-            setChronicArray([...chronicSelect]);
-        }
+        // if (diabetesComplicationsShow === []) {
+        //     setAcuteShow(false);
+        //     setChronicShow(false);
+        // }
+        // if (Array.isArray(chronicSelect) && chronicSelect.length >= 1) {
+        //     setChronicArray([...chronicSelect]);
+        // }
 
-        if (Array.isArray(acuteSelect) && acuteSelect.length >= 1) {
-            setAcuteArray([...acuteSelect]);
-        }
+        // if (Array.isArray(acuteSelect) && acuteSelect.length >= 1) {
+        //     setAcuteArray([...acuteSelect]);
+        // }
 
-        if (acuteSelect && acuteSelect.includes('diabeticketoacidosis')) {
+        if (acuteSelect && acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(true);
-        }
-        if (treatmentType === 'Insuline') {
-            setCurrentTreatmentShow(true);
-        } else {
-            setCurrentTreatmentShow(false);
-        }
-        if (
-            (treatmentType === undefined || treatmentType === 'Insuline') &&
-            (isf || ic || insulineTypeSelect || insulineDoseSelect || insulineType || insulineDose)
-        ) {
-            setCurrentTreatmentShow(true);
-            insulineType && setInsulineType(insulineType);
-            insulineDose && setInsulineDoseSelect(insulineDose);
-        }
-        if (treatmentType && treatmentType !== 'Insuline') {
-            insulineType && setInsulineType(null);
-            insulineDose && setInsulineDoseSelect(null);
-        }
-    };
-    useEffect(() => {
-        if (acuteArray && acuteArray.includes('diabeticketoacidosis')) {
-            setDiabeticketoacidosis(true);
-        } else {
+        } else if (acuteSelect && !acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(false);
         }
-    }, [acuteArray]);
+        if (treatmentType && treatmentType === 'INSULINE') {
+            setTreatmentTypeOption(treatmentType);
+            setCurrentTreatmentShow(true);
+        } else if (treatmentType && treatmentType !== 'INSULINE') {
+            setTreatmentTypeOption(treatmentType);
+            setCurrentTreatmentShow(false);
+        }
+        // if (treatmentType === 'INSULINE') {
+        //     setCurrentTreatmentShow(true);
+        // } else {
+        //     setCurrentTreatmentShow(false);
+        // }
+        // if (
+        //     (treatmentType === undefined || treatmentType === 'INSULINE') &&
+        //     (isf ||
+        //         I ||
+        //         C ||
+        //         insulineTypeSelect ||
+        //         insulineDoseSelect ||
+        //         insulineType ||
+        //         insulineDose)
+        // ) {
+        //     setCurrentTreatmentShow(true);
+        //     insulineType && setInsulineType(insulineType);
+        //     insulineDose && setInsulineDoseSelect(insulineDose);
+        // }
+        // if (treatmentType && treatmentType !== 'Insuline') {
+        //     insulineType && setInsulineType(null);
+        //     insulineDose && setInsulineDoseSelect(null);
+        // }
+        if (insulineType) {
+            setInsulineType(insulineType);
+        }
+    };
+    // useEffect(() => {
+    //     if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
+    //         setDiabeticketoacidosis(true);
+    //     } else {
+    //         setDiabeticketoacidosis(false);
+    //     }
+    // }, [acuteArray]);
     useEffect(() => {
-        console.log(insulineTypeSelect, insulineDoseSelect);
-    }, [insulineDoseSelect, insulineTypeSelect]);
+        insulineTypeSelect &&
+            setInsulineDoseSelectArray(
+                insulineTypes.filter((type) => type.type === insulineTypeSelect)
+            );
+    }, [insulineTypeSelect]);
     useEffect(() => {
         if (errorsCreatingPatient?.length) {
             notification.error({
@@ -160,48 +190,19 @@ const index = () => {
             });
         }
     }, [errorsCreatingPatient]);
-    function onChange(date, dateString) {
-        setDuration(dateString);
-    }
+
     const onFinish = async (values) => {
-        console.log(values, insulineTypeSelect, insulineDoseSelect);
-
-        let treatmentType = '';
-        if (values?.treatment === 'INSULIN') {
-            treatmentType = values?.insulin_treatment;
-        } else {
-            treatmentType = values?.treatment;
-        }
-        let healthIssues = values?.healthIssues;
-        let isOtherHealthIssues = false;
-        let otherHealthIssues = '';
-        if (healthIssues && healthIssues.length) {
-            let i = healthIssues?.indexOf('Other');
-            if (i > -1) {
-                healthIssues.splice(i, 1);
-                isOtherHealthIssues = true;
-                otherHealthIssues = values?.otherHealthIssues;
-            }
-        }
-        let diabetesComplications = values?.diabetesComplications;
-        let isOtherDiabetesComplications = false;
-        let otherDiabetesComplications = '';
-        if (diabetesComplications && diabetesComplications?.length) {
-            let j = diabetesComplications?.indexOf('Other');
-            if (j !== -1) {
-                diabetesComplications.splice(j, 1);
-                isOtherDiabetesComplications = true;
-                otherDiabetesComplications = values?.otherDiabetesComplications;
-            }
-        }
-
+        console.log(values);
         const data = {
-            name: values?.name.trim(),
-            remarkableNote: values?.remarkableNote.trim(),
+            name: values?.name?.trim(),
+
+            gender: values.gender,
+            age: values.age,
+            phoneNumber: values?.phoneNumber,
+            remarkableNote: values?.remarkableNote?.trim(),
             diabetesType: values?.diabetesType,
             diabetesStatus: values?.diabetesStatus,
-            diabetesDuration: values?.diabetesDuration._d,
-            treatmentType: values?.treatmentType,
+            diabetesDuration: values?.diabetesDuration?._d,
             reasonForReferral: values?.reasonForReferral,
             factorsEffectinglearning: values?.factorsEffectinglearning,
             short_term_goals: values?.short_term_goals,
@@ -210,26 +211,44 @@ const index = () => {
             recommendationGlycemicRange: values?.recommendationGlycemicRange,
             doctorNote: values?.doctorNote,
             medicalHistory: values?.medicalHistory,
-            otherHealthIssues: values?.otherHealthIssues || values.OotherHealthIssues,
-            currentTreatments: [
-                {
-                    type: values?.treatmentType,
-                    doseType: values?.insulineType,
-                    numberOfDoses: values?.insulineDose,
-                    I_C: values?.ic,
-                    ISF: values?.isf
-                }
-            ],
-            acutes: {
-                condition: values?.acuteSelect,
-                times: values?.DKAtimes,
-                severity: values?.Severity
-            },
-            chronics: [
-                {
-                    condition: values?.chronicSelect
-                }
-            ]
+            otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
+            insulineTime: values?.insulineTime?._d,
+            currentTreatments:
+                values?.treatmentType === 'INSULINE'
+                    ? [
+                          {
+                              units: values?.insulineUnit,
+                              treatment: values?.treatmentType,
+                              doseType: values?.insulineType,
+                              numberOfDoses: values?.insulineDose,
+                              I_C: values?.I ? `${values?.I}:${values.C}` : '',
+                              ISF: values?.isf,
+                              breakfast: values?.breakfast,
+                              lunch: values?.lunch,
+                              dinner: values?.dinner
+                          }
+                      ]
+                    : [
+                          {
+                              treatment: values?.treatmentType
+                          }
+                      ],
+            acutes:
+                values?.acuteSelect?.length >= 1
+                    ? {
+                          condition: values?.acuteSelect,
+                          times: Number(values?.DKAtimes),
+                          severity: values?.Severity
+                      }
+                    : [],
+            chronics:
+                values?.chronicSelect?.length >= 1
+                    ? [
+                          {
+                              condition: values?.chronicSelect
+                          }
+                      ]
+                    : []
         };
 
         try {
@@ -256,7 +275,10 @@ const index = () => {
     };
 
     return (
-        <div className={` ${styles.form_container}`}>
+        <div
+            className={
+                direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
+            }>
             <Title className={styles.title__registration}>{t('Register Patient')}</Title>
             <Form
                 form={form}
@@ -267,328 +289,15 @@ const index = () => {
                 scrollToFirstError>
                 <Row type="flex" justify="space-around" align="flex-start">
                     <Col lg={7} xs={24} className={styles.patient_register_column}>
-                        <Row type="flex">
-                            <Col xs={24}>
-                                <div className={styles.title_form}>
-                                    <Text className={styles.title_form}>
-                                        {t('Patient Information')}
-                                    </Text>
-                                </div>
-
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="name"
-                                        label={<p className={styles.label_form}>{t('Name')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient name'
-                                            }
-                                        ]}>
-                                        <Input placeholder="Omar Saleh" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="gender"
-                                        label={<p className={styles.label_form}>{t('Gender')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Gender'
-                                            }
-                                        ]}>
-                                        <Radio.Group className={styles.radio_container}>
-                                            <Radio value="Male">
-                                                {
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Male')}
-                                                    </p>
-                                                }
-                                            </Radio>
-                                            <Radio value="Female">
-                                                {
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Female')}
-                                                    </p>
-                                                }
-                                            </Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="w-100"
-                                        name="age"
-                                        label={<p className={styles.label_form}>{t('age')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient age'
-                                            }
-                                        ]}>
-                                        <Input placeholder="15" className="w-100" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="phoneNumber"
-                                        label={<p className={styles.label_form}>{t('Phone')}</p>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input patient phone'
-                                            },
-                                            {
-                                                pattern: /^(5)(0|2|3|4|5|6|7|8|9)([0-9]{7})$/,
-                                                message:
-                                                    'Phone number should be in this format 5xxxxxxxx'
-                                            }
-                                        ]}>
-                                        <Input className="w-100" placeholder="5xxxxxxxx" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="w-100"
-                                        name="remarkableNote"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Doctor recommendation & notes')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message: 'Please input patient age'
-                                            }
-                                        ]}>
-                                        <div className="w-100">
-                                            <Input.TextArea
-                                                className="w-100"
-                                                autoSize={{ minRows: 4, maxRows: 6 }}
-                                            />
-                                        </div>
-                                    </Form.Item>
-                                </div>
-                            </Col>
-                            <Col lg={24} className={styles.patient_register_column}>
-                                <Text className={styles.title_form}>
-                                    {t('diabetes information')}
-                                </Text>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="diabetesType"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes type')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes type'
-                                            }
-                                        ]}>
-                                        <Select placeholder="select patient Diabetes type">
-                                            {types.map((type) => {
-                                                return (
-                                                    <Option key={type.id} value={type.name_en}>
-                                                        {type.name_en}
-                                                    </Option>
-                                                );
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="diabetesDuration"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes duration')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes duration'
-                                            }
-                                        ]}>
-                                        <DatePicker onChange={onChange} className="w-100" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="diabetesStatus"
-                                        className={styles.form_item}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Diabetes status')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Diabetes status'
-                                            }
-                                        ]}>
-                                        <Radio.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Radio value="Controlled">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Controlled')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-
-                                                <Radio value="Uncontrolled">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Uncontrolled')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="DM with complications">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('DM with complications')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="treatmentType"
-                                        className={`create w-100 ${styles.form_item}`}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Current Treatment')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Current Treatment '
-                                            }
-                                        ]}>
-                                        <Radio.Group className={` w-100 ${styles.align_left}`}>
-                                            <Space direction="vertical" className="w-100">
-                                                <Radio value="Lifestyle Modification">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Lifestyle Modification')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-
-                                                <Radio value="Oral MEdications">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Oral MEdications')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="Insuline" className="w-100">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Insuline')}
-                                                        </p>
-                                                    }
-                                                    {currentTreatmentShow && (
-                                                        <>
-                                                            <Row
-                                                                className="w1-00"
-                                                                justify="space-around">
-                                                                <Col xs={11}>
-                                                                    <Form.Item
-                                                                        name="insulineType"
-                                                                        rules={[
-                                                                            {
-                                                                                required: true,
-                                                                                message:
-                                                                                    'Please select insuline type'
-                                                                            }
-                                                                        ]}>
-                                                                        <Select placeholder="Type">
-                                                                            {insulineTypes.map(
-                                                                                (type) => {
-                                                                                    return (
-                                                                                        <Option
-                                                                                            key={
-                                                                                                type.id
-                                                                                            }
-                                                                                            value={
-                                                                                                type.name
-                                                                                            }>
-                                                                                            {
-                                                                                                type.name
-                                                                                            }
-                                                                                        </Option>
-                                                                                    );
-                                                                                }
-                                                                            )}
-                                                                        </Select>
-                                                                    </Form.Item>
-                                                                </Col>
-                                                                <Col xs={11}>
-                                                                    <Form.Item
-                                                                        name="insulineDose"
-                                                                        rules={[
-                                                                            {
-                                                                                required: true,
-                                                                                message:
-                                                                                    'Please select insuline type'
-                                                                            }
-                                                                        ]}>
-                                                                        <Select placeholder="Dose">
-                                                                            {insulineDoses.map(
-                                                                                (type) => {
-                                                                                    return (
-                                                                                        <Option
-                                                                                            key={
-                                                                                                type.id
-                                                                                            }
-                                                                                            value={
-                                                                                                type.name
-                                                                                            }>
-                                                                                            {
-                                                                                                type.name
-                                                                                            }
-                                                                                        </Option>
-                                                                                    );
-                                                                                }
-                                                                            )}
-                                                                        </Select>
-                                                                    </Form.Item>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row
-                                                                className="w1-00"
-                                                                justify="space-around">
-                                                                <Col xs={11}>
-                                                                    <Form.Item name="isf">
-                                                                        <Select placeholder="ISF"></Select>
-                                                                    </Form.Item>
-                                                                </Col>
-                                                                <Col xs={11}>
-                                                                    <Form.Item name="ic">
-                                                                        <Select placeholder="I:C"></Select>
-                                                                    </Form.Item>
-                                                                </Col>
-                                                            </Row>
-                                                        </>
-                                                    )}
-                                                </Radio>
-                                                <Radio value="Weight loss injection">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Weight loss injection')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </div>
-                            </Col>
+                        <Row type="flex" justify="start">
+                            <PatienInfo styles={styles} t={t} />
+                            <DiabetesInfo
+                                styles={styles}
+                                t={t}
+                                currentTreatmentShow={currentTreatmentShow}
+                                insulineTypes={insulineTypes}
+                                insulineDoseSelectArray={insulineDoseSelectArray}
+                            />
                         </Row>
                     </Col>
                     <Col lg={7} sm={24} className={styles.patient_register_column}>
@@ -617,66 +326,66 @@ const index = () => {
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
-                                                <Checkbox value="forWeightLosing">
+                                                <Checkbox value="FOR_WEIGHT_LOSING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forWeightLosing')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forWeightgaining">
+                                                <Checkbox value="FOR_WEIGHT_GAINING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forWeightgaining')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forRecurrentingHypoglycemia">
+                                                <Checkbox value="FOR_RECURRENTING_HYPOGLYCEMIA">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('forRecurrentingHypoglycemia')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="forRecurrentingElevatedBloodGlucoseLevels">
+                                                <Checkbox value="FOR_RECURRENTING_ELEVATED_BLOOD_GLUCODE_LEVELS">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t(
                                                             'forRecurrentingElevatedBloodGlucoseLevels'
                                                         )}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="Currently on max oral hypoglycemic agent">
+                                                <Checkbox value="CURRENTLY_ON_MAX_ORAL_HYPOGLYCEMIC_AGENT">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t(
                                                             'Currently on max oral hypoglycemic agent'
                                                         )}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Carb counting classes">
+                                                <Checkbox value="FOR_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Carb counting classes')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Basic carb counting classes">
+                                                <Checkbox value="FOR_BASIC_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Basic carb counting classes')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Advanced Carb counting clases">
+                                                <Checkbox value="FOR_ADVANCED_CARB_COUNTING_CLASES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Advanced Carb counting clases')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For insulin injection">
+                                                <Checkbox value="FOR_INSULIN_INJECTION">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For insulin injection')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Insulin pump preparing">
+                                                <Checkbox value="FOR_INSULIN_PUMP_PREPARING">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Insulin pump preparing')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For Medical plan adherence">
+                                                <Checkbox value="FOR_MEDICAL_PLAN_ADHERENCE">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Medical plan adherence')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="For lifestyle modification ">
+                                                <Checkbox value="FOR_LIFESTYLE_MODIFICATION">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For lifestyle modification ')}
                                                     </p>
@@ -687,7 +396,7 @@ const index = () => {
 
                                     <Form.Item
                                         name="factorsEffectinglearning"
-                                        className={styles.form_item}
+                                        className={` ${styles.form_item}`}
                                         label={
                                             <p className={styles.label_form}>
                                                 {t('Factors which may affect Learning')}
@@ -701,9 +410,9 @@ const index = () => {
                                             }
                                         ]}>
                                         {/* Style needed to handle ltr && rtl */}
-                                        <Radio.Group className={styles.align_left}>
+                                        <Radio.Group className={`w-100 ${styles.align_left}`}>
                                             <Space direction="vertical">
-                                                <Radio value="Interpreter required">
+                                                <Radio value="INTERPRETER_REQUIRED">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -712,7 +421,7 @@ const index = () => {
                                                     }
                                                 </Radio>
 
-                                                <Radio value="Visual impairment">
+                                                <Radio value="VISUAL_IMPAIRMENT">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -720,7 +429,7 @@ const index = () => {
                                                         </p>
                                                     }
                                                 </Radio>
-                                                <Radio value="Auditory impairment">
+                                                <Radio value="AUDITORY_IMPAIRMENT">
                                                     {
                                                         <p
                                                             className={`gotLight ${styles.label_form}`}>
@@ -779,13 +488,7 @@ const index = () => {
                                                     'Is the patient on medication that may affect blood glucose ?'
                                                 )}
                                             </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Gender'
-                                            }
-                                        ]}>
+                                        }>
                                         <Radio.Group className={styles.radio_container}>
                                             <Space direction="vertical">
                                                 <Radio value="Yes">
@@ -825,7 +528,13 @@ const index = () => {
                                             <p className={styles.label_form}>
                                                 {t('Any other critical health issues?')}
                                             </p>
-                                        }>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select other healt issues'
+                                            }
+                                        ]}>
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
@@ -887,19 +596,19 @@ const index = () => {
                                                         <Checkbox.Group
                                                             className={styles.align_left}>
                                                             <Space direction="vertical">
-                                                                <Checkbox value="Recurrent Hypos">
+                                                                <Checkbox value="RECURRENT_HYPOS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Recurrent Hypos ')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Recurrent Hypers">
+                                                                <Checkbox value="RECURRENT_HYPERS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Recurrent Hypers')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Hyperosmolar Hyperglycaemic State(HHS)">
+                                                                <Checkbox value="HYPEROSMOLAR_HYPERGLYCAEMIC_STATE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -908,7 +617,7 @@ const index = () => {
                                                                     </p>
                                                                 </Checkbox>
 
-                                                                <Checkbox value="diabeticketoacidosis">
+                                                                <Checkbox value="DIABETIC_KETOACIDOSIS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Diabetic ketoacidosis')}
@@ -923,7 +632,14 @@ const index = () => {
                                                                             <Col sm={24}>
                                                                                 <Form.Item
                                                                                     className="w-100 m-0"
-                                                                                    name="DKAtimes">
+                                                                                    name="DKAtimes"
+                                                                                    rules={[
+                                                                                        {
+                                                                                            required: true,
+                                                                                            message:
+                                                                                                'Please select DKA TIMES'
+                                                                                        }
+                                                                                    ]}>
                                                                                     <Input
                                                                                         placeholder="How many times?"
                                                                                         className="m-0 w-100"
@@ -934,6 +650,13 @@ const index = () => {
                                                                         <Row>
                                                                             <Col xs={24}>
                                                                                 <Form.Item
+                                                                                    rules={[
+                                                                                        {
+                                                                                            required: true,
+                                                                                            message:
+                                                                                                'Please input severity'
+                                                                                        }
+                                                                                    ]}
                                                                                     name="Severity"
                                                                                     label={
                                                                                         <p
@@ -949,7 +672,7 @@ const index = () => {
                                                                                         className={
                                                                                             styles.radio_container
                                                                                         }>
-                                                                                        <Radio value="Mild">
+                                                                                        <Radio value="MILD">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -959,7 +682,7 @@ const index = () => {
                                                                                                 </p>
                                                                                             }
                                                                                         </Radio>
-                                                                                        <Radio value="Moderate">
+                                                                                        <Radio value="MODERATE">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -969,7 +692,7 @@ const index = () => {
                                                                                                 </p>
                                                                                             }
                                                                                         </Radio>
-                                                                                        <Radio value="Severe">
+                                                                                        <Radio value="SEVERE">
                                                                                             {
                                                                                                 <p
                                                                                                     className={`gotLight ${styles.label_form}`}>
@@ -1002,7 +725,7 @@ const index = () => {
                                                         <Checkbox.Group
                                                             className={styles.align_left}>
                                                             <Space direction="vertical">
-                                                                <Checkbox value="Eye problems (retinopathy)">
+                                                                <Checkbox value="EYE_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1010,14 +733,14 @@ const index = () => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Foot problems">
+                                                                <Checkbox value="FOOT_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Foot problems')}
                                                                     </p>
                                                                 </Checkbox>
 
-                                                                <Checkbox value="Heart attack and stroke">
+                                                                <Checkbox value="HEART_ATTACK_AND_STROKE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1025,13 +748,13 @@ const index = () => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Kidney problems">
+                                                                <Checkbox value="KIDNEY_PROBLEMS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Kidney problems')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Nerve damage (neuropathy)">
+                                                                <Checkbox value="NERVE_DAMAGE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1039,13 +762,13 @@ const index = () => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Gum disease">
+                                                                <Checkbox value="GUM_DISEASE">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t('Gum disease')}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Sexual problems in women">
+                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_WOMEN">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1053,7 +776,7 @@ const index = () => {
                                                                         )}
                                                                     </p>
                                                                 </Checkbox>
-                                                                <Checkbox value="Sexual problems in men">
+                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_MEN">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
                                                                         {t(
@@ -1075,7 +798,13 @@ const index = () => {
                                             <p className={styles.label_form}>
                                                 {t('Patients medical history')}
                                             </p>
-                                        }>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select medical history'
+                                            }
+                                        ]}>
                                         {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
                                         <Checkbox.Group className={styles.align_left}>
                                             <Space direction="vertical">
@@ -1136,14 +865,7 @@ const index = () => {
                                             <p className={`w-100 ${styles.label_form}`}>
                                                 {t('recommendationGlycemicRange')}
                                             </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message:
-                                                    'Please input recommendation Glycemic Range'
-                                            }
-                                        ]}>
+                                        }>
                                         <Input.TextArea
                                             className={`w-100`}
                                             autoSize={{ minRows: 1, maxRows: 1 }}
@@ -1164,13 +886,7 @@ const index = () => {
                                     <p className={styles.label_form}>
                                         {t('Doctor recommendation & notes')}
                                     </p>
-                                }
-                                rules={[
-                                    {
-                                        required: false,
-                                        message: 'Please input patient age'
-                                    }
-                                ]}>
+                                }>
                                 <Input.TextArea
                                     className="w-100"
                                     autoSize={{ minRows: 4, maxRows: 6 }}

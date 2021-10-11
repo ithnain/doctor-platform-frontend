@@ -19,6 +19,23 @@
 
 .form_container {
     padding: 14px;
+
+    .ant-select-selector {
+        text-align: initial;
+    }
+
+    div[role=alert] {
+        text-align: left;
+    }
+}
+
+.form_containerRTL {
+    padding: 14px;
+
+
+    div * {
+        text-align: right;
+    }
 }
 
 .register_btn {
@@ -36,6 +53,7 @@
     line-height: 24px;
     letter-spacing: 0px;
     color: $darkBlue !important;
+    text-align: center;
 }
 
 .form_item {
