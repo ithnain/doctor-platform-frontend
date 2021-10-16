@@ -315,7 +315,7 @@ const index = ({ direction }) => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Please select reasons of referal'
+                                                message: 'Please select reasons of referral'
                                             }
                                         ]}
                                         label={
@@ -355,11 +355,11 @@ const index = ({ direction }) => {
                                                         )}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="FOR_CARB_COUNTING_CLASSES">
+                                                {/* <Checkbox value="FOR_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Carb counting classes')}
                                                     </p>
-                                                </Checkbox>
+                                                </Checkbox> */}
                                                 <Checkbox value="FOR_BASIC_CARB_COUNTING_CLASSES">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('For Basic carb counting classes')}
@@ -387,7 +387,7 @@ const index = ({ direction }) => {
                                                 </Checkbox>
                                                 <Checkbox value="FOR_LIFESTYLE_MODIFICATION">
                                                     <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For lifestyle modification ')}
+                                                        {t('For lifestyle modification')}
                                                     </p>
                                                 </Checkbox>
                                             </Space>
@@ -543,7 +543,7 @@ const index = ({ direction }) => {
                                                         {t('Unawareness hypoglycemia')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="Insulin_resistance">
+                                                {/* <Checkbox value="Insulin_resistance">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('Insulin resistance')}
                                                     </p>
@@ -557,7 +557,7 @@ const index = ({ direction }) => {
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('Retinopathy')}
                                                     </p>
-                                                </Checkbox>
+                                                </Checkbox> */}
                                                 <Checkbox value="Other">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('Other')}
@@ -599,7 +599,7 @@ const index = ({ direction }) => {
                                                                 <Checkbox value="RECURRENT_HYPOS">
                                                                     <p
                                                                         className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Recurrent Hypos ')}
+                                                                        {t('Recurrent Hypos')}
                                                                     </p>
                                                                 </Checkbox>
                                                                 <Checkbox value="RECURRENT_HYPERS">
@@ -829,11 +829,11 @@ const index = ({ direction }) => {
                                                         {t('Celiac')}
                                                     </p>
                                                 </Checkbox>
-                                                <Checkbox value="Unawareness hypoglycimia">
+                                                {/* <Checkbox value="Unawareness hypoglycimia">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('Unawareness hypoglycimia')}
                                                     </p>
-                                                </Checkbox>
+                                                </Checkbox> */}
                                                 <Checkbox value="Skin infection / wound">
                                                     <p className={`gotLight ${styles.label_form}`}>
                                                         {t('Skin infection / wound')}
@@ -869,7 +869,7 @@ const index = ({ direction }) => {
                                         <Input.TextArea
                                             className={`w-100`}
                                             autoSize={{ minRows: 1, maxRows: 1 }}
-                                            placeholder="recommendation Glycemic Range"
+                                            placeholder="Glycemic Range"
                                         />
                                     </Form.Item>
                                 </div>

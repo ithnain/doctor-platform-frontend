@@ -15,6 +15,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import types from './types.json';
 
+const style = {
+    selectGeneric: {
+        width: 200
+    },
+    selectTrade: { width: 150 }
+};
+
 const DiabetesInfo = ({
     styles,
     t,
@@ -142,7 +149,9 @@ const DiabetesInfo = ({
                                                             message: 'Please select insuline type'
                                                         }
                                                     ]}>
-                                                    <Select placeholder="Type">
+                                                    <Select
+                                                        placeholder="Generic name"
+                                                        style={style.selectGeneric}>
                                                         {insulineTypes.length >= 1 &&
                                                             insulineTypes.map((type) => {
                                                                 return (
@@ -168,7 +177,9 @@ const DiabetesInfo = ({
                                                                     'Please select insuline dose'
                                                             }
                                                         ]}>
-                                                        <Select placeholder="Dose">
+                                                        <Select
+                                                            style={style.selectTrade}
+                                                            placeholder="Trade name">
                                                             {insulineDoseSelectArray[0]?.choices.map(
                                                                 (type) => {
                                                                     return (
@@ -270,7 +281,7 @@ const DiabetesInfo = ({
                                                     </Col>
                                                 </Row>
                                             )}
-                                        <Row className="w1-00" justify="space-around">
+                                        {/* <Row className="w1-00" justify="space-around">
                                             <Col xs={11}>
                                                 <Form.Item name="isf">
                                                     <InputNumber placeholder="ISF" />
@@ -297,7 +308,7 @@ const DiabetesInfo = ({
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                        </Row>
+                                        </Row> */}
                                     </>
                                 )}
                             </Radio>
