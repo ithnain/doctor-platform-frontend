@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { initializeStore } from '@redux/store';
 
-// baseURL: process.env.APP_ENV === 'production'? 'https://doctorsapi.ithnain.com/v1/' : `https://dev.doctorsapi.ithnain.com/v1/`,
 const API = axios.create({
-    baseURL: process.env.APP_ENV === 'production'? 'https://doctorsapi.ithnain.com/v1/' : `http://15.185.117.78:3003/v1/`,
+    baseURL: process.env.APP_ENV === 'production'? 'https://doctorsapi.ithnain.com/v1/' : 'http://doctor-api-load-balancer-1831372393.me-south-1.elb.amazonaws.com:3003/v1/',
     timeout: 30000
 });
 
