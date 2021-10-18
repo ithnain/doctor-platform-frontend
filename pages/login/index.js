@@ -27,7 +27,6 @@ const Login = ({ direction }) => {
     const [loading, setLoading] = useState(false);
 
     const onFinish = ({ email, password }) => {
-        console.log(email, password);
         setLoading(true);
         API.post('auth/signin', {
             email,
