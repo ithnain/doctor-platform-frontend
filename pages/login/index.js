@@ -49,13 +49,17 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    direction === 'rtl' ? Toast(error.ar) : Toast(error.en);
+                    direction === 'rtl' ? Toast(error.message?.ar) : Toast(error.message?.en);
                     // toastr.error('something went wrong');
                 }
             })
             .catch((err) => {
-                if (err.response?.data?.message) {
-                    toastr.error(err.response.data?.message);
+                console.log({ err });
+                if (err.response) {
+                    const { data = {} } = err.response;
+                    const { error = {} } = data;
+                    const { message = 'Something went wrong' } = error;
+                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {

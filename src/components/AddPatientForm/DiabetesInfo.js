@@ -17,11 +17,10 @@ import types from './types.json';
 
 const style = {
     selectGeneric: {
-        width: 200
+        width: 'auto'
     },
-    selectTrade: { width: 150 }
+    selectTrade: { width: 'auto' }
 };
-
 const DiabetesInfo = ({
     styles,
     t,
@@ -150,13 +149,14 @@ const DiabetesInfo = ({
                                                         }
                                                     ]}>
                                                     <Select
-                                                        placeholder="Generic name"
-                                                        style={style.selectGeneric}>
+                                                        style={style.selectGeneric}
+                                                        placeholder="Generic name">
                                                         {insulineTypes.length >= 1 &&
                                                             insulineTypes.map((type) => {
                                                                 return (
                                                                     <Option
                                                                         key={type.id}
+                                                                        title={type.type}
                                                                         value={type.type}>
                                                                         {type.type}
                                                                     </Option>
@@ -185,6 +185,7 @@ const DiabetesInfo = ({
                                                                     return (
                                                                         <Option
                                                                             key={type}
+                                                                            title={type}
                                                                             value={type}>
                                                                             {type}
                                                                         </Option>
