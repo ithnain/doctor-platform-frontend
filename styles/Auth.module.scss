@@ -20,6 +20,10 @@
     justify-content: center;
     align-items: center;
 
+    label {
+        font-size: 12px;
+    }
+
     > div:first-of-type {
         width: 100%;
     }

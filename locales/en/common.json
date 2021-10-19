@@ -1,5 +1,5 @@
 {
-    "requiredInput": "Please input your Phone",
+    "requiredInput": "Please fill this input",
     "accept": "accept",
     "reject": "reject",
     "email": "Email",
@@ -15,5 +15,9 @@
     "editProfile": "Edit Profile",
     "phone": "Phone",
     "speciality": "speciality",
-    "nationalID": "National ID"
+    "nationalID": "National ID",
+
+    "forgetPassword": "Forget password",
+    "resetPassword": "Reset Password",
+    "emailError": "Please input your email!"
 }
