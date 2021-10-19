@@ -3,7 +3,7 @@ import { initializeStore } from '@redux/store';
 
 const API = axios.create({
     baseURL:
-        process.env.APP_ENV === 'production'
+        process.env.NEXT_PUBLIC_APP_ENV === 'production'
             ? 'https://doctorsapi.ithnain.com/v1/'
             : 'http://doctor-api-load-balancer-1831372393.me-south-1.elb.amazonaws.com:3003/v1/',
     timeout: 30000
