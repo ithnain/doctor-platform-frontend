@@ -1,0 +1,65 @@
+.authLeftSide {
+  background-color: #042c44;
+  min-height: 100vh;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .authLeftSide {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+.authRightSide {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.authRightSide label {
+  font-size: 12px;
+}
+
+.authRightSide > div:first-of-type {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .authRightSide {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: auto;
+  }
+}
+
+.btnRegister {
+  background-color: #ee3d60;
+  width: 50%;
+  color: #fff;
+}
+
+.input {
+  border-radius: 7px;
+  background-color: #fafafa;
+}
+/*# sourceMappingURL=Auth.module.css.map */
