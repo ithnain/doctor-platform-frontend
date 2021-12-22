@@ -24,7 +24,6 @@ body {
 
 .gotLight {
     font-family: 'gothic' !important;
-
 }
 
 a {
@@ -254,9 +253,12 @@ a {
     .ant-col.ant-form-item-control {
         width: 100%;
     }
-
 }
 
 .ant-radio-wrapper>span:nth-child(2) {
     width: 100%;
+}
+
+.ant-form-item .ant-select {
+    width: 100% !important;
 }

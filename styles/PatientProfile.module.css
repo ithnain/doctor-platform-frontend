@@ -1,286 +1,290 @@
 .wrapper {
-  background-color: #ffffff;
-  width: 95%;
-  margin: 5rem auto;
+    background-color: #ffffff;
+    width: 95%;
+    margin: 5rem auto;
 }
 
 .dvider {
-  background-color: #ccc;
-  width: 100%;
-  height: 1px;
-  margin: 8px 10px;
+    background-color: #ccc;
+    width: 100%;
+    height: 1px;
+    margin: 8px 10px;
 }
 
 .infoTexthead {
-  margin: 4px 0px;
-  text-align: start;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    margin: 4px 0px;
+    text-align: start;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 .infoTextvalue {
-  font-size: 0.65rem;
-  color: #002c44;
+    font-size: 0.65rem;
+    color: #002c44;
 }
 
 .infoTextvalueValue {
-  font-size: 0.6rem;
-  color: #005792;
-  font-weight: normal;
-  padding: 0 4px;
+    font-size: 0.6rem;
+    color: #005792;
+    font-weight: normal;
+    padding: 0 4px;
 }
 
 .avatarWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  margin-bottom: 1rem;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 .avatarWrapperIconAndName {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 .avatarWrapperIconAndNameAvatar {
-  border: 1px solid;
+    border: 1px solid;
 }
 
 .avatarWrapperIconAndNameAvatarName {
-  color: black;
-  font-weight: bold;
-  font-size: 1.9rem;
-  font-weight: bold;
-  margin: auto 1rem;
+    color: black;
+    font-weight: bold;
+    font-size: 1.9rem;
+    font-weight: bold;
+    margin: auto 1rem;
 }
 
 .avatarWrapperIconAndNameAvatarIcon {
-  padding: 0px 8px;
+    padding: 0px 8px;
 }
 
 .NotesCardWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
 }
 
 .NotesCardWrapperName {
-  width: paddIngWidht;
-  color: #8798ad;
+    width: paddIngWidht;
+    color: #8798ad;
 }
 
 .NotesCardWrapperInformation {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .NotesCardWrapperInformationNote {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  min-width: 200px;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  text-align: start;
-  margin-right: 1rem;
-  margin-left: 1rem;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    min-width: 200px;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    text-align: start;
+    margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 .NotesCardWrapperInformationNoteText {
-  max-width: 100%;
-  padding-right: 8px;
-  margin: 0px;
-  color: #005792;
+    max-width: 100%;
+    padding-right: 8px;
+    margin: 0px;
+    color: #005792;
 }
 
 .NotesCardWrapperInformationViewHistoyWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 
-.NotesCardWrapperInformationViewHistoyWrapperBtn, .basicButton, .basicButtonBlue {
-  padding: 8px 16px;
-  border: solid 1px #ee3d60;
-  border-radius: 8px;
-  font-size: 0.5rem;
-  font-weight: normal;
-  margin: 4px 1rem;
-  text-align: center;
-  color: #ee3d60;
+.NotesCardWrapperInformationViewHistoyWrapperBtn,
+.basicButton,
+.basicButtonBlue {
+    padding: 8px 16px;
+    border: solid 1px #ee3d60;
+    border-radius: 8px;
+    font-size: 0.5rem;
+    font-weight: normal;
+    margin: 4px 1rem;
+    text-align: center;
+    color: #ee3d60;
 }
 
-.NotesCardWrapperInformationViewHistoyWrapperBtn:hover, .basicButton:hover, .basicButtonBlue:hover {
-  color: #ee3d60;
+.NotesCardWrapperInformationViewHistoyWrapperBtn:hover,
+.basicButton:hover,
+.basicButtonBlue:hover {
+    color: #ee3d60;
 }
 
 .UserCardInfoWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
 }
 
 .labelWidht {
-  width: 70px;
-  color: #8798ad;
-  text-align: start;
+    width: 70px;
+    color: #8798ad;
+    text-align: start;
 }
 
 .basicButton {
-  margin-right: 1rem;
-  margin-left: 1rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 .basicButtonBlue {
-  border-color: #015792;
-  color: #015792;
+    border-color: #015792;
+    color: #015792;
 }
 
 .basicButtonBlue:hover {
-  color: #015792;
+    color: #015792;
 }
 
 .header {
-  font-size: 1.75rem;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: start;
-  color: #042c42;
-  margin: 20px 20px 20px 8px;
+    font-size: 1.75rem;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: start;
+    color: #042c42;
+    margin: 20px 20px 20px 8px;
 }
 
 .personIconWrapper {
-  width: 70px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+    width: 70px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 
 .columOneTwoWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  margin-right: 1rem;
-  margin-left: 1rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 .columOneTwoWrapperColumOne {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  text-align: start;
-  min-width: 300;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    text-align: start;
+    min-width: 300;
 }
 
 .columOneTwoWrapperColumTwo {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-item-align: center;
-      align-self: center;
-  min-width: 200px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-item-align: center;
+    align-self: center;
+    min-width: 200px;
 }
 
 .diabetsInformationWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: '100%';
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: '100%';
 }
 
 .diabetsInformationWrapperOne {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .userinfoCard {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .flex1 {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
 }
 /*# sourceMappingURL=PatientProfile.module.css.map */

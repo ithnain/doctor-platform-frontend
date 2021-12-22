@@ -91,7 +91,7 @@ const index = ({ direction }) => {
             !diabetesComplications.includes('Chronic')
         ) {
             setChronicShow(false);
-            chronicSelect = [];
+            chronicSelect.length = 0;
         }
 
         if (acuteSelect && acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
