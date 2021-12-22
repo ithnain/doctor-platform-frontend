@@ -1,12 +1,19 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import router from 'next/router';
 
-const authenticatedRoute = (Component = null, options = {}) => {
+const authenticatedRoute = (Component = null) => {
+    AuthenticatedRoute.propTypes = {
+        isLoggedIn: PropTypes.bool.isRequired
+    };
     class AuthenticatedRoute extends React.Component {
-        state = {
-            loading: true
-        };
+        constructor(props) {
+            super(props);
+            this.state = {
+                loading: true
+            };
+        }
 
         componentDidMount() {
             if (router.pathname === '/login' && this.props.isLoggedIn) {
