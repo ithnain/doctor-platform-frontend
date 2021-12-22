@@ -2,11 +2,24 @@ import axios from 'axios';
 import { initializeStore } from '@redux/store';
 
 const API = axios.create({
-    baseURL: `https://157.175.95.127:3003/v1/`,
-    timeout: 30000,
-    headers: {
-        Authorization: `Bearer ${initializeStore().getState().user?.token}`
-    }
+    baseURL:
+        process.env.NEXT_PUBLIC_APP_ENV === 'production'
+            ? 'https://doctorsapi.ithnain.com/v1/'
+            : 'http://doctor-api-load-balancer-1831372393.me-south-1.elb.amazonaws.com:3003/v1/',
+    timeout: 30000
 });
 
+API.interceptors.request.use(
+    (config) => {
+        if (initializeStore().getState().user?.accessToken) {
+            config.headers.Authorization = `Bearer ${
+                initializeStore().getState().user?.accessToken
+            }`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 export default API;

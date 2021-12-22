@@ -22,6 +22,10 @@ body {
     }
 }
 
+.gotLight {
+    font-family: 'gothic' !important;
+}
+
 a {
     color: inherit;
 }
@@ -184,6 +188,20 @@ a {
     }
 }
 
+.ant-btn.blueBtn {
+    background-color: $darkBlue;
+    color: $white;
+    transition: 0.2s all ease-in-out;
+
+    &:hover {
+        background-color: $white;
+        color: $darkBlue;
+        filter: opacity(80%);
+        border: 1px solid $darkBlue;
+        outline: none;
+    }
+}
+
 .ant-pagination-item-active,
 .ant-pagination-item {
     border-radius: 8px !important;
@@ -217,4 +235,30 @@ a {
     a {
         color: $darkBlue !important;
     }
+}
+
+.ml-2 {
+    margin-left: 0.75rem !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+.create {
+    .ant-col.ant-form-item-control {
+        width: 100%;
+    }
+}
+
+.ant-radio-wrapper > span:nth-child(2) {
+    width: 100%;
+}
+
+.ant-form-item .ant-select {
+    width: 100% !important;
 }

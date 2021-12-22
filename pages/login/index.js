@@ -8,7 +8,9 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
+import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
+import authenticatedRoute from '@components/AuthenticatedRoute';
 import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
 import { useDispatch } from 'react-redux';
@@ -23,7 +25,6 @@ const Login = ({ direction }) => {
     const { t } = useTranslation('login');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const requiredField = t('common:requiredInput');
 
     const onFinish = ({ email, password }) => {
         setLoading(true);
@@ -37,7 +38,6 @@ const Login = ({ direction }) => {
 
                     if (res?.status === 201) {
                         dispatch(setUser(res.data));
-                        // cookie.set('token', res.data.accessToken, { expires: 24 });
                         fetch('/api/auth/login', {
                             method: 'post',
                             headers: {
@@ -49,12 +49,17 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    toastr.error('something went wrong');
+                    direction === 'rtl' ? Toast(error.message?.ar) : Toast(error.message?.en);
+                    // toastr.error('something went wrong');
                 }
             })
             .catch((err) => {
-                if (err.response?.data?.message) {
-                    toastr.error(err.response.data?.message);
+                console.log({ err });
+                if (err.response) {
+                    const { data = {} } = err.response;
+                    const { error = {} } = data;
+                    const { message = 'Something went wrong' } = error;
+                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -128,16 +133,21 @@ const Login = ({ direction }) => {
                                     <Col span={23}>
                                         <Form.Item
                                             label={t('password')}
-                                            className="mb-1"
+                                            className="mb-0"
                                             name="password"
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: requiredField
+                                                    message: t('emptyPassword')
                                                 }
                                             ]}>
                                             <Input.Password className={authStyles.input} />
                                         </Form.Item>
+                                        <Row justify="end" className="mb-1">
+                                            <Link className={`blue pointer`} href="/forgetpassword">
+                                                <a>{t('forgetPassword')}</a>
+                                            </Link>{' '}
+                                        </Row>
                                     </Col>
                                 </Row>
 
@@ -174,5 +184,5 @@ const Login = ({ direction }) => {
 Login.propTypes = {
     direction: PropTypes.string.isRequired
 };
-export default Login;
-// export default authenticatedRoute(Login);
+// export default Login;
+export default authenticatedRoute(Login);

@@ -1,23 +1,44 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import router from 'next/router';
 
-const authenticatedRoute = (Component = null, options = {}) => {
+const authenticatedRoute = (Component = null) => {
+    AuthenticatedRoute.propTypes = {
+        isLoggedIn: PropTypes.bool.isRequired
+    };
     class AuthenticatedRoute extends React.Component {
-        state = {
-            loading: true
-        };
+        constructor(props) {
+            super(props);
+            this.state = {
+                loading: true
+            };
+        }
 
         componentDidMount() {
             if (router.pathname === '/login' && this.props.isLoggedIn) {
                 router.push('/overview');
                 return;
             }
+            if (router.pathname === '/' && this.props.isLoggedIn) {
+                router.push('/overview');
+                return;
+            } else if (router.pathname === '/' && !this.props.isLoggedIn) {
+                this.setState({ loading: true });
+                router.push('/login').then(() => {
+                    this.setState({ loading: false });
+                });
+            }
             if (this.props.isLoggedIn) {
                 this.setState({ loading: false });
-            } else {
-                this.setState({ loading: false });
-                router.push('/login');
+                return;
+            }
+            if (this.props.isLoggedIn === '') {
+                this.setState({ loading: true });
+                router.push('/login').then(() => {
+                    this.setState({ loading: false });
+                });
+                return;
             }
         }
         render() {
@@ -32,7 +53,7 @@ const authenticatedRoute = (Component = null, options = {}) => {
     }
 
     return connect((state) => ({
-        isLoggedIn: state?.user.token
+        isLoggedIn: state?.user.accessToken
     }))(AuthenticatedRoute);
 };
 

@@ -119,10 +119,17 @@
         border-radius: 7px;
         text-transform: none;
         -webkit-appearance: button;
+        a {
+            color: $white;
+        }
     }
-    a {
-        color: $white;
+    &__btn:hover {
+        color: $pinkBG;
+        border-color: $pinkBG;
     }
+    // a {
+    //     color: $darkBlue;
+    // }
 }
 
 .content {

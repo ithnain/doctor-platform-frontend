@@ -1,7 +1,23 @@
 {
-    "requiredInput": "Please input your Phone",
+    "requiredInput": "Please fill this input",
     "accept": "accept",
     "reject": "reject",
     "email": "Email",
-    "id": "ID"
+    "id": "ID",
+    "age": "Age",
+    "patientType": "Patient type",
+    "responsibleOfPatient": "Responsible of patient",
+    "lastSessionDate": "Last session date",
+    "numberOfSessionsCompleted": "Number of sessions completed",
+    "addToMyPatient": "Add to my patients",
+    "registerPatient": "Register Patient",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile",
+    "phone": "Phone",
+    "speciality": "speciality",
+    "nationalID": "National ID",
+
+    "forgetPassword": "Forget password",
+    "resetPassword": "Reset Password",
+    "emailError": "Please input your email!"
 }

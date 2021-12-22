@@ -1,9 +1,9 @@
-import { Badge, Dropdown, Menu, Typography } from 'antd';
+import { useState } from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import { Badge, Dropdown, Menu, Typography, Button } from 'antd';
 
 import { BellOutlined } from '@ant-design/icons';
-import CustomButton from '../CustomBtn';
-// import en from '@src/i18n/en';
-// import ar from '@src/i18n/ar';
 import Image from 'next/image';
 import LangToggle from '@components/LangToggle';
 import Link from 'next/link';
@@ -11,21 +11,29 @@ import PropTypes from 'prop-types';
 import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import useTranslation from 'next-translate/useTranslation';
 
-function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
+function Header({ name, showAddPatientBtn }) {
     const { Text } = Typography;
+    const router = useRouter();
     const [, setLang] = useLocalStorage('storageLang', 'en');
+    const { t } = useTranslation('common');
+    const [loadingCreatePatient, setloadingCreatePatient] = useState(false);
 
-    // const t = storageLang === 'en' ? en : ar;
     return (
         <Row align="middle" justify="end">
-            {showAddPatientBtn && textBtn ? (
-                <span className={styles.header__btn}>
-                    <Link href={`/create-patient`} className={styles.linkText}>
-                        {textBtn}
-                    </Link>
-                </span>
+            {showAddPatientBtn ? (
+                <Button
+                    className={styles.header__btn}
+                    loading={loadingCreatePatient}
+                    onClick={async () => {
+                        if (router.pathname === '/create-patient') {
+                            return;
+                        }
+                        setloadingCreatePatient(true);
+                        await router.push('/create-patient');
+                    }}>
+                    {`${t('registerPatient')} + `}
+                </Button>
             ) : null}
 
             <div className={styles.header__notifications}>
@@ -47,16 +55,20 @@ function Header({ name, hospitalName, showAddPatientBtn, textBtn }) {
                 <LangToggle setLang={setLang} />
             </div>
 
-            <Link href="/">
+            <Link href="/doctor/profile">
                 <div className={styles.header__img}>
                     <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
                 </div>
             </Link>
-            <Text>{name || hospitalName}</Text>
+            {name && <Text> {name} </Text>}
         </Row>
     );
 }
 
-Header.propTypes = { name: PropTypes.string.isRequired, hospitalName: PropTypes.string.isRequired };
+Header.propTypes = {
+    showAddPatientBtn: PropTypes.bool,
+    name: PropTypes.string,
+    textBtn: PropTypes.string
+};
 
 export default Header;

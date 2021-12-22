@@ -18,8 +18,7 @@ function Overview({ direction, doctors }) {
 
 Overview.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired,
-    token: PropTypes.string.isRequired
+    doctors: PropTypes.array.isRequired
 };
 export const getServerSideProps = async ({ req }) => {
     try {
@@ -35,10 +34,9 @@ export const getServerSideProps = async ({ req }) => {
             }
         };
     } catch (error) {
-        console.log(error);
         return {
             props: {
-                doctors: []
+                doctors: null
             }
         };
     }

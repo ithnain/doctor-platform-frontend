@@ -1,0 +1,23 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-doctorplatform-dev-173809-authRole",
+            "UnauthRoleArn": "arn:aws:iam::783978692119:role/amplify-doctorplatform-dev-173809-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::783978692119:role/amplify-doctorplatform-dev-173809-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-doctorplatform-dev-173809-deployment",
+            "UnauthRoleName": "amplify-doctorplatform-dev-173809-unauthRole",
+            "StackName": "amplify-doctorplatform-dev-173809",
+            "StackId": "arn:aws:cloudformation:eu-west-1:783978692119:stack/amplify-doctorplatform-dev-173809/75f84cd0-e18c-11eb-ab78-027441ce323f",
+            "AmplifyAppId": "d31afuj9zq45gq"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d31afuj9zq45gq",
+                    "type": "cicd"
+                }
+            }
+        }
+    }
+}
