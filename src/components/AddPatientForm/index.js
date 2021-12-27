@@ -128,7 +128,6 @@ const index = ({ direction }) => {
     }, [errorsCreatingPatient]);
 
     const onFinish = async (values) => {
-        console.log(values);
         const data = {
             name: values?.name?.trim(),
 
@@ -197,6 +196,14 @@ const index = ({ direction }) => {
                 setCreatedPatientSuccess(true);
                 setLoading(false);
             }
+            setTimeout(() => {
+                setCreatedPatientSuccess(false);
+                setDiabeticketoacidosis(false);
+                setInsulineType(null);
+                setCurrentTreatmentShow(false);
+                setChronicShow(false);
+                setAcuteShow(false);
+            }, 3000);
         } catch (error) {
             if (error?.response?.data?.error?.message) {
                 // TO DO  if RTL ? or LTR

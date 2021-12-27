@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import router from 'next/router';
 
 const authenticatedRoute = (Component = null) => {
-    AuthenticatedRoute.propTypes = {
-        isLoggedIn: PropTypes.bool.isRequired
-    };
     class AuthenticatedRoute extends React.Component {
         constructor(props) {
             super(props);
@@ -51,6 +48,9 @@ const authenticatedRoute = (Component = null) => {
             return <Component {...this.props} />;
         }
     }
+    AuthenticatedRoute.propTypes = {
+        isLoggedIn: PropTypes.bool.isRequired
+    };
 
     return connect((state) => ({
         isLoggedIn: state?.user.accessToken

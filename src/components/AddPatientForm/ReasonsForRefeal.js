@@ -29,7 +29,7 @@ const ReasonsForRefeal = ({ styles, t }) => {
                             {t('forRecurrentingHypoglycemia')}
                         </p>
                     </Checkbox>
-                    <Checkbox value="FOR_RECURRENTING_ELEVATED_BLOOD_GLUCODE_LEVELS">
+                    <Checkbox value="FOR_RECURRENTING_ELEVATED_BLOOD_GLUCOSE_LEVELS">
                         <p className={`gotLight ${styles.label_form}`}>
                             {t('forRecurrentingElevatedBloodGlucoseLevels')}
                         </p>
