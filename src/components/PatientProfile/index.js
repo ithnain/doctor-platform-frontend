@@ -40,10 +40,10 @@ export const DbCarInfo = ({ t, ISF, sliding_scale, I_C, health_issues }) => (
             <div className={patienProfileSyle.flex1}>
                 <div className={patienProfileSyle.columOneTwoWrapper}>
                     <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
-                        <RenderInfoText title={t('patientType')} info="I" />
-                        <RenderInfoText title={t('patientType')} info="xxxxxxxxxxxx" />
-                        <RenderInfoText title={t('ResponsableOfPatient')} info="Paris" />
-                        <RenderInfoText title={t('PatientIsOn')} info="Paris" />
+                        <RenderInfoText title={t('patientType')} info=" " />
+                        <RenderInfoText title={t('patientType')} info=" " />
+                        <RenderInfoText title={t('ResponsableOfPatient')} info=" " />
+                        <RenderInfoText title={t('PatientIsOn')} info=" " />
                         {/* <RenderInfoText title={t('ISF')} info={ISF} /> */}
                         {/* <RenderInfoText title={t('IC')} info={I_C} /> */}
                         {/* <RenderInfoText title={t('SlidingSclae')} info={sliding_scale} /> */}
