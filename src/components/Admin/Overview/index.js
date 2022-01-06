@@ -4,6 +4,7 @@ import Card from '@components/Card';
 import CustomButton from '@src/components/CustomBtn';
 import PropTypes from 'prop-types';
 import QRCode from 'react-qr-code';
+import QRForm from '@src/components/QRForm';
 // import { useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -34,25 +35,31 @@ function Admin({ direction, doctors }) {
                         )}
                     </Row>
                 </Col>
-
-                <Row gutter={[20, 8]} justify="space-between" align="top">
-                    <Col>
-                        <QRCode
-                            className="section-to-print"
-                            value="https://www.npmjs.com/package/react-qr-code"
-                        />
-                    </Col>
-                    <Col>
-                        <CustomButton
-                            type="button"
-                            text="Print QR code"
-                            handleClick={() => {
-                                window.print();
-                            }}
-                        />
-                    </Col>
-                </Row>
+                <Col xs={24}>
+                    <Row gutter={[20, 8]} justify="space-between" align="top">
+                        <Col>
+                            <QRCode
+                                className="section-to-print"
+                                value="https://www.npmjs.com/package/react-qr-code"
+                            />
+                        </Col>
+                        <Col>
+                            <CustomButton
+                                type="button"
+                                text="Print QR code"
+                                handleClick={() => {
+                                    window.print();
+                                }}
+                            />
+                        </Col>
+                    </Row>
+                </Col>
             </ConfigProvider>
+            <Col xs={24}>
+                <Row justify="end">
+                    <QRForm />
+                </Row>
+            </Col>
         </Row>
     );
 }
