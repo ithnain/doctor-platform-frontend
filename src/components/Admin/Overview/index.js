@@ -4,12 +4,9 @@ import Card from '@components/Card';
 import CustomButton from '@src/components/CustomBtn';
 import PropTypes from 'prop-types';
 import QRCode from 'react-qr-code';
-import QRForm from '@src/components/QRForm';
-// import { useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 
 function Admin({ direction, doctors }) {
-    // const user = useSelector((state) => state.userdata);
     const { t } = useTranslation('overview');
     const { Title } = Typography;
     return (
@@ -55,11 +52,6 @@ function Admin({ direction, doctors }) {
                     </Row>
                 </Col>
             </ConfigProvider>
-            <Col xs={24}>
-                <Row justify="end">
-                    <QRForm />
-                </Row>
-            </Col>
         </Row>
     );
 }

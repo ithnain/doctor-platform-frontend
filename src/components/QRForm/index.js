@@ -84,80 +84,82 @@ const QRForm = () => {
     };
     return (
         <div className={styles.rtl}>
-            <Row justify="end">
-                <Space direction="vertical">
-                    <Col xs={24}>
-                        <div className={styles.logo}>
-                            <Image
-                                preview={false}
-                                width={80}
-                                height={80}
-                                src="/assets/logo-dark-notext.png"
-                            />
-                        </div>
-                    </Col>
-                    <Col xs={24}>
-                        <Text className={styles.welcome} strong>
-                            اهلا بك في اثنين
-                        </Text>
-                    </Col>
-                    <Col xs={24}>
-                        <Text className={styles.signThrough} strong>
-                            الدكتور المعالج
-                        </Text>
-                    </Col>
-                    <Col xs={24}>
-                        <div className={styles['d-flex']}>
-                            <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
-                            <Text className={styles.doctorName} type="secondary">
-                                اسم الدكتور
+            <Space>
+                <Row justify="space-between" className={styles.rtl}>
+                    <Space direction="vertical">
+                        <Col xs={24}>
+                            <div className={styles.logo}>
+                                <Image
+                                    preview={false}
+                                    width={80}
+                                    height={80}
+                                    src="/assets/logo-dark-notext.png"
+                                />
+                            </div>
+                        </Col>
+                        <Col xs={24}>
+                            <Text className={styles.welcome} strong>
+                                اهلا بك في اثنين
                             </Text>
-                        </div>
-                    </Col>
-                    <Col xs={24}>
-                        <div className={styles['d-flex']}>
-                            <Text className={styles.doctorName} type="secondary"></Text>
-                        </div>
-                    </Col>
-                    <Form
-                        layout="vertical"
-                        name="basic"
-                        labelCol={{ span: 6 }}
-                        wrapperCol={{ span: 24 }}
-                        initialValues={{ remember: true }}
-                        onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
-                        autoComplete="off">
-                        <Form.Item
-                            rules={[{ required: true, message: 'فضلا املأ البيانات' }]}
-                            label="اسم بالكامل"
-                            name="username">
-                            <Input />
-                        </Form.Item>
+                        </Col>
+                        <Col xs={24}>
+                            <Text className={styles.signThrough} strong>
+                                الدكتور المعالج
+                            </Text>
+                        </Col>
+                        <Col xs={24}>
+                            <div className={styles['d-flex']}>
+                                <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
+                                <Text className={styles.doctorName} type="secondary">
+                                    اسم الدكتور
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col xs={24}>
+                            <div className={styles['d-flex']}>
+                                <Text className={styles.doctorName} type="secondary"></Text>
+                            </div>
+                        </Col>
+                        <Form
+                            layout="vertical"
+                            name="basic"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 24 }}
+                            initialValues={{ remember: true }}
+                            onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
+                            autoComplete="off">
+                            <Form.Item
+                                rules={[{ required: true, message: 'فضلا املأ البيانات' }]}
+                                label="اسم بالكامل"
+                                name="username">
+                                <Input />
+                            </Form.Item>
 
-                        <Form.Item
-                            name="number"
-                            label="رقم الجوال"
-                            rules={[
-                                { required: true, message: 'فضلا املأ البيانات' },
-                                {
-                                    validator: checkNumber
-                                }
-                            ]}>
-                            <NumberInput />
-                        </Form.Item>
+                            <Form.Item
+                                name="number"
+                                label="رقم الجوال"
+                                rules={[
+                                    { required: true, message: 'فضلا املأ البيانات' },
+                                    {
+                                        validator: checkNumber
+                                    }
+                                ]}>
+                                <NumberInput />
+                            </Form.Item>
 
-                        <Form.Item wrapperCol={{ span: 24 }}>
-                            <CustomButton
-                                type="primary"
-                                htmlType="submit"
-                                text="انشاء حساب"
-                                className={styles.redBtn}
-                            />
-                        </Form.Item>
-                    </Form>
-                </Space>
-            </Row>
+                            <Form.Item wrapperCol={{ span: 24 }}>
+                                <CustomButton
+                                    type="primary"
+                                    htmlType="submit"
+                                    text="انشاء حساب"
+                                    className={styles.redBtn}
+                                />
+                            </Form.Item>
+                        </Form>
+                    </Space>
+                </Row>
+            </Space>
         </div>
     );
 };
