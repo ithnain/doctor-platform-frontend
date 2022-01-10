@@ -86,7 +86,7 @@ function Patients({ direction, patients, totalCount }) {
 Patients.propTypes = {
     direction: PropTypes.string.isRequired,
     patients: PropTypes.array.isRequired,
-    totalCount: PropTypes.string.isRequired
+    totalCount: PropTypes.number.isRequired
 };
 export const getServerSideProps = async ({ req, query }) => {
     try {

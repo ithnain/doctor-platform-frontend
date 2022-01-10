@@ -37,7 +37,7 @@ function Admin({ direction, doctors }) {
 
 Admin.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired
+    doctors: PropTypes.array
 };
 
 export default Admin;
