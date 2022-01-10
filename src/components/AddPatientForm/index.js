@@ -1,12 +1,20 @@
-import { Checkbox, Col, Form, Input, Radio, Row, Space, Typography, notification } from 'antd';
+import { Col, Form, Row, Typography, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
-// import { insulineDoses, insulineTypes } from './insuline';
 import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
+import DiabetesComplications from './DiabetesComplications';
 import DiabetesInfo from './DiabetesInfo';
+import DoctorNote from './DoctorNote';
+import EffectGlocuse from './EffectGlocuse';
+import FactorsAffectLearning from './FactorsAffectLearning';
+import Goals from './Goals';
+import HealthIssues from './HealthIssues';
+import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
+import ReasonsForRefeal from './ReasonsForRefeal';
+import RecommendationGlycemicRange from './RecommendationGlycemicRange';
 import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
@@ -23,18 +31,7 @@ const index = ({ direction }) => {
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
     const [insulineTypes, setInsulineTypes] = useState([]);
-    // const [IMASK, setIMASK] = useState(null);
-    // const [CMASK, setCMASK] = useState(null);
 
-    // const [ISFMASK, setISFMASK] = useState(null);
-
-    useEffect(() => {
-        if (!user || !user.data.accessToken) {
-            // enable this after we have the token in redux
-            // dispatch(clearUser())
-            // router.push("/login");
-        }
-    }, [user]);
     useEffect(() => {
         API.get('/insuline-type').then((data) => {
             setInsulineTypes(data.data);
@@ -48,14 +45,11 @@ const index = ({ direction }) => {
             form.resetFields();
         }
     }, [createdPatientSuccess]);
-    // const [diabetesComplicationsShow] = useState([]);
-    // const [acuteArray, setAcuteArray] = useState(null);
-    // const [chronicArray, setChronicArray] = useState(null);
-    const [treatmentTypeOption, setTreatmentTypeOption] = useState(null);
+
+    const [, setTreatmentTypeOption] = useState(null);
     const [diabeticKetoacidosis, setDiabeticketoacidosis] = useState(false);
 
     const [insulineTypeSelect, setInsulineType] = useState(null);
-    // const [insulineDoseSelect, setInsulineDoseSelect] = useState(null);
 
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
@@ -69,29 +63,10 @@ const index = ({ direction }) => {
         acuteSelect,
         chronicSelect
     }) => {
-        // if (I) {
-        //     setIMASK(I);
-        // }
-        // if (C) {
-        //     setCMASK(C);
-        // }
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
-        // if (acuteArray) {
-        //     setAcuteShow(true);
-        //     !acuteArray && setAcuteArray([]);
-        // }
-        // console.log(acuteArray);
-        // console.log(diabetesComplications);
-        // if (chronicArray) {
-        //     setChronicShow(true);
-        //     !chronicArray && setChronicArray([]);
-        // }
-        // if (Array.isArray(diabetesComplications) && diabetesComplications.length === 0) {
-        //     setChronicShow(false);
-        //     setAcuteShow(false);
-        // }
+
         if (
             Array.isArray(diabetesComplications) &&
             diabetesComplications &&
@@ -116,19 +91,8 @@ const index = ({ direction }) => {
             !diabetesComplications.includes('Chronic')
         ) {
             setChronicShow(false);
-            chronicSelect = [];
+            chronicSelect.length = 0;
         }
-        // if (diabetesComplicationsShow === []) {
-        //     setAcuteShow(false);
-        //     setChronicShow(false);
-        // }
-        // if (Array.isArray(chronicSelect) && chronicSelect.length >= 1) {
-        //     setChronicArray([...chronicSelect]);
-        // }
-
-        // if (Array.isArray(acuteSelect) && acuteSelect.length >= 1) {
-        //     setAcuteArray([...acuteSelect]);
-        // }
 
         if (acuteSelect && acuteSelect.includes('DIABETIC_KETOACIDOSIS')) {
             setDiabeticketoacidosis(true);
@@ -142,40 +106,12 @@ const index = ({ direction }) => {
             setTreatmentTypeOption(treatmentType);
             setCurrentTreatmentShow(false);
         }
-        // if (treatmentType === 'INSULINE') {
-        //     setCurrentTreatmentShow(true);
-        // } else {
-        //     setCurrentTreatmentShow(false);
-        // }
-        // if (
-        //     (treatmentType === undefined || treatmentType === 'INSULINE') &&
-        //     (isf ||
-        //         I ||
-        //         C ||
-        //         insulineTypeSelect ||
-        //         insulineDoseSelect ||
-        //         insulineType ||
-        //         insulineDose)
-        // ) {
-        //     setCurrentTreatmentShow(true);
-        //     insulineType && setInsulineType(insulineType);
-        //     insulineDose && setInsulineDoseSelect(insulineDose);
-        // }
-        // if (treatmentType && treatmentType !== 'Insuline') {
-        //     insulineType && setInsulineType(null);
-        //     insulineDose && setInsulineDoseSelect(null);
-        // }
+
         if (insulineType) {
             setInsulineType(insulineType);
         }
     };
-    // useEffect(() => {
-    //     if (acuteArray && acuteArray.includes('DIABETIC_KETOACIDOSIS')) {
-    //         setDiabeticketoacidosis(true);
-    //     } else {
-    //         setDiabeticketoacidosis(false);
-    //     }
-    // }, [acuteArray]);
+
     useEffect(() => {
         insulineTypeSelect &&
             setInsulineDoseSelectArray(
@@ -192,7 +128,6 @@ const index = ({ direction }) => {
     }, [errorsCreatingPatient]);
 
     const onFinish = async (values) => {
-        console.log(values);
         const data = {
             name: values?.name?.trim(),
 
@@ -261,6 +196,14 @@ const index = ({ direction }) => {
                 setCreatedPatientSuccess(true);
                 setLoading(false);
             }
+            setTimeout(() => {
+                setCreatedPatientSuccess(false);
+                setDiabeticketoacidosis(false);
+                setInsulineType(null);
+                setCurrentTreatmentShow(false);
+                setChronicShow(false);
+                setAcuteShow(false);
+            }, 3000);
         } catch (error) {
             if (error?.response?.data?.error?.message) {
                 // TO DO  if RTL ? or LTR
@@ -309,207 +252,18 @@ const index = ({ direction }) => {
                                     </Text>
                                 </div>
                                 <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="reasonForReferral"
-                                        className={styles.form_item}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select reasons of referral'
-                                            }
-                                        ]}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('reasonOfReferal')}
-                                            </p>
-                                        }>
-                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                        <Checkbox.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Checkbox value="FOR_WEIGHT_LOSING">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('forWeightLosing')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_WEIGHT_GAINING">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('forWeightgaining')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_RECURRENTING_HYPOGLYCEMIA">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('forRecurrentingHypoglycemia')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_RECURRENTING_ELEVATED_BLOOD_GLUCODE_LEVELS">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t(
-                                                            'forRecurrentingElevatedBloodGlucoseLevels'
-                                                        )}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="CURRENTLY_ON_MAX_ORAL_HYPOGLYCEMIC_AGENT">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t(
-                                                            'Currently on max oral hypoglycemic agent'
-                                                        )}
-                                                    </p>
-                                                </Checkbox>
-                                                {/* <Checkbox value="FOR_CARB_COUNTING_CLASSES">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For Carb counting classes')}
-                                                    </p>
-                                                </Checkbox> */}
-                                                <Checkbox value="FOR_BASIC_CARB_COUNTING_CLASSES">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For Basic carb counting classes')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_ADVANCED_CARB_COUNTING_CLASES">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For Advanced Carb counting clases')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_INSULIN_INJECTION">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For insulin injection')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_INSULIN_PUMP_PREPARING">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For Insulin pump preparing')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_MEDICAL_PLAN_ADHERENCE">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For Medical plan adherence')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="FOR_LIFESTYLE_MODIFICATION">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('For lifestyle modification')}
-                                                    </p>
-                                                </Checkbox>
-                                            </Space>
-                                        </Checkbox.Group>
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="factorsEffectinglearning"
-                                        className={` ${styles.form_item}`}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Factors which may affect Learning')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message:
-                                                    'Please select Factors which may affect Learning'
-                                            }
-                                        ]}>
-                                        {/* Style needed to handle ltr && rtl */}
-                                        <Radio.Group className={`w-100 ${styles.align_left}`}>
-                                            <Space direction="vertical">
-                                                <Radio value="INTERPRETER_REQUIRED">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Interpreter required')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-
-                                                <Radio value="VISUAL_IMPAIRMENT">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Visual impairment')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="AUDITORY_IMPAIRMENT">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Auditory impairment')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
+                                    <ReasonsForRefeal styles={styles} t={t} />
+                                    <FactorsAffectLearning styles={styles} t={t} />
                                 </div>
                             </Col>
                             <Col xs={24} className={styles.patient_register_column}>
                                 <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <Form.Item
-                                        name="short_term_goals"
-                                        className="w-100"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Your short term goals')}
-                                            </p>
-                                        }>
-                                        <Input.TextArea
-                                            className="w-100"
-                                            autoSize={{ minRows: 4, maxRows: 6 }}
-                                            placeholder={t(
-                                                'For example (my short term goal is reducing the oral medication)'
-                                            )}
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="long_term_goals"
-                                        className="w-100"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Your long term goals')}
-                                            </p>
-                                        }>
-                                        <Input.TextArea
-                                            className="w-100"
-                                            autoSize={{ minRows: 4, maxRows: 6 }}
-                                            placeholder={t(
-                                                'For example (my long term goal is reducing the oral medication)'
-                                            )}
-                                        />
-                                    </Form.Item>
+                                    <Goals styles={styles} t={t} />
                                 </div>
                             </Col>
                             <Col xs={24} className={styles.patient_register_column}>
                                 <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <Form.Item
-                                        name="medicationEffectingGlucose"
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t(
-                                                    'Is the patient on medication that may affect blood glucose ?'
-                                                )}
-                                            </p>
-                                        }>
-                                        <Radio.Group className={styles.radio_container}>
-                                            <Space direction="vertical">
-                                                <Radio value="Yes">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('Yes')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                                <Radio value="No">
-                                                    {
-                                                        <p
-                                                            className={`gotLight ${styles.label_form}`}>
-                                                            {t('No')}
-                                                        </p>
-                                                    }
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
+                                    <EffectGlocuse styles={styles} t={t} />
                                 </div>
                             </Col>
                         </Row>
@@ -521,357 +275,16 @@ const index = ({ direction }) => {
                                     {t('Medical  Conditions')}
                                 </Text>
                                 <div className={styles.patient_register_column_wrapper}>
-                                    <Form.Item
-                                        name="otherHealthIssues"
-                                        className={styles.form_item}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Any other critical health issues?')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select other healt issues'
-                                            }
-                                        ]}>
-                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                        <Checkbox.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Checkbox value="Unawareness_hypoglycemia">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Unawareness hypoglycemia')}
-                                                    </p>
-                                                </Checkbox>
-                                                {/* <Checkbox value="Insulin_resistance">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Insulin resistance')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="Hypertension">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Hypertension')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="Retinopathy">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Retinopathy')}
-                                                    </p>
-                                                </Checkbox> */}
-                                                <Checkbox value="Other">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Other')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Form.Item name="OotherHealthIssues">
-                                                    <Input />
-                                                </Form.Item>
-                                            </Space>
-                                        </Checkbox.Group>
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="diabetesComplications"
-                                        className={styles.form_item}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Any Diabetes complications?')}
-                                            </p>
-                                        }>
-                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                        <Checkbox.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Checkbox value="Acute">
-                                                    <p
-                                                        className={`gotLight ${styles.label_form}`}
-                                                        level={5}>
-                                                        {t('Acute')}
-                                                    </p>
-                                                </Checkbox>
-                                                {acuteShow && (
-                                                    <Form.Item
-                                                        name="acuteSelect"
-                                                        className={`ml-2 ${styles.form_item}`}>
-                                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                                        <Checkbox.Group
-                                                            className={styles.align_left}>
-                                                            <Space direction="vertical">
-                                                                <Checkbox value="RECURRENT_HYPOS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Recurrent Hypos')}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="RECURRENT_HYPERS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Recurrent Hypers')}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="HYPEROSMOLAR_HYPERGLYCAEMIC_STATE">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Hyperosmolar Hyperglycaemic State(HHS)'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-
-                                                                <Checkbox value="DIABETIC_KETOACIDOSIS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Diabetic ketoacidosis')}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                {diabeticKetoacidosis && (
-                                                                    <div
-                                                                        className={
-                                                                            styles.diabetesKet
-                                                                        }>
-                                                                        <Row className="">
-                                                                            <Col sm={24}>
-                                                                                <Form.Item
-                                                                                    className="w-100 m-0"
-                                                                                    name="DKAtimes"
-                                                                                    rules={[
-                                                                                        {
-                                                                                            required: true,
-                                                                                            message:
-                                                                                                'Please select DKA TIMES'
-                                                                                        }
-                                                                                    ]}>
-                                                                                    <Input
-                                                                                        placeholder="How many times?"
-                                                                                        className="m-0 w-100"
-                                                                                    />
-                                                                                </Form.Item>
-                                                                            </Col>
-                                                                        </Row>
-                                                                        <Row>
-                                                                            <Col xs={24}>
-                                                                                <Form.Item
-                                                                                    rules={[
-                                                                                        {
-                                                                                            required: true,
-                                                                                            message:
-                                                                                                'Please input severity'
-                                                                                        }
-                                                                                    ]}
-                                                                                    name="Severity"
-                                                                                    label={
-                                                                                        <p
-                                                                                            className={
-                                                                                                styles.label_form
-                                                                                            }>
-                                                                                            {t(
-                                                                                                'Severity of the latest one'
-                                                                                            )}
-                                                                                        </p>
-                                                                                    }>
-                                                                                    <Radio.Group
-                                                                                        className={
-                                                                                            styles.radio_container
-                                                                                        }>
-                                                                                        <Radio value="MILD">
-                                                                                            {
-                                                                                                <p
-                                                                                                    className={`gotLight ${styles.label_form}`}>
-                                                                                                    {t(
-                                                                                                        'Mild'
-                                                                                                    )}
-                                                                                                </p>
-                                                                                            }
-                                                                                        </Radio>
-                                                                                        <Radio value="MODERATE">
-                                                                                            {
-                                                                                                <p
-                                                                                                    className={`gotLight ${styles.label_form}`}>
-                                                                                                    {t(
-                                                                                                        'Moderate'
-                                                                                                    )}
-                                                                                                </p>
-                                                                                            }
-                                                                                        </Radio>
-                                                                                        <Radio value="SEVERE">
-                                                                                            {
-                                                                                                <p
-                                                                                                    className={`gotLight ${styles.label_form}`}>
-                                                                                                    {t(
-                                                                                                        'Severe'
-                                                                                                    )}
-                                                                                                </p>
-                                                                                            }
-                                                                                        </Radio>
-                                                                                    </Radio.Group>
-                                                                                </Form.Item>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </div>
-                                                                )}
-                                                            </Space>
-                                                        </Checkbox.Group>
-                                                    </Form.Item>
-                                                )}
-                                                <Checkbox value="Chronic">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Chronic')}
-                                                    </p>
-                                                </Checkbox>
-                                                {chronicShow && (
-                                                    <Form.Item
-                                                        name="chronicSelect"
-                                                        className={`ml-2 ${styles.form_item}`}>
-                                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                                        <Checkbox.Group
-                                                            className={styles.align_left}>
-                                                            <Space direction="vertical">
-                                                                <Checkbox value="EYE_PROBLEMS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Eye problems (retinopathy)'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="FOOT_PROBLEMS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Foot problems')}
-                                                                    </p>
-                                                                </Checkbox>
-
-                                                                <Checkbox value="HEART_ATTACK_AND_STROKE">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Heart attack and stroke'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="KIDNEY_PROBLEMS">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Kidney problems')}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="NERVE_DAMAGE">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Nerve damage (neuropathy)'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="GUM_DISEASE">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t('Gum disease')}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_WOMEN">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Sexual problems in women'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-                                                                <Checkbox value="SEXUAL_PROBLEMS_IN_MEN">
-                                                                    <p
-                                                                        className={`gotLight ${styles.label_form}`}>
-                                                                        {t(
-                                                                            'Sexual problems in men'
-                                                                        )}
-                                                                    </p>
-                                                                </Checkbox>
-                                                            </Space>
-                                                        </Checkbox.Group>
-                                                    </Form.Item>
-                                                )}
-                                            </Space>
-                                        </Checkbox.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="medicalHistory"
-                                        className={`${styles.form_item}`}
-                                        label={
-                                            <p className={styles.label_form}>
-                                                {t('Patients medical history')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select medical history'
-                                            }
-                                        ]}>
-                                        {/* TO DO CHANGE ALIGN TEXT IF LANG CHANGE */}
-                                        <Checkbox.Group className={styles.align_left}>
-                                            <Space direction="vertical">
-                                                <Checkbox value="Hypertension">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Hypertension')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="Dyslipidemia">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Dyslipidemia')}
-                                                    </p>
-                                                </Checkbox>
-
-                                                <Checkbox value="Obesity">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Obesity')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="Celiac">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Celiac')}
-                                                    </p>
-                                                </Checkbox>
-                                                {/* <Checkbox value="Unawareness hypoglycimia">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Unawareness hypoglycimia')}
-                                                    </p>
-                                                </Checkbox> */}
-                                                <Checkbox value="Skin infection / wound">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('Skin infection / wound')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="MI or ACS  Date ....">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('MI or ACS  Date ....')}
-                                                    </p>
-                                                </Checkbox>
-                                                <Checkbox value="TIA / CVA">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('TIA / CVA')}
-                                                    </p>
-                                                </Checkbox>
-
-                                                <Checkbox value="PVD">
-                                                    <p className={`gotLight ${styles.label_form}`}>
-                                                        {t('PVD')}
-                                                    </p>
-                                                </Checkbox>
-                                            </Space>
-                                        </Checkbox.Group>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="recommendationGlycemicRange"
-                                        className={`${styles.form_item} w-100 create`}
-                                        label={
-                                            <p className={`w-100 ${styles.label_form}`}>
-                                                {t('recommendationGlycemicRange')}
-                                            </p>
-                                        }>
-                                        <Input.TextArea
-                                            className={`w-100`}
-                                            autoSize={{ minRows: 1, maxRows: 1 }}
-                                            placeholder="Glycemic Range"
-                                        />
-                                    </Form.Item>
+                                    <HealthIssues styles={styles} t={t} />
+                                    <DiabetesComplications
+                                        styles={styles}
+                                        t={t}
+                                        acuteShow={acuteShow}
+                                        diabeticKetoacidosis={diabeticKetoacidosis}
+                                        chronicShow={chronicShow}
+                                    />
+                                    <MedicalHistory styles={styles} t={t} />
+                                    <RecommendationGlycemicRange styles={styles} t={t} />
                                 </div>
                             </Col>
                         </Row>
@@ -879,19 +292,7 @@ const index = ({ direction }) => {
 
                     <Col lg={23} className={`w-100 ${styles.patient_register_column}`}>
                         <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                            <Form.Item
-                                name="doctorNote"
-                                className="w-100"
-                                label={
-                                    <p className={styles.label_form}>
-                                        {t('Doctor recommendation & notes')}
-                                    </p>
-                                }>
-                                <Input.TextArea
-                                    className="w-100"
-                                    autoSize={{ minRows: 4, maxRows: 6 }}
-                                />
-                            </Form.Item>
+                            <DoctorNote styles={styles} t={t} />
                         </div>
                     </Col>
                 </Row>

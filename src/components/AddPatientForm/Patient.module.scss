@@ -24,14 +24,13 @@
         text-align: initial;
     }
 
-    div[role=alert] {
+    div[role='alert'] {
         text-align: left;
     }
 }
 
 .form_containerRTL {
     padding: 14px;
-
 
     div * {
         text-align: right;
@@ -58,11 +57,10 @@
 
 .form_item {
     align-items: flex-start;
-
 }
 
 .diabetesKet {
-    background: #F4f4f4;
+    background: #f4f4f4;
     padding: 5px;
     border-radius: 8px;
 }
@@ -85,7 +83,6 @@
     color: $darkBlue !important;
     align-items: inherit;
     margin: 0;
-
 }
 
 .radio_container {

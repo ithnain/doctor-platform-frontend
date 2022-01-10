@@ -50,7 +50,7 @@ const PatientProfile = ({ patient, direction }) => {
                             health_issues={patient.health_issues}
                         />
                         <DividerLine />
-                        <NotesCard note={patient.note} t={t} />
+                        <NotesCard note={patient.remarkable_note} t={t} />
                     </Col>
                 </Row>
             </ConfigProvider>

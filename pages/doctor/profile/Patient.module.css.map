@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "Patient.module.scss"
+    ],
+    "names": [],
+    "file": "Patient.module.css"
+}

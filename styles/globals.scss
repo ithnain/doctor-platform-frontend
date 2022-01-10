@@ -24,7 +24,6 @@ body {
 
 .gotLight {
     font-family: 'gothic' !important;
-
 }
 
 a {
@@ -69,7 +68,7 @@ a {
 .ant-layout-header {
     background: $white !important;
 
-    >.trigger {
+    > .trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
@@ -97,7 +96,7 @@ a {
     // background: #00a0e9;
 }
 
-.dropdown-btn>.ant-dropdown-trigger {
+.dropdown-btn > .ant-dropdown-trigger {
     &:hover {
         color: inherit;
         background: transparent;
@@ -108,7 +107,7 @@ a {
     border: none;
 }
 
-.dropdown-btn>.ant-dropdown-trigger>span {
+.dropdown-btn > .ant-dropdown-trigger > span {
     background-color: $white !important;
 }
 
@@ -254,5 +253,12 @@ a {
     .ant-col.ant-form-item-control {
         width: 100%;
     }
+}
 
+.ant-radio-wrapper > span:nth-child(2) {
+    width: 100%;
+}
+
+.ant-form-item .ant-select {
+    width: 100% !important;
 }
