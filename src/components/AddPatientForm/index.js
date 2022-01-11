@@ -1,6 +1,5 @@
 import { Checkbox, Col, Form, Input, Radio, Row, Space, Typography, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
-// import { insulineDoses, insulineTypes } from './insuline';
 import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
@@ -10,6 +9,8 @@ import PatienInfo from './PatienInfo';
 import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
+
+// import { insulineDoses, insulineTypes } from './insuline';
 
 const { Title, Text } = Typography;
 
