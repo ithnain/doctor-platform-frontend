@@ -77,7 +77,7 @@ const QRForm = ({ name }) => {
     const onFinish = async (values) => {
         const data = {
             name: values?.username?.trim(),
-            country: `${values?.number.country}${values.number.number}`
+            phoneNumber: `${values?.number.country}${values.number.number}`
         };
         try {
             const res = await API.post('patient/createPatient', data);
