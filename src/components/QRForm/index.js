@@ -63,7 +63,12 @@ const NumberInput = ({ value = {}, onChange }) => {
                 </Select>
             </Col>
             <Col xs={15}>
-                <Input type="text" value={value.number || number} onChange={onNumberChange} />
+                <Input
+                    type="text"
+                    value={value.number || number}
+                    onChange={onNumberChange}
+                    placeholder="5xxxxxxxx"
+                />
             </Col>
         </Row>
     );
@@ -72,12 +77,13 @@ NumberInput.propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func
 };
-const QRForm = ({ name }) => {
+const QRForm = ({ name, id }) => {
     const { Text } = Typography;
     const onFinish = async (values) => {
         const data = {
             name: values?.username?.trim(),
-            phoneNumber: `${values?.number.country}${values.number.number}`
+            phoneNumber: `${values.number.number}`,
+            doctorId: id
         };
         try {
             const res = await API.post('patient/createPatient', data);
@@ -88,11 +94,16 @@ const QRForm = ({ name }) => {
             router.push('/create-patient-qr/error');
         }
     };
-
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-
+    const checkNumber = (_, value) => {
+        const numberstr = `${value.number}`;
+        if (numberstr.match(/^(5)(0|2|3|4|5|6|7|8|9)([0-9]{7})$/)) {
+            return Promise.resolve();
+        }
+        return Promise.reject(new Error('5xxxxxxxx شكل الرقم'));
+    };
     return (
         <Row justify="space-around">
             <ConfigProvider direction="rtl">
@@ -155,10 +166,12 @@ const QRForm = ({ name }) => {
                                 <Form.Item
                                     name="number"
                                     label="رقم الجوال"
-                                    rules={[{ required: true, message: 'فضلا املأ البيانات' }]}>
+                                    rules={[
+                                        { required: true, message: 'فضلا املأ البيانات' },
+                                        { validator: checkNumber }
+                                    ]}>
                                     <NumberInput />
                                 </Form.Item>
-
                                 <Form.Item wrapperCol={{ span: 24 }}>
                                     <CustomButton
                                         type="primary"
@@ -176,6 +189,7 @@ const QRForm = ({ name }) => {
     );
 };
 QRForm.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
 };
 export default QRForm;
