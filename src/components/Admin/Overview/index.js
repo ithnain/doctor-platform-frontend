@@ -38,7 +38,7 @@ function Admin({ direction, doctors }) {
                     </Row>
                 </Col>
                 <Col xs={24}>
-                    <Row gutter={[20, 8]} justify="space-between" align="top">
+                    <Row gutter={[20, 8]} justify="center" align="middle">
                         <Col ref={printQR}>
                             <QRCode
                                 value={`${window.origin}/create-patient-qr/${user.id}?name=${user.name}`}

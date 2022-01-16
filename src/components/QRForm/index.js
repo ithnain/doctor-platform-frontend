@@ -14,7 +14,7 @@ const { Option } = Select;
 
 const NumberInput = ({ value = {}, onChange }) => {
     const [number, setNumber] = useState(0);
-    const [country, setCountry] = useState('00971');
+    const [country, setCountry] = useState('+966');
 
     const triggerChange = (changedValue) => {
         onChange?.({
@@ -58,8 +58,8 @@ const NumberInput = ({ value = {}, onChange }) => {
                     value={value.newCountry || country}
                     onChange={onCountryChange}
                     className={styles.countryCode}>
-                    <Option value="00971">00971</Option>
-                    <Option value="002">002</Option>
+                    <Option value="+966">+966</Option>
+                    <Option value="+2">+2</Option>
                 </Select>
             </Col>
             <Col xs={15}>
