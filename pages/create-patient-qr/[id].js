@@ -6,16 +6,16 @@ import { useRouter } from 'next/router';
 
 const QRFormPage = () => {
     const router = useRouter();
-    const { name } = router.query;
+    const { name, id } = router.query;
     useEffect(() => {
-        if (!name) {
+        if (!id) {
             router.push('/create-patient-qr/error');
         }
     }, []);
     return (
         <Row justify="space-around">
             <Col xs={24}>
-                <QRForm name={name} />
+                <QRForm name={name} id={id} />
             </Col>
         </Row>
     );
