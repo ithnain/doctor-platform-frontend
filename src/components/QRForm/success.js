@@ -1,5 +1,6 @@
 import { Col, Row, Space, Typography } from 'antd';
 
+import Link from 'next/link';    
 import Image from 'next/image';
 import React from 'react';
 import styles from './QR.module.scss';
@@ -45,14 +46,18 @@ const QRSucess = () => {
                             </Text>
                         </Col>
                         <Col xs={24}>
+                         <Link  href="https://play.google.com/store/apps/details?id=com.ithnain.ithnainapp" passHref={true}>
                             <div className={styles['center-box']}>
                                 <Image width={120} height={120} src="/assets/google-play.png" />
                             </div>
+                         </Link>
                         </Col>
                         <Col xs={24}>
+                          <Link  href="https://apps.apple.com/us/app/ithnain-%D8%A5%D8%AB%D9%86%D9%8A%D9%86/id1478263137" passHref={true}>
                             <div className={styles['center-box']}>
                                 <Image width={120} height={40} src="/assets/apple-store.png" />
                             </div>
+                          </Link>
                         </Col>
                     </Space>
                 </Row>
