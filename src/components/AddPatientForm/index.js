@@ -19,6 +19,8 @@ import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
 
+// import { insulineDoses, insulineTypes } from './insuline';
+
 const { Title, Text } = Typography;
 
 const index = ({ direction }) => {
