@@ -77,7 +77,7 @@ const ForgetPassword = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    preview="false"
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"
