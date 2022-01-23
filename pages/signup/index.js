@@ -115,9 +115,9 @@ const SignUp = ({ direction, hospitals }) => {
                             </Row>
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
-                            </Row>{' '}
+                            </Row>
                             <Row justify="start">
-                                <Col span={11}>
+                                <Col span={11} flex>
                                     <button
                                         onClick={() => handleDoctorStatus('partner')}
                                         className={
@@ -145,7 +145,7 @@ const SignUp = ({ direction, hospitals }) => {
                                             />
                                         </picture>
                                         <h3>{t('partnerDoctor')}</h3>
-                                        <p>{t('ifPartner')}</p>
+                                        {/* <p>{t('ifPartner')}</p> */}
                                     </button>
                                 </Col>
                                 <Col span={11}>
@@ -171,12 +171,12 @@ const SignUp = ({ direction, hospitals }) => {
                                                 srcSet="/assets/images/doctor@3x.png"
                                             />
                                             <img
-                                                srcSet="/assets/images/doctor@2x.png"
+                                                srcSet="/assets/images/doctor@3x.png"
                                                 alt="Medical team for partners"
                                             />
                                         </picture>
                                         <h3>{t('individualDoctor')}</h3>
-                                        <p>{t('ifIndividual')}</p>
+                                        {/* <p>{t('ifIndividual')}</p> */}
                                     </button>
                                 </Col>
                             </Row>
