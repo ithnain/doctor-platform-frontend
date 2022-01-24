@@ -33,7 +33,7 @@ UserCardInfo.propTypes = {
     city: PropTypes.string,
     t: PropTypes.func
 };
-export const DbCarInfo = ({ t, ISF, sliding_scale, I_C, health_issues }) => (
+export const DbCarInfo = ({ t }) => (
     <div className={patienProfileSyle.diabetsInformationWrapper}>
         <h6 className={patienProfileSyle.labelWidht}>{`${t('Diabetes')} ${t('information')}`}</h6>
         <div className={patienProfileSyle.diabetsInformationWrapperOne}>

@@ -1,10 +1,9 @@
 import API from '@utils/axios';
-import AdminOverview from '@src/components/Admin/Overview';
 import PropTypes from 'prop-types';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 
-function Overview({ direction, doctors }) {
+function Overview() {
     return (
         <SliderLayout
             title={'Overview'}

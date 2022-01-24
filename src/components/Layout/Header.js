@@ -1,6 +1,5 @@
-import { Badge, Button, Dropdown, Menu, Typography } from 'antd';
+import { Button, Typography } from 'antd';
 
-import { BellOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import LangToggle from '@components/LangToggle';
 import Link from 'next/link';

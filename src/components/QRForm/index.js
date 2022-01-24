@@ -28,7 +28,7 @@ const NumberInput = ({ value = {}, onChange }) => {
     const onNumberChange = (e) => {
         const newNumber = parseInt(e.target.value || '0', 10);
 
-        if (Number.isNaN(number)) {
+        if (Number.isNaN(newNumber)) {
             return;
         }
 
