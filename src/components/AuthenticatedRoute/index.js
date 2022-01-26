@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import SliderLayout from '@components/Layout';
 import { connect } from 'react-redux';
 import router from 'next/router';
 
@@ -8,21 +9,22 @@ const authenticatedRoute = (Component = null) => {
         constructor(props) {
             super(props);
             this.state = {
-                loading: true
+                loading: true,
+                active: ''
             };
         }
 
         componentDidMount() {
-            if (router.pathname === '/login' && this.props.isLoggedIn) {
-                router.push('/overview');
-                return;
-            }
-            if (router.pathname === '/' && this.props.isLoggedIn) {
-                router.push('/overview');
+            this.setState({ active: router.pathname });
+            if (
+                (router.pathname === '/login' && this.props.isLoggedIn) ||
+                (router.pathname === '/' && this.props.isLoggedIn)
+            ) {
+                router.push({ pathname: '/overview', options: { shallow: true } });
                 return;
             } else if (router.pathname === '/' && !this.props.isLoggedIn) {
                 this.setState({ loading: true });
-                router.push('/login').then(() => {
+                router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
                     this.setState({ loading: false });
                 });
             }
@@ -32,7 +34,7 @@ const authenticatedRoute = (Component = null) => {
             }
             if (this.props.isLoggedIn === '') {
                 this.setState({ loading: true });
-                router.push('/login').then(() => {
+                router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
                     this.setState({ loading: false });
                 });
                 return;
@@ -42,7 +44,15 @@ const authenticatedRoute = (Component = null) => {
             const { loading } = this.state;
 
             if (loading) {
-                return <div />;
+                return (
+                    <SliderLayout
+                        title={this.state.active}
+                        keywords={'doctor,platform,any word'}
+                        description={'this is the doctor overview'}
+                        active={`/${this.state.active}`}>
+                        <div />
+                    </SliderLayout>
+                );
             }
 
             return <Component {...this.props} />;
