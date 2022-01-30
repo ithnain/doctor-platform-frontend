@@ -68,7 +68,6 @@ export async function getServerSideProps({ params, req }) {
             }
         });
         patient = res.data;
-        console.log(patient);
     } catch (error) {
         patient = null;
     }
