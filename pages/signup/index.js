@@ -1,4 +1,4 @@
-import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
+import { Col, Form, Image, Input, Radio, Row, Select, Space, Typography } from 'antd';
 
 import API from '@src/utils/axios';
 import { ConfigProvider } from 'antd';
@@ -7,7 +7,6 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
-import Style from './Signup.module.scss';
 import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
@@ -114,77 +113,31 @@ const SignUp = ({ direction, hospitals }) => {
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
                             </Row>
                             <Row justify="start">
-                                <Col span={11} flex>
-                                    <button
-                                        onClick={() => handleDoctorStatus('partner')}
-                                        className={
-                                            doctorStatus === 'partner'
-                                                ? `${Style.doctorStatusBox} ${Style.active}`
-                                                : `${Style.doctorStatusBox}`
-                                        }>
-                                        <picture>
-                                            <source
-                                                media="(max-width: 799px)"
-                                                srcSet="/assets/images/medical-team.png"
-                                            />
-                                            <source
-                                                media="(min-width: 800px)"
-                                                srcSet="/assets/images/medical-team@2x.png"
-                                            />
-
-                                            <source
-                                                media="(min-width: 1200px)"
-                                                srcSet="/assets/images/medical-team@3x.png"
-                                            />
-                                            <img
-                                                srcSet="/assets/images/medical-team@2x.png"
-                                                alt="Medical team for partners"
-                                            />
-                                        </picture>
-                                        <h3>{t('partnerDoctor')}</h3>
-                                        {/* <p>{t('ifPartner')}</p> */}
-                                    </button>
-                                </Col>
-                                <Col span={11}>
-                                    <button
-                                        onClick={() => handleDoctorStatus('individual')}
-                                        className={
-                                            doctorStatus === 'individual'
-                                                ? `${Style.doctorStatusBox} ${Style.active}`
-                                                : `${Style.doctorStatusBox}`
-                                        }>
-                                        <picture>
-                                            <source
-                                                media="(max-width: 799px)"
-                                                srcSet="/assets/images/doctor.png"
-                                            />
-                                            <source
-                                                media="(min-width: 800px)"
-                                                srcSet="/assets/images/doctor@2x.png"
-                                            />
-
-                                            <source
-                                                media="(min-width: 1200px)"
-                                                srcSet="/assets/images/doctor@3x.png"
-                                            />
-                                            <img
-                                                srcSet="/assets/images/doctor@3x.png"
-                                                alt="Medical team for partners"
-                                            />
-                                        </picture>
-                                        <h3>{t('individualDoctor')}</h3>
-                                        {/* <p>{t('ifIndividual')}</p> */}
-                                    </button>
-                                </Col>
+                                <Radio.Group
+                                    className="toggle"
+                                    onChange={(e) => handleDoctorStatus(e.target.value)}
+                                    value={doctorStatus}>
+                                    <Space direction="vertical">
+                                        <Radio value={'individual'}>
+                                            <span className="radio-title">
+                                                {t('individualDoctor')}
+                                            </span>{' '}
+                                            {t('ifIndividual')}
+                                        </Radio>
+                                        <Radio value={'partner'}>
+                                            <span className="radio-title">
+                                                {t('partnerDoctor')}{' '}
+                                            </span>
+                                            {t('ifPartner')}
+                                        </Radio>
+                                    </Space>
+                                </Radio.Group>
                             </Row>
                             <Form
-                                // {...layout}
                                 name="basic"
                                 className="form-container"
                                 layout="vertical"
-                                onFinish={onFinish}
-                                // onFinishFailed={onFinishFailed}
-                            >
+                                onFinish={onFinish}>
                                 {doctorStatus === 'partner' && (
                                     <Row justify="start">
                                         <Col span={22}>
@@ -234,21 +187,6 @@ const SignUp = ({ direction, hospitals }) => {
                                             <Input className={authStyles.input} />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('ID')}
-                                            name="nationalId"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: t('idLength'),
-                                                    min: 10
-                                                }
-                                            ]}>
-                                            <Input className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
@@ -284,25 +222,6 @@ const SignUp = ({ direction, hospitals }) => {
                                             <Input className={authStyles.input} />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('password')}
-                                            className="mb-1"
-                                            name="password"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                },
-                                                {
-                                                    pattern:
-                                                        /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                                                    message: t('weakPassword')
-                                                }
-                                            ]}>
-                                            <Input.Password className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
@@ -328,45 +247,9 @@ const SignUp = ({ direction, hospitals }) => {
                                             />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('gender')}
-                                            name="gender"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Select size="medium">
-                                                <Select.Option key={'male'} value={'male'}>
-                                                    {t('male')}
-                                                </Select.Option>
-                                                <Select.Option key={'female'} value={'female'}>
-                                                    {t('female')}
-                                                </Select.Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
-                                    {/* <Col span={22}>
-                                        <Form.Item
-                                            label={t('email')}
-                                            name="email"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    type: 'email',
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Input className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                     <Col span={22}>
                                         <Form.Item
                                             label={t('password')}

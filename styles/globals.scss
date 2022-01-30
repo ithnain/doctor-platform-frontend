@@ -240,3 +240,24 @@ a {
 .mb-1 {
     margin-bottom: 0.5rem !important;
 }
+
+.toggle {
+    width: 100%;
+    text-align: start;
+
+    .radio-title {
+        font-family: 'gothic-bold';
+        font-size: 18px;
+    }
+
+    .ant-radio-inner:after {
+        background: $darkBlue !important;
+    }
+
+    .ant-radio-checked .ant-radio-inner,
+    .ant-radio:hover .ant-radio-inner,
+    .ant-radio-wrapper:hover,
+    .ant-radio-input:focus .ant-radio-inner {
+        border-color: $darkBlue !important;
+    }
+}
