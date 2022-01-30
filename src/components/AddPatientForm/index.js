@@ -132,7 +132,7 @@ const index = ({ direction }) => {
     const onFinish = async (values) => {
         const data = {
             name: values?.name?.trim(),
-
+            doctorId: user.data.id,
             gender: values.gender,
             age: values.age,
             phoneNumber: values?.phoneNumber,
