@@ -65,8 +65,11 @@ const SignUp = ({ direction, hospitals }) => {
                 }
             })
             .catch((err) => {
-                if (err.response?.data?.message) {
-                    toastr.error(err.response.data?.message);
+                if (err.response) {
+                    const { data = {} } = err.response;
+                    const { error = {} } = data;
+                    const { message = 'Something went wrong' } = error;
+                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -103,7 +106,7 @@ const SignUp = ({ direction, hospitals }) => {
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
                                 <Image
-                                    preview={false}
+                                    preview="false"
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-signup"

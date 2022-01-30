@@ -29,16 +29,20 @@ function SliderLayout({ title, keywords, description, active, children }) {
         if (moment(refreshTokenDate) <= moment()) {
             API.post('auth/refrsh', {
                 token: `${refreshToken}`
-            }).then((res) => {
-                dispatch(updateToken(res.data));
-                fetch('/api/auth/login', {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ token: res.data.accessToken })
+            })
+                .then((res) => {
+                    dispatch(updateToken(res.data));
+                    fetch('/api/auth/login', {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ token: res.data.accessToken })
+                    });
+                })
+                .catch(() => {
+                    logoutHandler();
                 });
-            });
         }
     }, []);
     useEffect(() => {
@@ -85,7 +89,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 className={styles.sider}>
                 <div className={styles.sider__logo}>
                     <Image
-                        preview={false}
+                        preview="false"
                         width={80}
                         height={80}
                         src="/assets/logo-dark-notext.png"
@@ -94,7 +98,9 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
                     {role &&
                         sideNavIcons[role].sidenavData.map((item) => (
-                            <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
+                            <Menu.Item
+                                className={styles.sider__menu__item}
+                                key={item.link ? `/${item.link}` : `${item.title}`}>
                                 <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
                                 <span className="nav-text">
                                     <Link href={`/${item.link}`}>{item.title}</Link>
@@ -103,6 +109,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                         ))}
 
                     <Menu.Item
+                        key={Math.random()}
                         onClick={logoutHandler}
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
@@ -142,7 +149,7 @@ SliderLayout.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string.isRequired,
     keywords: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     active: PropTypes.string.isRequired,
     textBtn: PropTypes.string
 };

@@ -1,4 +1,4 @@
-import { Badge, Dropdown, Menu, Typography } from 'antd';
+import { Badge, Button, Dropdown, Menu, Typography } from 'antd';
 
 import { BellOutlined } from '@ant-design/icons';
 import Image from 'next/image';
@@ -8,26 +8,37 @@ import PropTypes from 'prop-types';
 import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
 function Header({ name, showAddPatientBtn }) {
     const { Text } = Typography;
+    const router = useRouter();
     const [, setLang] = useLocalStorage('storageLang', 'en');
     const { t } = useTranslation('common');
+    const [loadingCreatePatient, setloadingCreatePatient] = useState(false);
 
     return (
         <Row align="middle" justify="end">
             {showAddPatientBtn ? (
-                <span className={styles.header__btn}>
-                    <Link href={`/create-patient`} className={styles.linkText}>
-                        {`${t('registerPatient')} + `}
-                    </Link>
-                </span>
+                <Button
+                    className={styles.header__btn}
+                    loading={loadingCreatePatient}
+                    onClick={async () => {
+                        if (router.pathname === '/create-patient') {
+                            return;
+                        }
+                        setloadingCreatePatient(true);
+                        await router.push('/create-patient');
+                    }}>
+                    {`${t('registerPatient')} + `}
+                </Button>
             ) : null}
 
             <div className={styles.header__notifications}>
-                <Badge size="small" offset={[0, 12]} count={5}>
-                    {/* <BellOutlined /> */}
+                {/* <BellOutlined /> */}
+                {/* <Badge size="small" offset={[0, 12]} count={5}>
                     <Dropdown.Button
                         className="dropdown-btn"
                         overlay={
@@ -38,7 +49,7 @@ function Header({ name, showAddPatientBtn }) {
                             </Menu>
                         }
                         icon={<BellOutlined />}></Dropdown.Button>
-                </Badge>
+                </Badge> */}
             </div>
             <div className={styles.header__lang}>
                 <LangToggle setLang={setLang} />

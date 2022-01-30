@@ -22,6 +22,10 @@ body {
     }
 }
 
+.gotLight {
+    font-family: 'gothic' !important;
+}
+
 a {
     color: inherit;
 }
@@ -233,8 +237,16 @@ a {
     }
 }
 
-.mb-0 {
-    margin-bottom: 0 !important;
+.ml-2 {
+    margin-left: 0.75rem !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.m-0 {
+    margin: 0 !important;
 }
 
 .mb-1 {
@@ -260,4 +272,18 @@ a {
     .ant-radio-input:focus .ant-radio-inner {
         border-color: $darkBlue !important;
     }
+}
+
+.create {
+    .ant-col.ant-form-item-control {
+        width: 100%;
+    }
+}
+
+.ant-radio-wrapper>span:nth-child(2) {
+    width: 100%;
+}
+
+.ant-form-item .ant-select {
+    width: 100% !important;
 }

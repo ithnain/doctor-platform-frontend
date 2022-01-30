@@ -10,15 +10,13 @@ function Overview({ direction, doctors }) {
             title={'Overview'}
             keywords={'doctor,platform,any word'}
             description={'this is the doctor overview'}
-            active={`/overview`}>
-            <AdminOverview direction={direction} doctors={doctors} />
-        </SliderLayout>
+            active={`/overview`}></SliderLayout>
     );
 }
 
 Overview.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired
+    doctors: PropTypes.array
 };
 export const getServerSideProps = async ({ req }) => {
     try {
