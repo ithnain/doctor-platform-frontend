@@ -142,8 +142,8 @@ const index = ({ direction }) => {
             diabetesDuration: values?.diabetesDuration?._d,
             reasonForReferral: values?.reasonForReferral,
             factorsEffectinglearning: values?.factorsEffectinglearning,
-            short_term_goals: values?.short_term_goals,
-            long_term_goals: values?.long_term_goals,
+            shortTermGoals: values?.short_term_goals,
+            longTermGoals: values?.long_term_goals,
             medicationEffectingGlucose: values?.medicationEffectingGlucose,
             recommendationGlycemicRange: values?.recommendationGlycemicRange,
             doctorNote: values?.doctorNote,
@@ -170,22 +170,23 @@ const index = ({ direction }) => {
                               treatment: values?.treatmentType
                           }
                       ],
-            acutes:
-                values?.acuteSelect?.length >= 1
-                    ? {
-                          condition: values?.acuteSelect,
-                          times: Number(values?.DKAtimes),
-                          severity: values?.Severity
-                      }
-                    : [],
-            chronics:
-                values?.chronicSelect?.length >= 1
-                    ? [
-                          {
-                              condition: values?.chronicSelect
-                          }
-                      ]
-                    : []
+            acutes: values?.acuteSelect?.map((ac) => {
+                if (ac === 'DIABETIC_KETOACIDOSIS') {
+                    return {
+                        condition: ac,
+                        times: Number(values?.DKAtimes),
+                        severity: values?.Severity
+                    };
+                }
+                return {
+                    condition: ac
+                };
+            }),
+            chronics: values?.chronicSelect?.map((ch) => {
+                return {
+                    condition: ch
+                };
+            })
         };
 
         try {
