@@ -1,6 +1,7 @@
 import { Col, Row, Space, Typography } from 'antd';
 
 import Image from 'next/image';
+import CustomButton from '../CustomBtn';
 import styles from './QR.module.scss';
 
 const QRError = () => {
@@ -29,21 +30,27 @@ const QRError = () => {
                                 src="/assets/error.svg"
                             />
                         </Col>
-                        <Col xs={24}>
-                            <Text className={styles.welcome} strong>
+                        <Col xs={24} className={styles.errorHappenedCol}>
+                            <Text className={styles.errorHappened} strong>
                                 حدث خطأ ما
                             </Text>
                         </Col>
                         <Col xs={24}>
-                            <Text>
-                                نعمل جاهدين لمعرفة المشكلة و ايجاد الحل نرجو الخروج من الصفح أو
+                            <Text className={styles.explainationText}>
+                                نعمل جاهدين لمعرفة المشكلة و ايجاد الحل نرجو الخروج من الصفحه أو
                                 تواصل معنا{' '}
                             </Text>
                         </Col>
                         <Col xs={24}>
-                            <Text className={`${styles.welcome} ${styles['center-box']}`} strong>
-                                تواصل معنا
-                            </Text>
+                            <CustomButton
+                                handleClick={() => {
+                                    window.location.assign('https://wa.me/966592476362');
+                                }}
+                                type="primary"
+                                htmlType="submit"
+                                text="تواصل معنا"
+                                className={styles.smallRedBtn}
+                            />
                         </Col>
                     </Space>
                 </Row>
