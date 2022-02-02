@@ -1,0 +1,65 @@
+@import '@styles/colors';
+
+.rtl {
+    direction: rtl;
+    text-align: center;
+
+    input,
+    .countryCode {
+        border: 2px solid $darkBlue;
+        border-radius: 15px;
+
+        * {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
+
+.logo {
+    height: 32px;
+    margin: 16px auto;
+    display: flex;
+}
+
+.welcome {
+    display: flex;
+    font-size: 1.5rem;
+}
+
+.signThrough {
+    display: flex;
+    font-size: 1rem;
+}
+
+.d-flex {
+    display: flex;
+
+    img {
+        border-radius: 50%;
+    }
+
+    .doctorName {
+        @extend .signThrough;
+        margin-right: 5px;
+    }
+}
+
+.phoneInput {
+    justify-content: space-between;
+}
+
+.redBtn {
+    background-color: $pinkBG;
+    color: $white;
+    border: none;
+    width: 75%;
+    height: 50%;
+    border-radius: 15px;
+}
+
+.center-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

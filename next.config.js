@@ -3,4 +3,4 @@ const nextTranslate = require('next-translate');
 // module.exports = nextTranslate();
 
 //for netlify
-module.exports = nextTranslate({ target: 'serverless' });
+module.exports = nextTranslate();
