@@ -36,21 +36,21 @@ function Header({ name, showAddPatientBtn }) {
                 </Button>
             ) : null}
 
-            <div className={styles.header__notifications}>
-                <Badge size="small" offset={[0, 12]} count={5}>
-                    {/* <BellOutlined /> */}
-                    <Dropdown.Button
-                        className="dropdown-btn"
-                        overlay={
-                            <Menu>
-                                <Menu.Item key="1">Item 1</Menu.Item>
-                                <Menu.Item key="2">Item 2</Menu.Item>
-                                <Menu.Item key="3">Item 3</Menu.Item>
-                            </Menu>
-                        }
-                        icon={<BellOutlined />}></Dropdown.Button>
-                </Badge>
-            </div>
+//             <div className={styles.header__notifications}>
+//                 <Badge size="small" offset={[0, 12]} count={5}>
+//                     {/* <BellOutlined /> */}
+//                     <Dropdown.Button
+//                         className="dropdown-btn"
+//                         overlay={
+//                             <Menu>
+//                                 <Menu.Item key="1">Item 1</Menu.Item>
+//                                 <Menu.Item key="2">Item 2</Menu.Item>
+//                                 <Menu.Item key="3">Item 3</Menu.Item>
+//                             </Menu>
+//                         }
+//                         icon={<BellOutlined />}></Dropdown.Button>
+//                 </Badge>
+//             </div>
             <div className={styles.header__lang}>
                 <LangToggle setLang={setLang} />
             </div>
