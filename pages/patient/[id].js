@@ -14,11 +14,26 @@ import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
 import useTranslation from 'next-translate/useTranslation';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
-const PatientProfile = ({ patient, direction }) => {
+const getPatient = async (query) => {
+    return fetch('/api/auth/getToken')
+        .then((res) => res.json())
+        .then((data) => {
+            return API.get(`patient/patient?id=${query.queryKey[1].query}`, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+        });
+};
+const PatientProfile = ({ direction }) => {
     const { t } = useTranslation('patient');
-
-    if (!patient) return <h1>{t('NotFOund')}</h1>;
+    const router = useRouter();
+    const id = router.query.id;
+    const { data: patientData } = useQuery(['onePatient', { query: id }], getPatient);
+    if (!patientData?.data) return <h1>{t('NotFOund')}</h1>;
     return (
         <SliderLayout
             title={'PatientProfile'}
@@ -33,24 +48,24 @@ const PatientProfile = ({ patient, direction }) => {
                         )}`}</h6>
                     </Col>
                     <Col xs={24}>
-                        <AvatarWithEdit name={patient.name} />
+                        <AvatarWithEdit name={patientData?.data.name} />
                         <UserCardInfo
                             t={t}
-                            age={patient.age}
-                            phone_number={patient.phone_number}
-                            city={patient.city}
+                            age={patientData?.data.age}
+                            phone_number={patientData?.dataphone_number}
+                            city={patientData?.datacity}
                         />
                         <DividerLine />
                         <DbCarInfo
                             t={t}
-                            ISF={patient.ISF}
-                            sliding_scale={patient.sliding_scale}
-                            is_other_health_issues={patient.s_other_health_issues}
-                            I_C={patient.I_C}
-                            health_issues={patient.health_issues}
+                            ISF={patientData?.dataISF}
+                            sliding_scale={patientData?.datasliding_scale}
+                            is_other_health_issues={patientData?.datas_other_health_issues}
+                            I_C={patientData?.dataI_C}
+                            health_issues={patientData?.datahealth_issues}
                         />
                         <DividerLine />
-                        <NotesCard note={patient.remarkable_note} t={t} />
+                        <NotesCard note={patientData?.dataremarkable_note} t={t} />
                     </Col>
                 </Row>
             </ConfigProvider>
@@ -58,25 +73,19 @@ const PatientProfile = ({ patient, direction }) => {
     );
 };
 
-export async function getServerSideProps({ params, req }) {
-    let patient;
-    try {
-        const res = await API.get(`patient/patient?id=${params.id}`, {
-            headers: {
-                Authorization: `Bearer ${req.cookies.token}`
-            }
-        });
-        patient = res.data;
-    } catch (error) {
-        patient = null;
-    }
+export const getServerSideProps = async ({ params }) => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('allHospitals', getPatient(params.id));
 
-    return { props: { patient } };
-}
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
+};
 
 PatientProfile.propTypes = {
-    direction: PropTypes.string.isRequired,
-    patient: PropTypes.object.isRequired
+    direction: PropTypes.string.isRequired
 };
 
 export default authenticatedRoute(PatientProfile, {

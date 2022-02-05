@@ -13,16 +13,16 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
+import { useMutation } from 'react-query';
 
 const ForgetPassword = ({ direction }) => {
     const { t } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-
-    const onFinish = ({ email }) => {
+    const forgetUser = async (credintials) => {
         setLoading(true);
-        API.post('auth/signin', {
-            email
+        await API.post('auth/signin', {
+            email: credintials.email
         })
             .then((res) => {
                 try {
@@ -49,9 +49,12 @@ const ForgetPassword = ({ direction }) => {
                 setLoading(false);
             });
     };
-    // const onFinishFailed = (errorInfo) => {
-    //     toastr.warning('Something went wrong');
-    // };
+    const { mutate: forgetMutate } = useMutation((credintials) => forgetUser(credintials));
+    const onFinish = ({ email }) => {
+        setLoading(true);
+        forgetMutate({ email });
+    };
+
     return (
         <Row>
             <Col

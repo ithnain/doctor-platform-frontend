@@ -10,10 +10,24 @@ import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-function Patients({ direction, patients, totalCount }) {
+const getPatients = async (query) => {
+    return fetch('/api/auth/getToken')
+        .then((res) => res.json())
+        .then((data) =>
+            API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            })
+        );
+};
+function Patients({ direction }) {
     const { t } = useTranslation('patients');
     const router = useRouter();
+    const page = router.query.page;
+    const { data: patientsData } = useQuery(['allPatients', { query: page }], getPatients);
     const { Title } = Typography;
     const handlePagination = (page) => {
         const currentPath = router.pathname;
@@ -25,7 +39,6 @@ function Patients({ direction, patients, totalCount }) {
             query: currentQuery
         });
     };
-
     return (
         <SliderLayout
             title={'Patients'}
@@ -36,13 +49,13 @@ function Patients({ direction, patients, totalCount }) {
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
                         <Title level={3} align="start">
-                            {t('myPatients', { count: totalCount || 0 })}
+                            {t('myPatients', { count: patientsData?.data.totalCount || 0 })}
                         </Title>
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patients && patients.length >= 1 ? (
-                                patients.map((patient) => (
+                            {patientsData?.data && patientsData?.data.data.length >= 1 ? (
+                                patientsData.data.data.map((patient) => (
                                     <Col xs={24} md={12} lg={8} key={patient.id}>
                                         <Card
                                             patient={patient}
@@ -61,16 +74,16 @@ function Patients({ direction, patients, totalCount }) {
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                {patients && patients.length >= 1 && (
+                                {patientsData?.data && patientsData?.data.data.length >= 1 && (
                                     <Pagination
                                         current={+router.query.page}
                                         onChange={handlePagination}
-                                        showTotal={(totalCount, range) =>
-                                            `${range[0]}-${range[1]} of ${totalCount} items`
+                                        showTotal={(range) =>
+                                            `${range[0]}-${range[1]} of ${patientsData.data.totalCount} items`
                                         }
                                         defaultPageSize={9}
                                         defaultCurrent={1}
-                                        total={totalCount}
+                                        total={patientsData.data.totalCount}
                                         showSizeChanger={false}
                                     />
                                 )}
@@ -84,31 +97,16 @@ function Patients({ direction, patients, totalCount }) {
 }
 
 Patients.propTypes = {
-    direction: PropTypes.string.isRequired,
-    patients: PropTypes.array.isRequired,
-    totalCount: PropTypes.string.isRequired
+    direction: PropTypes.string.isRequired
 };
-export const getServerSideProps = async ({ req, query }) => {
-    try {
-        const res = await API.get(`/patient/getPatients?page=${query.page}&limit=9`, {
-            headers: {
-                Authorization: `Bearer ${req.cookies.token}`
-            }
-        });
+export const getServerSideProps = async ({ query }) => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('allPatients', getPatients(query));
 
-        const { data } = res;
-        return {
-            props: {
-                patients: data.data,
-                totalCount: data.totalCount
-            }
-        };
-    } catch (error) {
-        return {
-            props: {
-                patients: null
-            }
-        };
-    }
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
 };
 export default authenticatedRoute(Patients, { pathAfterFailure: '/login' });

@@ -6,10 +6,23 @@ import PropTypes from 'prop-types';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-function Profile({ direction, info }) {
+const getUserData = async () => {
+    return fetch('/api/auth/getToken')
+        .then((res) => res.json())
+        .then((data) =>
+            API.get(`auth/profile`, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            })
+        );
+};
+function Profile({ direction }) {
     const { t } = useTranslation('common');
     const { Title } = Typography;
+    const { data: userData } = useQuery('user', getUserData);
 
     return (
         <SliderLayout
@@ -26,7 +39,7 @@ function Profile({ direction, info }) {
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="top">
                             <Col xs={24}>
-                                <Card doctor={info} profile={true} />
+                                <Card doctor={userData.data} profile={true} />
                             </Col>
                         </Row>
                     </Col>
@@ -40,26 +53,15 @@ Profile.propTypes = {
     direction: PropTypes.string.isRequired,
     info: PropTypes.object
 };
-export const getServerSideProps = async ({ req }) => {
-    try {
-        const res = await API.get(`/auth/profile`, {
-            headers: {
-                Authorization: `Bearer ${req.cookies.token}`
-            }
-        });
-        const { data } = res;
-        return {
-            props: {
-                info: data
-            }
-        };
-    } catch (error) {
-        return {
-            props: {
-                info: '',
-                error: 'Something went wrong there. Try again.'
-            }
-        };
-    }
+
+export const getServerSideProps = async () => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('user', getUserData);
+
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
 };
 export default authenticatedRoute(Profile, { pathAfterFailure: '/login' });
