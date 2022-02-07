@@ -18,15 +18,7 @@ import { useRouter } from 'next/router';
 
 const { Content, Sider, Header } = Layout;
 const getUserData = async () => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`auth/profile`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
+    return API.get(`auth/profile`);
 };
 function SliderLayout({ title, keywords, description, active, children }) {
     const { data: userData } = useQuery('user', getUserData);
@@ -98,7 +90,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 className={styles.sider}>
                 <div className={styles.sider__logo}>
                     <Image
-                        preview={false}
+                        preview="false"
                         width={80}
                         height={80}
                         src="/assets/logo-dark-notext.png"
@@ -120,7 +112,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
                         <span className="nav-text">
-                            <button handleclick={logoutHandler}>Log out</button>
+                            <button onClick={logoutHandler}>Log out</button>
                         </span>
                     </Menu.Item>
                 </Menu>
@@ -162,14 +154,13 @@ SliderLayout.propTypes = {
     description: PropTypes.string.isRequired,
     keywords: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
-    active: PropTypes.string.isRequired,
+    active: PropTypes.string,
     textBtn: PropTypes.string
 };
 
 export const getServerSideProps = async () => {
     const qClient = new QueryClient();
     await qClient.prefetchQuery('user', getUserData);
-    // await qClient.prefetchQuery('doctors', getDoctors);
 
     return {
         props: {

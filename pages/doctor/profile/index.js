@@ -7,22 +7,16 @@ import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+import Loader from '@src/components/loader';
+import Toast from '@src/components/ToastMsg';
 
 const getUserData = async () => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`auth/profile`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
+    return API.get(`auth/profile`);
 };
 function Profile({ direction }) {
     const { t } = useTranslation('common');
     const { Title } = Typography;
-    const { data: userData } = useQuery('user', getUserData);
+    const { data: userData, isLoading, isError } = useQuery('user', getUserData);
 
     return (
         <SliderLayout
@@ -37,6 +31,8 @@ function Profile({ direction }) {
                         </Title>
                     </Col>
                     <Col xs={24}>
+                        {isLoading && <Loader />}
+                        {isError && <Toast type="error" msg="" />}
                         <Row gutter={[20, 8]} justify="start" align="top">
                             <Col xs={24}>
                                 <Card doctor={userData.data} profile={true} />

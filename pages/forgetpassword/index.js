@@ -16,7 +16,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useMutation } from 'react-query';
 
 const ForgetPassword = ({ direction }) => {
-    const { t } = useTranslation('forgetpassword');
+    const { t, lang } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const forgetUser = async (credintials) => {
@@ -32,7 +32,7 @@ const ForgetPassword = ({ direction }) => {
                         router.push('/login');
                     }
                 } catch (error) {
-                    direction === 'rtl' ? Toast(error.ar) : Toast(error.en);
+                    Toast(error[`${lang}`]);
                 }
             })
             .catch((err) => {
@@ -40,7 +40,7 @@ const ForgetPassword = ({ direction }) => {
                     const { data = {} } = err.response;
                     const { error = {} } = data;
                     const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
+                    toastr.error(message[`${lang}`]);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -80,7 +80,7 @@ const ForgetPassword = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    preview="false"
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"

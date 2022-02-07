@@ -16,13 +16,14 @@ import { useMutation } from 'react-query';
 const { Text } = Typography;
 
 const Login = ({ direction }) => {
+    const { t, lang } = useTranslation('login');
+
     const getUser = async (credintials) => {
         await API.post('auth/signin', {
             email: credintials.email,
             password: credintials.password
         })
             .then((res) => {
-                console.log('first');
                 try {
                     setLoading(false);
                     if (res?.status === 201) {
@@ -32,23 +33,20 @@ const Login = ({ direction }) => {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ token: res.data.accessToken })
-                        })
-                            .then(() => window.localStorage.setItem('token', res.data.accessToken))
-                            .then(() => {
-                                router.push('/overview');
-                            });
+                        }).then(() => {
+                            router.push('/overview');
+                        });
                     }
                 } catch (error) {
-                    direction === 'rtl' ? Toast(error.message?.ar) : Toast(error.message?.en);
+                    Toast(error.message[`${lang}`]);
                 }
             })
             .catch((err) => {
-                console.log({ err });
                 if (err.response) {
                     const { data = {} } = err.response;
                     const { error = {} } = data;
                     const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
+                    toastr.error(message[`${lang}`]);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -60,7 +58,6 @@ const Login = ({ direction }) => {
     const { mutate } = useMutation((credintials) => getUser(credintials));
 
     // const dispatch = useDispatch();
-    const { t } = useTranslation('login');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const onFinish = ({ email, password }) => {
@@ -93,7 +90,7 @@ const Login = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    preview="false"
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"

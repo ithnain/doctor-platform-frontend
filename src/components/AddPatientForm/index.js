@@ -19,26 +19,10 @@ import { useMutation, useQuery } from 'react-query';
 
 const { Title, Text } = Typography;
 const getUserData = async () => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`auth/profile`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
+    return API.get(`auth/profile`);
 };
 const getInsuline = async () => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`/insuline-type`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
+    return API.get(`/insuline-type`);
 };
 
 const index = ({ direction }) => {
@@ -199,47 +183,45 @@ const index = ({ direction }) => {
                     : []
         };
         // await API.post('auth/signUp')
-        fetch('/api/auth/getToken')
-            .then((res) => res.json())
-            .then((token) =>
-                API.post('patient/createPatient', data, {
-                    headers: {
-                        Authorization: `Bearer ${token.token}`
-                    }
-                })
-            )
-            .then((res) => {
-                try {
-                    if (res.status === 201) {
-                        setCreatedPatientSuccess(true);
-                        setLoading(false);
-                    }
-                    setTimeout(() => {
-                        setCreatedPatientSuccess(false);
-                        setDiabeticketoacidosis(false);
-                        setInsulineType(null);
-                        setCurrentTreatmentShow(false);
-                        setChronicShow(false);
-                        setAcuteShow(false);
-                    }, 3000);
-                } catch (error) {
-                    if (error?.response?.data?.error?.message) {
-                        // TO DO  if RTL ? or LTR
-                        setErrorsCreatingPatient([error.response.data.error.message.en]);
-                    } else if (error?.response?.data?.message?.length) {
-                        setErrorsCreatingPatient(error.response.data.message);
-                    } else {
-                        setErrorsCreatingPatient([t('Error in the server')]);
-                    }
+        API.post('patient/createPatient', data).then((res) => {
+            try {
+                if (res.status === 201) {
+                    setCreatedPatientSuccess(true);
                     setLoading(false);
                 }
-            });
+                setTimeout(() => {
+                    setCreatedPatientSuccess(false);
+                    setDiabeticketoacidosis(false);
+                    setInsulineType(null);
+                    setCurrentTreatmentShow(false);
+                    setChronicShow(false);
+                    setAcuteShow(false);
+                }, 3000);
+            } catch (error) {
+                if (error?.response?.data?.error?.message) {
+                    // TO DO  if RTL ? or LTR
+                    setErrorsCreatingPatient([error.response.data.error.message.en]);
+                } else if (error?.response?.data?.message?.length) {
+                    setErrorsCreatingPatient(error.response.data.message);
+                } else {
+                    setErrorsCreatingPatient([t('Error in the server')]);
+                }
+                setLoading(false);
+            }
+        });
     };
-    const { mutate: signMutate } = useMutation((credintials) => createPatient(credintials));
+    const { mutate: signMutate, isError } = useMutation((credintials) =>
+        createPatient(credintials)
+    );
     const onFinish = async (values) => {
         signMutate(values);
     };
-
+    {
+        isError &&
+            notification.warn({
+                message: t('Error in the server')
+            });
+    }
     return (
         <div
             className={

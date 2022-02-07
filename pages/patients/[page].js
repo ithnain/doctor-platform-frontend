@@ -12,17 +12,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-const getPatients = async (query) => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
-};
+const getPatients = async (query) =>
+    API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`);
 function Patients({ direction }) {
     const { t } = useTranslation('patients');
     const router = useRouter();
@@ -78,9 +69,9 @@ function Patients({ direction }) {
                                     <Pagination
                                         current={+router.query.page}
                                         onChange={handlePagination}
-                                        showTotal={(range) =>
-                                            `${range[0]}-${range[1]} of ${patientsData.data.totalCount} items`
-                                        }
+                                        showTotal={(totalCount, range) => {
+                                            return `${range[0]}-${range[1]} of ${patientsData.data.totalCount} items`;
+                                        }}
                                         defaultPageSize={9}
                                         defaultCurrent={1}
                                         total={patientsData.data.totalCount}

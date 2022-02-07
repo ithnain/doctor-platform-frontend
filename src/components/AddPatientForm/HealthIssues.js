@@ -34,6 +34,6 @@ const HealthIssues = ({ styles, t }) => {
         </Form.Item>
     );
 };
-HealthIssues.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+HealthIssues.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default HealthIssues;

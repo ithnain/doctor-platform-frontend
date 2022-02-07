@@ -17,17 +17,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 
-const getPatient = async (query) => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) => {
-            return API.get(`patient/patient?id=${query.queryKey[1].query}`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-        });
-};
+const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 const PatientProfile = ({ direction }) => {
     const { t } = useTranslation('patient');
     const router = useRouter();
@@ -75,7 +65,7 @@ const PatientProfile = ({ direction }) => {
 
 export const getServerSideProps = async ({ params }) => {
     const qClient = new QueryClient();
-    await qClient.prefetchQuery('allHospitals', getPatient(params.id));
+    await qClient.prefetchQuery('getPatient', getPatient(params.id));
 
     return {
         props: {

@@ -10,15 +10,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 const getHospitals = async (query) => {
-    return fetch('/api/auth/getToken')
-        .then((res) => res.json())
-        .then((data) =>
-            API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            })
-        );
+    return API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`);
 };
 
 function Hospital({ direction }) {

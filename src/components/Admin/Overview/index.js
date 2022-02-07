@@ -9,7 +9,6 @@ import { useRef } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
 function Admin({ direction, doctors, id, name }) {
-    // const user = useSelector((state) => state.user.data);
     const printQR = useRef('');
     const { t } = useTranslation('overview');
     const { Title } = Typography;
@@ -47,7 +46,7 @@ function Admin({ direction, doctors, id, name }) {
                             <CustomButton
                                 type="button"
                                 text="Print QR code"
-                                handleclick={() => {
+                                handleButtonClick={() => {
                                     print(printQR.current);
                                 }}
                             />
@@ -61,7 +60,7 @@ function Admin({ direction, doctors, id, name }) {
 
 Admin.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired,
+    doctors: PropTypes.array,
     id: PropTypes.string,
     name: PropTypes.string
 };
