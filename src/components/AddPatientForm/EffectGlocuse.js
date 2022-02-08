@@ -25,6 +25,6 @@ const EffectGlocuse = ({ styles, t }) => {
     );
 };
 
-EffectGlocuse.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+EffectGlocuse.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default EffectGlocuse;

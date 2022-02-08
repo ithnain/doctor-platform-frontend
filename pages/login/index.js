@@ -1,7 +1,4 @@
-// import PropTypes from 'prop-types';
-
 import { Col, ConfigProvider, Form, Image, Input, Row, Typography } from 'antd';
-
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
@@ -11,33 +8,25 @@ import PropTypes from 'prop-types';
 import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
 import authenticatedRoute from '@components/AuthenticatedRoute';
-import { setUser } from '@redux/actions/user';
 import toastr from 'toastr';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-
+import { useMutation } from 'react-query';
 const { Text } = Typography;
 
 const Login = ({ direction }) => {
-    const dispatch = useDispatch();
-    const { t } = useTranslation('login');
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const { t, lang } = useTranslation('login');
 
-    const onFinish = ({ email, password }) => {
-        setLoading(true);
-        API.post('auth/signin', {
-            email,
-            password
+    const getUser = async (credintials) => {
+        await API.post('auth/signin', {
+            email: credintials.email,
+            password: credintials.password
         })
             .then((res) => {
                 try {
                     setLoading(false);
-
                     if (res?.status === 201) {
-                        dispatch(setUser(res.data));
                         fetch('/api/auth/login', {
                             method: 'post',
                             headers: {
@@ -49,17 +38,15 @@ const Login = ({ direction }) => {
                         });
                     }
                 } catch (error) {
-                    direction === 'rtl' ? Toast(error.message?.ar) : Toast(error.message?.en);
-                    // toastr.error('something went wrong');
+                    Toast(error.message[`${lang}`]);
                 }
             })
             .catch((err) => {
-                console.log({ err });
                 if (err.response) {
                     const { data = {} } = err.response;
                     const { error = {} } = data;
                     const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
+                    toastr.error(message[`${lang}`]);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -68,9 +55,16 @@ const Login = ({ direction }) => {
                 setLoading(false);
             });
     };
-    // const onFinishFailed = (errorInfo) => {
-    //     toastr.warning('Something went wrong');
-    // };
+    const { mutate } = useMutation((credintials) => getUser(credintials));
+
+    // const dispatch = useDispatch();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const onFinish = ({ email, password }) => {
+        setLoading(true);
+        mutate({ email, password });
+    };
+
     return (
         <Row>
             <Col
@@ -96,7 +90,7 @@ const Login = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview={false}
+                                    preview="false"
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"

@@ -1,6 +1,3 @@
-// import PropTypes from 'prop-types';
-// import styles from './Patients.module.scss';
-
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
 
 import API from '@utils/axios';
@@ -10,10 +7,18 @@ import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-function Hospital({ direction, patients, totalCount }) {
+const getHospitals = async (query) => {
+    return API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`);
+};
+
+function Hospital({ direction }) {
     const { t } = useTranslation('hospital');
     const router = useRouter();
+    const page = router.query.page;
+    const { data: hospitalsData } = useQuery(['allHospitals', { query: page }], getHospitals);
+
     const { Title } = Typography;
     const handlePagination = (page) => {
         const currentPath = router.pathname;
@@ -36,13 +41,13 @@ function Hospital({ direction, patients, totalCount }) {
                 <Row justify="start" align="middle" gutter={[20, 20]}>
                     <Col flex xs={24}>
                         <Title level={3} align="start">
-                            {t('hospitalPatients', { count: totalCount || 0 })}
+                            {t('hospitalPatients', { count: hospitalsData?.data.totalCount || 0 })}
                         </Title>
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patients && patients.length >= 1 ? (
-                                patients.map((patient) => (
+                            {hospitalsData?.data && hospitalsData?.data.data.length >= 1 ? (
+                                hospitalsData.data.data.map((patient) => (
                                     <Col xs={24} md={12} lg={8} key={patient.id}>
                                         <Card
                                             patient={patient}
@@ -62,16 +67,16 @@ function Hospital({ direction, patients, totalCount }) {
                     <Col xs={24} flex align="end">
                         <Row justify="end" align="bottom">
                             <Col span={24}>
-                                {patients && patients.length >= 1 && (
+                                {hospitalsData.data && hospitalsData.data.data.length >= 1 && (
                                     <Pagination
                                         current={+router.query.page}
                                         onChange={handlePagination}
-                                        showTotal={(totalCount, range) =>
-                                            `${range[0]}-${range[1]} of ${totalCount} items`
+                                        showTotal={(range) =>
+                                            `${range[0]}-${range[1]} of ${hospitalsData.data.totalCount} items`
                                         }
                                         defaultPageSize={9}
                                         defaultCurrent={1}
-                                        total={totalCount}
+                                        total={hospitalsData.data.totalCount}
                                         showSizeChanger={false}
                                     />
                                 )}
@@ -89,27 +94,15 @@ Hospital.propTypes = {
     patients: PropTypes.array.isRequired,
     totalCount: PropTypes.string.isRequired
 };
-export const getServerSideProps = async ({ req, query }) => {
-    try {
-        const res = await API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`, {
-            headers: {
-                Authorization: `Bearer ${req.cookies.token}`
-            }
-        });
+export const getServerSideProps = async ({ query }) => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('allHospitals', getHospitals(query));
 
-        const { data } = res;
-        return {
-            props: {
-                patients: data.data,
-                totalCount: data.totalCount
-            }
-        };
-    } catch (error) {
-        return {
-            props: {
-                patients: null
-            }
-        };
-    }
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
 };
+
 export default authenticatedRoute(Hospital, { pathAfterFailure: '/login' });

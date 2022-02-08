@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { initializeStore } from '@redux/store';
 
 const API = axios.create({
     baseURL:
@@ -11,12 +10,12 @@ const API = axios.create({
 
 API.interceptors.request.use(
     (config) => {
-        if (initializeStore().getState().user?.accessToken) {
-            config.headers.Authorization = `Bearer ${
-                initializeStore().getState().user?.accessToken
-            }`;
-        }
-        return config;
+        return fetch('/api/auth/getToken')
+            .then((res) => res.json())
+            .then((data) => {
+                config.headers.Authorization = `Bearer ${data.token}`;
+            })
+            .then(() => config);
     },
     (error) => {
         return Promise.reject(error);

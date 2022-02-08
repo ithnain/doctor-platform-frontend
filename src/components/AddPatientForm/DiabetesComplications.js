@@ -174,7 +174,7 @@ const DiabetesComplications = ({ styles, t, acuteShow, diabeticKetoacidosis, chr
 
 DiabetesComplications.propTypes = {
     styles: PropTypes.object,
-    t: PropTypes.object,
+    t: PropTypes.func,
     acuteShow: PropTypes.bool,
     chronicShow: PropTypes.bool,
     diabeticKetoacidosis: PropTypes.bool

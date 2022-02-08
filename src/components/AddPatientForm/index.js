@@ -1,7 +1,5 @@
 import { Col, Form, Row, Typography, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
 import DiabetesComplications from './DiabetesComplications';
@@ -15,30 +13,28 @@ import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
 import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
-import { registerPatient } from '@redux/actions/patient';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
-
-// import { insulineDoses, insulineTypes } from './insuline';
+import { useMutation, useQuery } from 'react-query';
 
 const { Title, Text } = Typography;
+const getUserData = async () => {
+    return API.get(`auth/profile`);
+};
+const getInsuline = async () => {
+    return API.get(`/insuline-type`);
+};
 
 const index = ({ direction }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.user);
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
     const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false);
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [insulineTypes, setInsulineTypes] = useState([]);
+    const { data: userData } = useQuery('user', getUserData);
+    const { data: insulineType } = useQuery('insulineTypes', getInsuline);
 
-    useEffect(() => {
-        API.get('/insuline-type').then((data) => {
-            setInsulineTypes(data.data);
-        });
-    }, []);
     useEffect(() => {
         if (createdPatientSuccess) {
             notification.success({
@@ -117,7 +113,7 @@ const index = ({ direction }) => {
     useEffect(() => {
         insulineTypeSelect &&
             setInsulineDoseSelectArray(
-                insulineTypes.filter((type) => type.type === insulineTypeSelect)
+                insulineType?.data.filter((type) => type.type === insulineTypeSelect)
             );
     }, [insulineTypeSelect]);
     useEffect(() => {
@@ -128,97 +124,104 @@ const index = ({ direction }) => {
             });
         }
     }, [errorsCreatingPatient]);
-
-    const onFinish = async (values) => {
+    const createPatient = async (credintials) => {
         const data = {
-            name: values?.name?.trim(),
-
-            gender: values.gender,
-            age: values.age,
-            phoneNumber: values?.phoneNumber,
-            remarkableNote: values?.remarkableNote?.trim(),
-            diabetesType: values?.diabetesType,
-            diabetesStatus: values?.diabetesStatus,
-            diabetesDuration: values?.diabetesDuration?._d,
-            reasonForReferral: values?.reasonForReferral,
-            factorsEffectinglearning: values?.factorsEffectinglearning,
-            short_term_goals: values?.short_term_goals,
-            long_term_goals: values?.long_term_goals,
-            medicationEffectingGlucose: values?.medicationEffectingGlucose,
-            recommendationGlycemicRange: values?.recommendationGlycemicRange,
-            doctorNote: values?.doctorNote,
-            medicalHistory: values?.medicalHistory,
-            otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
-            insulineTime: values?.insulineTime?._d,
+            doctorId: userData?.data.id,
+            name: credintials?.name?.trim(),
+            gender: credintials.gender,
+            age: credintials.age,
+            phoneNumber: credintials?.phoneNumber,
+            remarkableNote: credintials?.remarkableNote?.trim(),
+            diabetesType: credintials?.diabetesType,
+            diabetesStatus: credintials?.diabetesStatus,
+            diabetesDuration: credintials?.diabetesDuration?._d,
+            reasonForReferral: credintials?.reasonForReferral,
+            factorsEffectinglearning: credintials?.factorsEffectinglearning,
+            short_term_goals: credintials?.short_term_goals,
+            long_term_goals: credintials?.long_term_goals,
+            medicationEffectingGlucose: credintials?.medicationEffectingGlucose,
+            recommendationGlycemicRange: credintials?.recommendationGlycemicRange,
+            doctorNote: credintials?.doctorNote,
+            medicalHistory: credintials?.medicalHistory,
+            otherHealthIssues: credintials?.otherHealthIssues || [credintials.OotherHealthIssues],
+            insulineTime: credintials?.insulineTime?._d,
             currentTreatments:
-                values?.treatmentType === 'INSULINE'
+                credintials?.treatmentType === 'INSULINE'
                     ? [
                           {
-                              units: values?.insulineUnit,
-                              treatment: values?.treatmentType,
-                              doseType: values?.insulineType,
-                              numberOfDoses: values?.insulineDose,
-                              I_C: values?.I ? `${values?.I}:${values.C}` : '',
-                              ISF: values?.isf,
-                              breakfast: values?.breakfast,
-                              lunch: values?.lunch,
-                              dinner: values?.dinner
+                              units: credintials?.insulineUnit,
+                              treatment: credintials?.treatmentType,
+                              doseType: credintials?.insulineType,
+                              numberOfDoses: credintials?.insulineDose,
+                              I_C: credintials?.I ? `${credintials?.I}:${credintials.C}` : '',
+                              ISF: credintials?.isf,
+                              breakfast: credintials?.breakfast,
+                              lunch: credintials?.lunch,
+                              dinner: credintials?.dinner
                           }
                       ]
                     : [
                           {
-                              treatment: values?.treatmentType
+                              treatment: credintials?.treatmentType
                           }
                       ],
             acutes:
-                values?.acuteSelect?.length >= 1
+                credintials?.acuteSelect?.length >= 1
                     ? {
-                          condition: values?.acuteSelect,
-                          times: Number(values?.DKAtimes),
-                          severity: values?.Severity
+                          condition: credintials?.acuteSelect,
+                          times: Number(credintials?.DKAtimes),
+                          severity: credintials?.Severity
                       }
                     : [],
             chronics:
-                values?.chronicSelect?.length >= 1
+                credintials?.chronicSelect?.length >= 1
                     ? [
                           {
-                              condition: values?.chronicSelect
+                              condition: credintials?.chronicSelect
                           }
                       ]
                     : []
         };
-
-        try {
-            setLoading(true);
-            const res = await API.post('patient/createPatient', data, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-            if (res.status === 201) {
-                dispatch(registerPatient(res.data));
-                setCreatedPatientSuccess(true);
+        // await API.post('auth/signUp')
+        API.post('patient/createPatient', data).then((res) => {
+            try {
+                if (res.status === 201) {
+                    setCreatedPatientSuccess(true);
+                    setLoading(false);
+                }
+                setTimeout(() => {
+                    setCreatedPatientSuccess(false);
+                    setDiabeticketoacidosis(false);
+                    setInsulineType(null);
+                    setCurrentTreatmentShow(false);
+                    setChronicShow(false);
+                    setAcuteShow(false);
+                }, 3000);
+            } catch (error) {
+                if (error?.response?.data?.error?.message) {
+                    // TO DO  if RTL ? or LTR
+                    setErrorsCreatingPatient([error.response.data.error.message.en]);
+                } else if (error?.response?.data?.message?.length) {
+                    setErrorsCreatingPatient(error.response.data.message);
+                } else {
+                    setErrorsCreatingPatient([t('Error in the server')]);
+                }
                 setLoading(false);
             }
-            setTimeout(() => {
-                setCreatedPatientSuccess(false);
-                setDiabeticketoacidosis(false);
-                setInsulineType(null);
-                setCurrentTreatmentShow(false);
-                setChronicShow(false);
-                setAcuteShow(false);
-            }, 3000);
-        } catch (error) {
-            if (error?.response?.data?.error?.message) {
-                // TO DO  if RTL ? or LTR
-                setErrorsCreatingPatient([error.response.data.error.message.en]);
-            } else if (error?.response?.data?.message?.length) {
-                setErrorsCreatingPatient(error.response.data.message);
-            } else {
-                setErrorsCreatingPatient([t('Error in the server')]);
-            }
-            setLoading(false);
-        }
+        });
     };
-
+    const { mutate: signMutate, isError } = useMutation((credintials) =>
+        createPatient(credintials)
+    );
+    const onFinish = async (values) => {
+        signMutate(values);
+    };
+    {
+        isError &&
+            notification.warn({
+                message: t('Error in the server')
+            });
+    }
     return (
         <div
             className={
@@ -240,7 +243,7 @@ const index = ({ direction }) => {
                                 styles={styles}
                                 t={t}
                                 currentTreatmentShow={currentTreatmentShow}
-                                insulineTypes={insulineTypes}
+                                insulineTypes={insulineType?.data}
                                 insulineDoseSelectArray={insulineDoseSelectArray}
                             />
                         </Row>
