@@ -55,7 +55,7 @@ function Header({ name, showAddPatientBtn }) {
 
             <Link href="/doctor/profile">
                 <div className={styles.header__img}>
-                    <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
+                    <Image width={30} height={30} src="/assets/images/educatorBlue.png" />
                 </div>
             </Link>
             {name && <Text> {name} </Text>}
