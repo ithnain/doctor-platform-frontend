@@ -1,7 +1,6 @@
 import { Col, ConfigProvider, Row, Typography } from 'antd';
 
 import Card from '@components/Card';
-import CustomButton from '@src/components/CustomBtn';
 import PropTypes from 'prop-types';
 import QRCode from 'react-qr-code';
 import print from '@utils/helpers/print';
@@ -35,24 +34,6 @@ function Admin({ direction, doctors }) {
                                 <h4>{t('noDoctors')}</h4>
                             </Col>
                         )}
-                    </Row>
-                </Col>
-                <Col xs={24}>
-                    <Row gutter={[20, 8]} justify="center" align="middle">
-                        <Col ref={printQR}>
-                            <QRCode
-                                value={`${window.origin}/create-patient-qr/${user.id}?name=${user.name}`}
-                            />
-                        </Col>
-                        <Col>
-                            <CustomButton
-                                type="button"
-                                text="Print QR code"
-                                handleClick={() => {
-                                    print(printQR.current);
-                                }}
-                            />
-                        </Col>
                     </Row>
                 </Col>
             </ConfigProvider>

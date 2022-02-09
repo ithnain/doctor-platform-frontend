@@ -28,7 +28,9 @@
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
             { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients/1" },
-            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
+            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" },
+            { "title": "My Code", "image": "qr-code.svg", "key": "4", "link": "qr-code" }
+
         ]
     }
 }
