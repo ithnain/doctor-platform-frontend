@@ -47,7 +47,6 @@ const QRError = () => {
                                     window.location.assign('https://wa.me/966592476362');
                                 }}
                                 type="primary"
-                                htmlType="submit"
                                 text="تواصل معنا"
                                 className={styles.smallRedBtn}
                             />
