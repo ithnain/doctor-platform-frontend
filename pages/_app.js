@@ -7,6 +7,7 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -22,6 +23,7 @@ function MyApp({ Component, pageProps }) {
                     <title>Doctor Platform </title>
                 </Head>
                 <Component {...pageProps} direction={direction} />
+                <ReactQueryDevtools />
             </Hydrate>
         </QueryClientProvider>
     );

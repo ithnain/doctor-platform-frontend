@@ -5,7 +5,6 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
-import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import toastr from 'toastr';
@@ -18,48 +17,43 @@ const { Text } = Typography;
 const Login = ({ direction }) => {
     const { t, lang } = useTranslation('login');
 
-    const getUser = async (credintials) => {
+    const getUser = async (credintials) =>
         await API.post('auth/signin', {
             email: credintials.email,
             password: credintials.password
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
-                    if (res?.status === 201) {
-                        fetch('/api/auth/login', {
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ token: res.data.accessToken })
-                        }).then(() => {
-                            router.push('/overview');
-                        });
-                    }
-                } catch (error) {
-                    Toast(error.message[`${lang}`]);
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    toastr.error(message[`${lang}`]);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
-    };
-    const { mutate } = useMutation((credintials) => getUser(credintials));
+        });
 
-    // const dispatch = useDispatch();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { mutate } = useMutation(getUser, {
+        onSuccess: (data) => {
+            fetch('/api/auth/login', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: data.data.accessToken })
+            }).then(() => {
+                router.push('/overview');
+            });
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                const { error = {} } = data;
+                const { message = 'Something went wrong' } = error;
+                toastr.error(message[`${lang}`]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: async () => {
+            setLoading(false);
+        }
+    });
+
     const onFinish = ({ email, password }) => {
         setLoading(true);
         mutate({ email, password });
@@ -90,7 +84,7 @@ const Login = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"

@@ -10,6 +10,7 @@ const API = axios.create({
 
 API.interceptors.request.use(
     (config) => {
+        if (config.url === 'auth/signin') return config;
         return fetch('/api/auth/getToken')
             .then((res) => res.json())
             .then((data) => {

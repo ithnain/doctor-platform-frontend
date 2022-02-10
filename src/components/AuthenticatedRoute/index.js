@@ -49,40 +49,13 @@ function authenticatedRoute(Component = null) {
                         this.setState({ loading: false });
                     });
                 });
-            // if (
-            //     (router.pathname === '/login' && this.props.cookies.get('token')) ||
-            //     (router.pathname === '/' && this.props.cookies.get('token'))
-            // ) {
-            //     router.push({ pathname: '/overview', options: { shallow: true } });
-            //     return;
-            // } else if (router.pathname === '/' && !this.props.cookies.get('token')) {
-            //     this.setState({ loading: true });
-            //     router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-            //         this.setState({ loading: false });
-            //     });
-            // }
-            // if (this.props.cookies.get('token')) {
-            //     this.setState({ loading: false });
-            //     return;
-            // }
-            // if (!this.props.cookies.get('token')) {
-            //     this.setState({ loading: true });
-            //     router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-            //         this.setState({ loading: false });
-            //     });
-            //     return;
-            // }
         }
         render() {
             const { loading } = this.state;
 
             if (loading) {
                 return (
-                    <SliderLayout
-                        title={this.state.active}
-                        keywords={'doctor,platform,any word'}
-                        description={'this is the doctor overview'}
-                        active={`/${this.state.active}`}>
+                    <SliderLayout title="loading">
                         <div />
                     </SliderLayout>
                 );

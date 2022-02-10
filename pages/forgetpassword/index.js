@@ -1,13 +1,9 @@
-// import PropTypes from 'prop-types';
-
 import { Col, ConfigProvider, Form, Image, Input, Row } from 'antd';
-
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
-import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
@@ -16,40 +12,32 @@ import useTranslation from 'next-translate/useTranslation';
 import { useMutation } from 'react-query';
 
 const ForgetPassword = ({ direction }) => {
-    const { t, lang } = useTranslation('forgetpassword');
+    const { t } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const forgetUser = async (credintials) => {
-        setLoading(true);
+    const forgetUser = async (credintials) =>
         await API.post('auth/signin', {
             email: credintials.email
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
+        });
 
-                    if (res?.status === 201) {
-                        router.push('/login');
-                    }
-                } catch (error) {
-                    Toast(error[`${lang}`]);
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    toastr.error(message[`${lang}`]);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
-    };
-    const { mutate: forgetMutate } = useMutation((credintials) => forgetUser(credintials));
+    const { mutate: forgetMutate } = useMutation((credintials) => forgetUser(credintials), {
+        onSuccess: () => {
+            router.push('/login');
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
     const onFinish = ({ email }) => {
         setLoading(true);
         forgetMutate({ email });
@@ -80,7 +68,7 @@ const ForgetPassword = ({ direction }) => {
                         <Col span={18}>
                             <Row justify="center">
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-Login"
@@ -138,5 +126,4 @@ const ForgetPassword = ({ direction }) => {
 ForgetPassword.propTypes = {
     direction: PropTypes.string.isRequired
 };
-// export default Login;
 export default ForgetPassword;

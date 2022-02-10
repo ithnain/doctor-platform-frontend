@@ -1,4 +1,4 @@
-import { Col, Form, Row, Typography, notification } from 'antd';
+import { Col, Form, Row, Typography, notification, ConfigProvider } from 'antd';
 import React, { useEffect, useState } from 'react';
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
@@ -15,24 +15,21 @@ import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, dehydrate, QueryClient } from 'react-query';
 
 const { Title, Text } = Typography;
-const getUserData = async () => {
-    return API.get(`auth/profile`);
-};
+
 const getInsuline = async () => {
     return API.get(`/insuline-type`);
 };
 
-const index = ({ direction }) => {
+const index = ({ direction, userData }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
     const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false);
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { data: userData } = useQuery('user', getUserData);
     const { data: insulineType } = useQuery('insulineTypes', getInsuline);
 
     useEffect(() => {
@@ -182,7 +179,6 @@ const index = ({ direction }) => {
                       ]
                     : []
         };
-        // await API.post('auth/signUp')
         API.post('patient/createPatient', data).then((res) => {
             try {
                 if (res.status === 201) {
@@ -210,110 +206,121 @@ const index = ({ direction }) => {
             }
         });
     };
-    const { mutate: signMutate, isError } = useMutation((credintials) =>
-        createPatient(credintials)
-    );
+    const { mutate: signMutate } = useMutation((credintials) => createPatient(credintials));
     const onFinish = async (values) => {
         signMutate(values);
     };
-    {
-        isError &&
-            notification.warn({
-                message: t('Error in the server')
-            });
-    }
+    // {
+    //     isError &&
+    //         notification.warn({
+    //             message: t('Error in the server')
+    //         });
+    // }
     return (
-        <div
-            className={
-                direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
-            }>
-            <Title className={styles.title__registration}>{t('Register Patient')}</Title>
-            <Form
-                form={form}
-                layout={'vertical'}
-                name="register"
-                onFinish={onFinish}
-                onValuesChange={onValuesChange}
-                scrollToFirstError>
-                <Row type="flex" justify="space-around" align="flex-start">
-                    <Col lg={7} xs={24} className={styles.patient_register_column}>
-                        <Row type="flex" justify="start">
-                            <PatienInfo styles={styles} t={t} />
-                            <DiabetesInfo
-                                styles={styles}
-                                t={t}
-                                currentTreatmentShow={currentTreatmentShow}
-                                insulineTypes={insulineType?.data}
-                                insulineDoseSelectArray={insulineDoseSelectArray}
-                            />
-                        </Row>
-                    </Col>
-                    <Col lg={7} sm={24} className={styles.patient_register_column}>
-                        <Row>
-                            <Col sm={24} className={styles.patient_register_column}>
-                                <div className={styles.title_form}>
+        <ConfigProvider direction={direction}>
+            <div
+                className={
+                    direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
+                }>
+                <Title className={styles.title__registration}>{t('Register Patient')}</Title>
+                <Form
+                    form={form}
+                    layout={'vertical'}
+                    name="register"
+                    onFinish={onFinish}
+                    onValuesChange={onValuesChange}
+                    scrollToFirstError>
+                    <Row type="flex" justify="space-around" align="flex-start">
+                        <Col lg={7} xs={24} className={styles.patient_register_column}>
+                            <Row type="flex" justify="start">
+                                <PatienInfo styles={styles} t={t} />
+                                <DiabetesInfo
+                                    styles={styles}
+                                    t={t}
+                                    currentTreatmentShow={currentTreatmentShow}
+                                    insulineTypes={insulineType?.data}
+                                    insulineDoseSelectArray={insulineDoseSelectArray}
+                                />
+                            </Row>
+                        </Col>
+                        <Col lg={7} sm={24} className={styles.patient_register_column}>
+                            <Row>
+                                <Col sm={24} className={styles.patient_register_column}>
+                                    <div className={styles.title_form}>
+                                        <Text className={styles.title_form}>
+                                            {t('ReferalInformation')}
+                                        </Text>
+                                    </div>
+                                    <div className={styles.patient_register_column_wrapper}>
+                                        <ReasonsForRefeal styles={styles} t={t} />
+                                        <FactorsAffectLearning styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                                <Col xs={24} className={styles.patient_register_column}>
+                                    <div
+                                        className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                        <Goals styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                                <Col xs={24} className={styles.patient_register_column}>
+                                    <div
+                                        className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                        <EffectGlocuse styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col sm={24} lg={7} className={styles.patient_register_column}>
+                            <Row xs={24}>
+                                <Col xs={24}>
                                     <Text className={styles.title_form}>
-                                        {t('ReferalInformation')}
+                                        {t('Medical  Conditions')}
                                     </Text>
-                                </div>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <ReasonsForRefeal styles={styles} t={t} />
-                                    <FactorsAffectLearning styles={styles} t={t} />
-                                </div>
-                            </Col>
-                            <Col xs={24} className={styles.patient_register_column}>
-                                <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <Goals styles={styles} t={t} />
-                                </div>
-                            </Col>
-                            <Col xs={24} className={styles.patient_register_column}>
-                                <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <EffectGlocuse styles={styles} t={t} />
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col sm={24} lg={7} className={styles.patient_register_column}>
-                        <Row xs={24}>
-                            <Col xs={24}>
-                                <Text className={styles.title_form}>
-                                    {t('Medical  Conditions')}
-                                </Text>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <HealthIssues styles={styles} t={t} />
-                                    <DiabetesComplications
-                                        styles={styles}
-                                        t={t}
-                                        acuteShow={acuteShow}
-                                        diabeticKetoacidosis={diabeticKetoacidosis}
-                                        chronicShow={chronicShow}
-                                    />
-                                    <MedicalHistory styles={styles} t={t} />
-                                    <RecommendationGlycemicRange styles={styles} t={t} />
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
+                                    <div className={styles.patient_register_column_wrapper}>
+                                        <HealthIssues styles={styles} t={t} />
+                                        <DiabetesComplications
+                                            styles={styles}
+                                            t={t}
+                                            acuteShow={acuteShow}
+                                            diabeticKetoacidosis={diabeticKetoacidosis}
+                                            chronicShow={chronicShow}
+                                        />
+                                        <MedicalHistory styles={styles} t={t} />
+                                        <RecommendationGlycemicRange styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
 
-                    <Col lg={23} className={`w-100 ${styles.patient_register_column}`}>
-                        <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                            <DoctorNote styles={styles} t={t} />
-                        </div>
-                    </Col>
-                </Row>
-                <Row type="flex" justify="center" align="middle">
-                    <Form.Item>
-                        <CustomButton
-                            htmlType="submit"
-                            text={t('Register')}
-                            className={`${styles.btn_text}`}
-                            loading={loading}
-                        />
-                    </Form.Item>
-                </Row>
-            </Form>
-        </div>
+                        <Col lg={23} className={`w-100 ${styles.patient_register_column}`}>
+                            <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                <DoctorNote styles={styles} t={t} />
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="center" align="middle">
+                        <Form.Item>
+                            <CustomButton
+                                htmlType="submit"
+                                text={t('Register')}
+                                className={`${styles.btn_text}`}
+                                loading={loading}
+                            />
+                        </Form.Item>
+                    </Row>
+                </Form>
+            </div>
+        </ConfigProvider>
     );
 };
+export const getServerSideProps = async () => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('insulineTypes', getInsuline);
 
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
+};
 export default index;

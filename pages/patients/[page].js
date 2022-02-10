@@ -1,8 +1,4 @@
-// import PropTypes from 'prop-types';
-// import styles from './Patients.module.scss';
-
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
-
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';

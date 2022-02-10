@@ -8,7 +8,7 @@ import print from '@utils/helpers/print';
 import { useRef } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-function Admin({ direction, doctors, id, name }) {
+function Admin({ direction, doctors, userData }) {
     const printQR = useRef('');
     const { t } = useTranslation('overview');
     const { Title } = Typography;
@@ -39,7 +39,7 @@ function Admin({ direction, doctors, id, name }) {
                     <Row gutter={[20, 8]} justify="center" align="middle">
                         <Col ref={printQR}>
                             <QRCode
-                                value={`${window.origin}/create-patient-qr/${id}?name=${name}`}
+                                value={`${window.origin}/create-patient-qr/${userData.id}?name=${userData.name}`}
                             />
                         </Col>
                         <Col>
@@ -62,7 +62,8 @@ Admin.propTypes = {
     direction: PropTypes.string.isRequired,
     doctors: PropTypes.array,
     id: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    userData: PropTypes.object
 };
 
 export default Admin;

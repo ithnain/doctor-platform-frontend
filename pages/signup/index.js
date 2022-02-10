@@ -35,35 +35,31 @@ const SignUp = ({ direction }) => {
             phoneNumber: credintials.phoneNumber,
             hospital: credintials.hospital,
             gender: credintials.gender
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
-                    if (res?.status === 201) {
-                        toastr.success('User registed successfully');
-                        setTimeout(() => {
-                            router.push('/login');
-                        }, 2000);
-                    }
-                } catch (error) {
-                    toastr.error('something went wrong');
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    toastr.error(message[`${lang}`]);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
+        });
     };
-    const { mutate: signMutate } = useMutation((credintials) => setUser(credintials));
+    const { mutate: signMutate } = useMutation((credintials) => setUser(credintials), {
+        onSuccess: () => {
+            toastr.success('User registed successfully');
+            setTimeout(() => {
+                router.push('/login');
+            }, 2000);
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                const { error = {} } = data;
+                const { message = 'Something went wrong' } = error;
+                toastr.error(message[`${lang}`]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
     const onFinish = ({
         email,
         password,
@@ -122,7 +118,7 @@ const SignUp = ({ direction }) => {
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-signup"

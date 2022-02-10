@@ -1,5 +1,4 @@
 import AddPatientForm from 'src/components/AddPatientForm';
-import { ConfigProvider } from 'antd';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
@@ -15,9 +14,7 @@ function createPatient({ direction }) {
             title={t('Register Patient')}
             keywords={'doctor,platform,any word'}
             description={'this is the doctor create patient page'}>
-            <ConfigProvider direction={direction}>
-                <AddPatientForm direction={direction} />
-            </ConfigProvider>
+            <AddPatientForm direction={direction} />
         </SliderLayout>
     );
 }

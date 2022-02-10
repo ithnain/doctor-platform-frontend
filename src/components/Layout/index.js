@@ -21,7 +21,9 @@ const getUserData = async () => {
     return API.get(`auth/profile`);
 };
 function SliderLayout({ title, keywords, description, active, children }) {
-    const { data: userData } = useQuery('user', getUserData);
+    const { data: userData } = useQuery('user', getUserData, {
+        enabled: title !== 'loading'
+    });
     const refreshRequest = async () => {
         await API.post('auth/refrsh', {
             token: `${userData?.data.refreshToken}`
@@ -90,7 +92,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 className={styles.sider}>
                 <div className={styles.sider__logo}>
                     <Image
-                        preview="false"
+                        preview={false}
                         width={80}
                         height={80}
                         src="/assets/logo-dark-notext.png"
@@ -136,7 +138,10 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 </Row>
                 {userData && (
                     <Content className={styles.content}>
-                        <>{children}</>
+                        {React.Children.map(children, (child) => {
+                            // Checking isValidElement is the safe way and avoids a TS error too.
+                            return React.cloneElement(child, { userData: userData.data });
+                        })}
                     </Content>
                 )}
             </Layout>
