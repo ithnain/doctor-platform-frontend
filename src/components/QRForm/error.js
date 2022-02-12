@@ -15,7 +15,7 @@ const QRError = () => {
                         <Col xs={24}>
                             <div className={styles.logo}>
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={80}
                                     height={80}
                                     src="/assets/logo-dark-notext.png"
@@ -24,7 +24,7 @@ const QRError = () => {
                         </Col>
                         <Col xs={24}>
                             <Image
-                                preview="false"
+                                preview={false}
                                 width={180}
                                 height={180}
                                 src="/assets/error.svg"

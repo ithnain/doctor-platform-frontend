@@ -37,7 +37,9 @@ const MedicalHistory = ({ styles, t }) => {
                         </p>
                     </Checkbox>
                     <Checkbox value="MI or ACS  Date ....">
-                        <p className={`gotLight ${styles.label_form}`}>{t('MI or ACS  Date')}</p>
+                        <p className={`gotLight ${styles.label_form}`}>
+                            {t('MI or ACS  Date ....')}
+                        </p>
                     </Checkbox>
                     <Checkbox value="TIA / CVA">
                         <p className={`gotLight ${styles.label_form}`}>{t('TIA / CVA')}</p>
@@ -52,6 +54,6 @@ const MedicalHistory = ({ styles, t }) => {
     );
 };
 
-MedicalHistory.propTypes = { styles: PropTypes.object, t: PropTypes.func };
+MedicalHistory.propTypes = { styles: PropTypes.object, t: PropTypes.object };
 
 export default MedicalHistory;

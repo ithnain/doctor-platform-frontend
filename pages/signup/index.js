@@ -13,28 +13,44 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { useQuery, useMutation } from 'react-query';
 
-const getHospitals = async () => await API.get(`/hospitals`);
 const { Text } = Typography;
-const SignUp = ({ direction }) => {
-    const { t, lang } = useTranslation('signup');
+const SignUp = ({ direction, hospitals }) => {
+    const { t } = useTranslation('signup');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [doctorStatus, setDoctorStatus] = useState('partner');
     const requiredField = t('common:requiredInput');
-    const { data: hospitals } = useQuery('allPatients', getHospitals);
 
-    const setUser = async (credintials) => {
-        await API.post('auth/signUp', {
-            email: credintials.email,
-            password: credintials.password,
-            name: credintials.name,
-            nationalId: credintials.nationalId,
-            specialty: credintials.specialty,
-            phoneNumber: credintials.phoneNumber,
-            hospital: credintials.hospital,
-            gender: credintials.gender
+    const onFinish = ({
+        email,
+        password,
+        name,
+        nationalId,
+        specialty,
+        phoneNumber,
+        hospital,
+        gender
+    }) => {
+        setLoading(true);
+        let selectedHospital;
+        hospitals.map((h) => {
+            if (h.id === hospital) {
+                selectedHospital = h;
+            } else {
+                return;
+            }
+        });
+        API.post('auth/signup', {
+            email,
+            password,
+            name,
+            nationalId,
+            specialty,
+            phoneNumber,
+            hospital: selectedHospital,
+            gender,
+            role: 'DOCTOR'
         })
             .then((res) => {
                 try {
@@ -54,7 +70,7 @@ const SignUp = ({ direction }) => {
                     const { data = {} } = err.response;
                     const { error = {} } = data;
                     const { message = 'Something went wrong' } = error;
-                    toastr.error(message[`${lang}`]);
+                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
                 } else if (err.message) {
                     toastr.error(err.message);
                 } else if (err.request) {
@@ -62,37 +78,6 @@ const SignUp = ({ direction }) => {
                 }
                 setLoading(false);
             });
-    };
-    const { mutate: signMutate } = useMutation((credintials) => setUser(credintials));
-    const onFinish = ({
-        email,
-        password,
-        name,
-        nationalId,
-        specialty,
-        phoneNumber,
-        hospital,
-        gender
-    }) => {
-        setLoading(true);
-        let selectedHospital;
-        hospitals?.data.map((h) => {
-            if (h.id === hospital) {
-                selectedHospital = h;
-            } else {
-                return;
-            }
-        });
-        signMutate({
-            email,
-            password,
-            name,
-            nationalId,
-            specialty,
-            phoneNumber,
-            hospital: selectedHospital,
-            gender
-        });
     };
     const handleDoctorStatus = (newState) => {
         setDoctorStatus(newState);
@@ -122,7 +107,7 @@ const SignUp = ({ direction }) => {
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={100}
                                     src="/assets/logo-dark-notext.png"
                                     className="logo-signup"
@@ -217,8 +202,8 @@ const SignUp = ({ direction }) => {
                                                     }
                                                 ]}>
                                                 <Select size="medium">
-                                                    {hospitals?.data?.length ? (
-                                                        hospitals?.data.map((hospital) => {
+                                                    {hospitals?.length ? (
+                                                        hospitals.map((hospital) => {
                                                             return (
                                                                 <Select.Option
                                                                     key={hospital.id}

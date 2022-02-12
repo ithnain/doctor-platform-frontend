@@ -6,9 +6,11 @@ import PropTypes from 'prop-types';
 import QRCode from 'react-qr-code';
 import print from '@utils/helpers/print';
 import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 
-function Admin({ direction, doctors, id, name }) {
+function Admin({ direction, doctors }) {
+    const user = useSelector((state) => state.user.data);
     const printQR = useRef('');
     const { t } = useTranslation('overview');
     const { Title } = Typography;
@@ -39,14 +41,14 @@ function Admin({ direction, doctors, id, name }) {
                     <Row gutter={[20, 8]} justify="center" align="middle">
                         <Col ref={printQR}>
                             <QRCode
-                                value={`${window.origin}/create-patient-qr/${id}?name=${name}`}
+                                value={`${window.origin}/create-patient-qr/${user.id}?name=${user.name}`}
                             />
                         </Col>
                         <Col>
                             <CustomButton
                                 type="button"
                                 text="Print QR code"
-                                handleButtonClick={() => {
+                                handleClick={() => {
                                     print(printQR.current);
                                 }}
                             />
@@ -60,9 +62,7 @@ function Admin({ direction, doctors, id, name }) {
 
 Admin.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array,
-    id: PropTypes.string,
-    name: PropTypes.string
+    doctors: PropTypes.array.isRequired
 };
 
 export default Admin;

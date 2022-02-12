@@ -86,5 +86,5 @@ const PatienInfo = ({ styles, t }) => {
     );
 };
 
-PatienInfo.propTypes = { styles: PropTypes.object, t: PropTypes.func };
+PatienInfo.propTypes = { styles: PropTypes.object, t: PropTypes.object };
 export default PatienInfo;

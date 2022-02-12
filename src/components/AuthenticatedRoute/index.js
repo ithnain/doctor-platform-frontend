@@ -1,77 +1,44 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SliderLayout from '@components/Layout';
+import { connect } from 'react-redux';
 import router from 'next/router';
-import { withCookies } from 'react-cookie';
 
-function authenticatedRoute(Component = null) {
+const authenticatedRoute = (Component = null) => {
     class AuthenticatedRoute extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
-                loading: true
+                loading: true,
+                active: ''
             };
         }
+
         componentDidMount() {
-            fetch('/api/auth/getToken')
-                .then((res) => res.json())
-                .then((data) => {
-                    if (!data.token) {
-                        this.setState({ loading: true });
-                        router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-                            this.setState({ loading: false });
-                        });
-                        return;
-                    } else {
-                        if (
-                            (router.pathname === '/login' && data.token) ||
-                            (router.pathname === '/' && data.token)
-                        ) {
-                            router.push({ pathname: '/overview', options: { shallow: true } });
-                            return;
-                        } else if (router.pathname === '/' && !data.token) {
-                            this.setState({ loading: true });
-                            router
-                                .push({ pathname: '/login', options: { shallow: true } })
-                                .then(() => {
-                                    this.setState({ loading: false });
-                                });
-                        }
-                        if (data.token) {
-                            this.setState({ loading: false });
-                            return;
-                        }
-                    }
-                })
-                .catch(() => {
-                    this.setState({ loading: true });
-                    router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-                        this.setState({ loading: false });
-                    });
+            this.setState({ active: router.pathname });
+            if (
+                (router.pathname === '/login' && this.props.isLoggedIn) ||
+                (router.pathname === '/' && this.props.isLoggedIn)
+            ) {
+                router.push({ pathname: '/overview', options: { shallow: true } });
+                return;
+            } else if (router.pathname === '/' && !this.props.isLoggedIn) {
+                this.setState({ loading: true });
+                router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
+                    this.setState({ loading: false });
                 });
-            // if (
-            //     (router.pathname === '/login' && this.props.cookies.get('token')) ||
-            //     (router.pathname === '/' && this.props.cookies.get('token'))
-            // ) {
-            //     router.push({ pathname: '/overview', options: { shallow: true } });
-            //     return;
-            // } else if (router.pathname === '/' && !this.props.cookies.get('token')) {
-            //     this.setState({ loading: true });
-            //     router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-            //         this.setState({ loading: false });
-            //     });
-            // }
-            // if (this.props.cookies.get('token')) {
-            //     this.setState({ loading: false });
-            //     return;
-            // }
-            // if (!this.props.cookies.get('token')) {
-            //     this.setState({ loading: true });
-            //     router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
-            //         this.setState({ loading: false });
-            //     });
-            //     return;
-            // }
+            }
+            if (this.props.isLoggedIn) {
+                this.setState({ loading: false });
+                return;
+            }
+            if (this.props.isLoggedIn === '') {
+                this.setState({ loading: true });
+                router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
+                    this.setState({ loading: false });
+                });
+                return;
+            }
         }
         render() {
             const { loading } = this.state;
@@ -92,11 +59,12 @@ function authenticatedRoute(Component = null) {
         }
     }
     AuthenticatedRoute.propTypes = {
-        isLoggedIn: PropTypes.bool,
-        cookies: PropTypes.any
+        isLoggedIn: PropTypes.bool.isRequired
     };
 
-    return withCookies(AuthenticatedRoute);
-}
+    return connect((state) => ({
+        isLoggedIn: state?.user.accessToken
+    }))(AuthenticatedRoute);
+};
 
 export default authenticatedRoute;
