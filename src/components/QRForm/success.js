@@ -16,7 +16,7 @@ const QRSucess = () => {
                         <Col xs={24}>
                             <div className={styles.logo}>
                                 <Image
-                                    preview="false"
+                                    preview={false}
                                     width={80}
                                     height={80}
                                     src="/assets/logo-dark-notext.png"

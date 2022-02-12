@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Typography, Button } from 'antd';
+import { Badge, Dropdown, Menu, Typography, Button } from 'antd';
 
+import { BellOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import LangToggle from '@components/LangToggle';
 import Link from 'next/link';
@@ -35,7 +36,7 @@ function Header({ name, showAddPatientBtn }) {
                 </Button>
             ) : null}
 
-            {/* <div className={styles.header__notifications}>
+             {/* <div className={styles.header__notifications}>
                  <Badge size="small" offset={[0, 12]} count={5}>
                      <Dropdown.Button
                          className="dropdown-btn"

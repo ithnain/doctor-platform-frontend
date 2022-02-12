@@ -284,7 +284,7 @@ const DiabetesInfo = ({
 
 DiabetesInfo.propTypes = {
     styles: PropTypes.object,
-    t: PropTypes.func,
+    t: PropTypes.object,
     currentTreatmentShow: PropTypes.bool,
     insulineTypes: PropTypes.array,
     insulineDoseSelectArray: PropTypes.array

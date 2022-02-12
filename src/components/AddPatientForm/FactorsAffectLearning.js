@@ -44,6 +44,6 @@ const FactorsAffectLearning = ({ styles, t }) => {
         </Form.Item>
     );
 };
-FactorsAffectLearning.propTypes = { styles: PropTypes.object, t: PropTypes.func };
+FactorsAffectLearning.propTypes = { styles: PropTypes.object, t: PropTypes.object };
 
 export default FactorsAffectLearning;

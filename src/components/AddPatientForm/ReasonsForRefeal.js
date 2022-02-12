@@ -79,6 +79,6 @@ const ReasonsForRefeal = ({ styles, t }) => {
         </Form.Item>
     );
 };
-ReasonsForRefeal.propTypes = { styles: PropTypes.object, t: PropTypes.func };
+ReasonsForRefeal.propTypes = { styles: PropTypes.object, t: PropTypes.object };
 
 export default ReasonsForRefeal;
