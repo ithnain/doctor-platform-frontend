@@ -17,12 +17,17 @@ import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 
-const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
+const getPatient = async (query) =>
+    API.get(`patient/patient?id=${query.query}`).catch((e) => console.log(e));
 const PatientProfile = ({ direction }) => {
     const { t } = useTranslation('patient');
     const router = useRouter();
     const id = router.query.id;
-    const { data: patientData } = useQuery(['onePatient', { query: id }], getPatient);
+    const { data: patientData } = useQuery(
+        ['onePatient', { query: id }],
+        () => getPatient({ query: id }),
+        { enabled: !!id }
+    );
     if (!patientData?.data) return <h1>{t('NotFOund')}</h1>;
     return (
         <SliderLayout

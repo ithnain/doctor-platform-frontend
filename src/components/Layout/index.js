@@ -139,7 +139,6 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 {userData && (
                     <Content className={styles.content}>
                         {React.Children.map(children, (child) => {
-                            // Checking isValidElement is the safe way and avoids a TS error too.
                             return React.cloneElement(child, { userData: userData.data });
                         })}
                     </Content>

@@ -8,13 +8,23 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-const getPatients = async (query) =>
-    API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`);
+const getPatients = async (query) => {
+    console.log(query);
+    return await API.get(`/patient/getPatients?page=${query.query}&limit=9`).catch((e) =>
+        console.log(e)
+    );
+};
 function Patients({ direction }) {
     const { t } = useTranslation('patients');
     const router = useRouter();
     const page = router.query.page;
-    const { data: patientsData } = useQuery(['allPatients', { query: page }], getPatients);
+    const { data: patientsData, isError } = useQuery(
+        ['allPatients', { query: page }],
+        () => getPatients({ query: page }),
+        {
+            enabled: !!page
+        }
+    );
     const { Title } = Typography;
     const handlePagination = (page) => {
         const currentPath = router.pathname;
@@ -41,7 +51,8 @@ function Patients({ direction }) {
                     </Col>
                     <Col xs={24}>
                         <Row gutter={[20, 8]} justify="start" align="middle">
-                            {patientsData?.data && patientsData?.data.data.length >= 1 ? (
+                            {patientsData?.data &&
+                                patientsData?.data.data.length >= 1 &&
                                 patientsData.data.data.map((patient) => (
                                     <Col xs={24} md={12} lg={8} key={patient.id}>
                                         <Card
@@ -50,8 +61,8 @@ function Patients({ direction }) {
                                             direction={direction}
                                         />
                                     </Col>
-                                ))
-                            ) : (
+                                ))}
+                            {isError && (
                                 <Col xs={24}>
                                     <h4>{t('noPatients')}</h4>
                                 </Col>
@@ -87,8 +98,9 @@ Patients.propTypes = {
     direction: PropTypes.string.isRequired
 };
 export const getServerSideProps = async ({ query }) => {
+    console.log({ query });
     const qClient = new QueryClient();
-    await qClient.prefetchQuery('allPatients', getPatients(query));
+    await qClient.prefetchQuery('allPatients', getPatients(query.page));
 
     return {
         props: {
