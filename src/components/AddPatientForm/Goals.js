@@ -32,6 +32,6 @@ const Goals = ({ styles, t }) => {
         </>
     );
 };
-Goals.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+Goals.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default Goals;
