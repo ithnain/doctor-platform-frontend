@@ -7,14 +7,28 @@ import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+import toastr from 'toastr';
 
 const getPatients = async (query) =>
-    API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`);
+    API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`).catch((err) => {
+        if (err.response) {
+            const { data = {} } = err.response;
+            toastr.error(data.message[0]);
+        } else if (err.message) {
+            toastr.error(err.message);
+        } else if (err.request) {
+            toastr.error(err.request);
+        }
+    });
 function Patients({ direction }) {
     const { t } = useTranslation('patients');
     const router = useRouter();
     const page = router.query.page;
-    const { data: patientsData } = useQuery(['allPatients', { query: page }], getPatients);
+    const { data: patientsData } = useQuery(
+        ['allPatients', { query: page }],
+        () => getPatients({ query: page }),
+        { enabled: !!page }
+    );
     const { Title } = Typography;
     const handlePagination = (page) => {
         const currentPath = router.pathname;
