@@ -10,7 +10,7 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import toastr from 'toastr';
 
 const getPatients = async (query) =>
-    API.get(`/patient/getPatients?page=${query.queryKey[1].query}&limit=9`).catch((err) => {
+    API.get(`/patient/getPatients?page=${query.query}&limit=9`).catch((err) => {
         if (err.response) {
             const { data = {} } = err.response;
             toastr.error(data.message[0]);
