@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import toastr from 'toastr';
 
 const getPatient = async (query) =>
-    API.get(`patient/patient?id=${query.queryKey[1].query}`).catch((err) => {
+    API.get(`patient/patient?id=${query.query}`).catch((err) => {
         if (err.response) {
             const { data = {} } = err.response;
             toastr.error(data.message[0]);
