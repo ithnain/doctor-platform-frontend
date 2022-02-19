@@ -4,6 +4,7 @@ import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
+import Image from 'next/image';
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
     <div className={patienProfileSyle.UserCardInfoWrapper}>
@@ -33,7 +34,7 @@ UserCardInfo.propTypes = {
     city: PropTypes.string,
     t: PropTypes.func
 };
-export const DbCarInfo = ({ t, ISF, sliding_scale, I_C, health_issues }) => (
+export const DbCarInfo = ({ t }) => (
     <div className={patienProfileSyle.diabetsInformationWrapper}>
         <h6 className={patienProfileSyle.labelWidht}>{`${t('Diabetes')} ${t('information')}`}</h6>
         <div className={patienProfileSyle.diabetsInformationWrapperOne}>
@@ -98,7 +99,7 @@ export const AvatarWithEdit = ({ name }) => (
     <div className={patienProfileSyle.avatarWrapper}>
         <div className={patienProfileSyle.avatarWrapperIconAndName}>
             <div className={patienProfileSyle.personIconWrapper}>
-                <PersonIcon />
+                <Image width={75} height={75} src="/assets/images/educatorPink.png" />
             </div>
             <h3 className={patienProfileSyle.avatarWrapperIconAndNameAvatarName}>{name}</h3>
             <GenderIcon />

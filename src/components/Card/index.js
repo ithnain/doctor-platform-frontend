@@ -77,7 +77,7 @@ const Card = ({
                                     <Image
                                         width={75}
                                         height={75}
-                                        src="/assets/images/doctor-200.jpg"
+                                        src="/assets/images/educatorBlue.png"
                                     />
                                 </div>
                             </Col>
@@ -87,7 +87,7 @@ const Card = ({
                                     <Image
                                         width={75}
                                         height={75}
-                                        src="/assets/images/doctor-200.jpg"
+                                        src="/assets/images/educatorPink.png"
                                     />
                                 </div>
                             </Col>
