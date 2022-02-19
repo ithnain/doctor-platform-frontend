@@ -118,7 +118,7 @@ const RenderInfoText = ({ title, info }) => (
 );
 RenderInfoText.propTypes = {
     title: PropTypes.string,
-    info: PropTypes.string
+    info: PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
 export const DividerLine = () => <div className={patienProfileSyle.dvider} />;

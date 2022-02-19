@@ -13,21 +13,11 @@ const QRError = () => {
                     <Space direction="vertical">
                         <Col xs={24}>
                             <div className={styles.logo}>
-                                <Image
-                                    preview={false}
-                                    width={80}
-                                    height={80}
-                                    src="/assets/logo-dark-notext.png"
-                                />
+                                <Image width={80} height={80} src="/assets/logo-dark-notext.png" />
                             </div>
                         </Col>
                         <Col xs={24}>
-                            <Image
-                                preview={false}
-                                width={180}
-                                height={180}
-                                src="/assets/error.svg"
-                            />
+                            <Image width={180} height={180} src="/assets/error.svg" />
                         </Col>
                         <Col xs={24}>
                             <Text className={styles.welcome} strong>

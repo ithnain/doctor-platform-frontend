@@ -1,5 +1,7 @@
-import { Col, Form, Row, Typography, notification, ConfigProvider } from 'antd';
+import { Col, ConfigProvider, Form, Row, Typography, notification } from 'antd';
+import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
+
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
 import DiabetesComplications from './DiabetesComplications';
@@ -15,7 +17,6 @@ import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
-import { useMutation, useQuery, dehydrate, QueryClient } from 'react-query';
 
 const { Title, Text } = Typography;
 

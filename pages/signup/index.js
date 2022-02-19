@@ -117,12 +117,7 @@ const SignUp = ({ direction }) => {
                         <LangChanger abs={true} />
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
-                                <Image
-                                    preview={false}
-                                    width={100}
-                                    src="/assets/logo-dark-notext.png"
-                                    className="logo-signup"
-                                />
+                                <Image width={100} height={45} src="/assets/logo-dark-notext.png" />
                             </Row>
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>

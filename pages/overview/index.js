@@ -20,8 +20,7 @@ function Overview({ direction }) {
 
 Overview.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array,
-    userData: PropTypes.object
+    doctors: PropTypes.array
 };
 
 export default authenticatedRoute(Overview);

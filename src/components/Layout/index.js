@@ -2,8 +2,9 @@ import 'antd/dist/antd.css';
 
 import { Col, Layout, Menu, Row } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-import { dehydrate, QueryClient, useQuery, useMutation } from 'react-query';
+
 import API from '@utils/axios';
 import Head from 'next/head';
 import HeaderMenu from './Header';
@@ -65,15 +66,13 @@ function SliderLayout({ title, keywords, description, active, children }) {
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
 
     const logoutHandler = () => {
-        router.push('/login').then(() => {
-            fetch('/api/auth/logout', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-        });
+        fetch('/api/auth/logout', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        }).then(() => router.push('/login'));
     };
     return (
         <Layout>
@@ -91,12 +90,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 onCollapse={() => setCollapsed(!collapsed)}
                 className={styles.sider}>
                 <div className={styles.sider__logo}>
-                    <Image
-                        preview={false}
-                        width={80}
-                        height={80}
-                        src="/assets/logo-dark-notext.png"
-                    />
+                    <Image width={80} height={80} src="/assets/logo-dark-notext.png" />
                 </div>
                 <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
                     {userData?.data.role &&
@@ -110,6 +104,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                         ))}
 
                     <Menu.Item
+                        key={`item-logout`}
                         onClick={logoutHandler}
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
                         <Image src="/assets/icons/logout.svg" width={40} height={40} />
@@ -140,7 +135,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                     <Content className={styles.content}>
                         {React.Children.map(children, (child) => {
                             // Checking isValidElement is the safe way and avoids a TS error too.
-                            return React.cloneElement(child, { userData: userData.data });
+                            return React.cloneElement(child, { userdata: userData.data });
                         })}
                     </Content>
                 )}

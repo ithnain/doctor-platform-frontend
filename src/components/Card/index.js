@@ -248,7 +248,7 @@ const Card = ({
 };
 
 Card.propTypes = {
-    doctor: PropTypes.object.isRequired,
+    doctor: PropTypes.object,
     actions: PropTypes.bool,
     setShow: PropTypes.func,
     patient: PropTypes.object,

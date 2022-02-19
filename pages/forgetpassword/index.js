@@ -1,4 +1,4 @@
-import { Col, ConfigProvider, Form, Image, Input, Row } from 'antd';
+import { Col, ConfigProvider, Form, Input, Row } from 'antd';
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
 import LangChanger from '@src/components/LangToggle';
@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useMutation } from 'react-query';
+import Image from 'next/image';
 
 const ForgetPassword = ({ direction }) => {
     const { t } = useTranslation('forgetpassword');
@@ -67,12 +68,7 @@ const ForgetPassword = ({ direction }) => {
                         <LangChanger abs={true} />
                         <Col span={18}>
                             <Row justify="center">
-                                <Image
-                                    preview={false}
-                                    width={100}
-                                    src="/assets/logo-dark-notext.png"
-                                    className="logo-Login"
-                                />
+                                <Image width={100} height={45} src="/assets/logo-dark-notext.png" />
                             </Row>
                             <Row justify="space-around">
                                 <p className="title-1 dark-blue">{t('forgetPassword')}</p>
