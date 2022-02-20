@@ -14,14 +14,14 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-const ForgetPassword = ({ direction }) => {
+const ForgetPassword = ({ direction = 'rtl' }) => {
     const { t } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const onFinish = ({ email }) => {
         setLoading(true);
-        API.post('auth/signin', {
+        API.post('auth/reset', {
             email
         })
             .then((res) => {
