@@ -151,7 +151,9 @@ const index = ({ direction }) => {
             otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
             insulineTime: values?.insulineTime?._d,
             currentTreatments:
-                values?.treatmentType === 'INSULINE'
+                values?.treatmentType === undefined
+                    ? null
+                    : values?.treatmentType === 'INSULINE'
                     ? [
                           {
                               units: values?.insulineUnit,

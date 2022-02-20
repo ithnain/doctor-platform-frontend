@@ -11,7 +11,7 @@ const FactorsAffectLearning = ({ styles, t }) => {
             label={<p className={styles.label_form}>{t('Factors which may affect Learning')}</p>}
             rules={[
                 {
-                    required: true,
+                    required: false,
                     message: 'Please select Factors which may affect Learning'
                 }
             ]}>
