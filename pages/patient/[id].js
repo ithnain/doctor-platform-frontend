@@ -3,7 +3,13 @@ import {
     DbCarInfo,
     DividerLine,
     NotesCard,
-    UserCardInfo
+    UserCardInfo,
+    ProgressCardInfo,
+    GoalsCard,
+    RefCardInfo,
+    MedicalConditions,
+    PatientMedication,
+    SessionsCard
 } from '@components/PatientProfile';
 import { Col, ConfigProvider, Row } from 'antd';
 import { QueryClient, dehydrate, useQuery } from 'react-query';
@@ -13,13 +19,25 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
-import patienProfileSyle from '@styles/PatientProfile.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
 const getPatient = async (query) => API.get(`patient/patient?id=${query.query}`);
+const getPatientAppointments = async (query) =>
+    API.get(`patient/appointments?patientId=${query.query}`);
+
 const PatientProfile = ({ direction }) => {
+    const onError = (err) => {
+        if (err.response) {
+            const { data = {} } = err.response;
+            toastr.error(data.message[0]);
+        } else if (err.message) {
+            toastr.error(err.message);
+        } else if (err.request) {
+            toastr.error(err.request);
+        }
+    };
     const { t } = useTranslation('patient');
     const router = useRouter();
     const id = router.query.id;
@@ -28,19 +46,20 @@ const PatientProfile = ({ direction }) => {
         () => getPatient({ query: id }),
         {
             enabled: !!id,
-            onError: (err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    toastr.error(data.message[0]);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-            }
+            onError
         }
     );
-    if (!patientData?.data) return <h1>{t('NotFOund')}</h1>;
+    const { data: appointmentsData } = useQuery(
+        ['patientAppointments', { query: id }],
+        () => getPatientAppointments({ query: id }),
+        {
+            enabled: !!id,
+            onError
+        }
+    );
+    const patient = patientData?.data;
+    const appointments = appointmentsData?.data;
+    if (!patient?.data) return <h1>{t('NotFOund')}</h1>;
     return (
         <SliderLayout
             title={'PatientProfile'}
@@ -50,29 +69,55 @@ const PatientProfile = ({ direction }) => {
             <ConfigProvider direction={direction}>
                 <Row>
                     <Col xs={24}>
-                        <h6 className={patienProfileSyle.header}>{`${t('patient')} ${t(
-                            'profile'
-                        )}`}</h6>
-                    </Col>
-                    <Col xs={24}>
-                        <AvatarWithEdit name={patientData?.data.name} id={id} />
+                        <AvatarWithEdit name={patient?.name} id={id} />
+                        <SessionsCard t={t} appointments={appointments} />
+                        <DividerLine />
                         <UserCardInfo
                             t={t}
-                            age={patientData?.data.age}
-                            phone_number={patientData?.dataphone_number}
-                            city={patientData?.datacity}
+                            age={patient?.age}
+                            phone_number={patient?.phone_number}
+                            topics={patient?.topics}
+                        />
+                        <DividerLine />
+                        <ProgressCardInfo
+                            t={t}
+                            appointments={appointments}
+                            invoice={patient?.invoice}
                         />
                         <DividerLine />
                         <DbCarInfo
                             t={t}
-                            ISF={patientData?.dataISF}
-                            sliding_scale={patientData?.datasliding_scale}
-                            is_other_health_issues={patientData?.datas_other_health_issues}
-                            I_C={patientData?.dataI_C}
-                            health_issues={patientData?.datahealth_issues}
+                            diabetesType={patient?.diabetesType}
+                            diabetesStatus={patient?.diabetesStatus}
+                            treatment={patient?.treatment}
                         />
                         <DividerLine />
-                        <NotesCard note={patientData?.dataremarkable_note} t={t} />
+                        <RefCardInfo
+                            t={t}
+                            factorsEffectingLearning={patient?.factorsEffectingLearning}
+                            reasonForReferral={patient?.reasonForReferral}
+                        />
+                        <DividerLine />
+                        <GoalsCard
+                            t={t}
+                            shortTermGoals={patient?.shortTermGoals}
+                            longTermGoals={patient?.longTermGoals}
+                        />
+                        <DividerLine />
+                        <PatientMedication
+                            t={t}
+                            medicationEffectingGlucose={patient?.medicationEffectingGlucose}
+                        />
+                        <DividerLine />
+                        <MedicalConditions
+                            t={t}
+                            otherHealthIssues={patient?.otherHealthIssues}
+                            medicalHistory={patient?.medicalHistory}
+                            acutes={patient?.acutes}
+                            chronics={patient?.chronics}
+                        />
+                        <DividerLine />
+                        <NotesCard doctorNote={patient?.doctorNote} t={t} />
                     </Col>
                 </Row>
             </ConfigProvider>
@@ -83,6 +128,7 @@ const PatientProfile = ({ direction }) => {
 export const getServerSideProps = async ({ params }) => {
     const qClient = new QueryClient();
     await qClient.prefetchQuery('getPatient', () => getPatient(params.id));
+    await qClient.prefetchQuery('getPatientAppointments', () => getPatientAppointments(params.id));
 
     return {
         props: {
