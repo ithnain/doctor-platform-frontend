@@ -43,6 +43,7 @@ const PatientProfile = ({ patient, direction }) => {
                         <DividerLine />
                         <DbCarInfo
                             t={t}
+                            type={patient.diabetesType}
                             ISF={patient.ISF}
                             sliding_scale={patient.sliding_scale}
                             is_other_health_issues={patient.s_other_health_issues}

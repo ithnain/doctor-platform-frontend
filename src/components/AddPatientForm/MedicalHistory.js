@@ -10,7 +10,7 @@ const MedicalHistory = ({ styles, t }) => {
             label={<p className={styles.label_form}>{t('Patients medical history')}</p>}
             rules={[
                 {
-                    required: true,
+                    required: false,
                     message: 'Please select medical history'
                 }
             ]}>

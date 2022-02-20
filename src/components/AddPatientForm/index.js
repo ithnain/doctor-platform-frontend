@@ -132,7 +132,7 @@ const index = ({ direction }) => {
     const onFinish = async (values) => {
         const data = {
             name: values?.name?.trim(),
-
+            doctorId: user.data.id,
             gender: values.gender,
             age: values.age,
             phoneNumber: values?.phoneNumber,
@@ -142,8 +142,8 @@ const index = ({ direction }) => {
             diabetesDuration: values?.diabetesDuration?._d,
             reasonForReferral: values?.reasonForReferral,
             factorsEffectinglearning: values?.factorsEffectinglearning,
-            short_term_goals: values?.short_term_goals,
-            long_term_goals: values?.long_term_goals,
+            shortTermGoals: values?.short_term_goals,
+            longTermGoals: values?.long_term_goals,
             medicationEffectingGlucose: values?.medicationEffectingGlucose,
             recommendationGlycemicRange: values?.recommendationGlycemicRange,
             doctorNote: values?.doctorNote,
@@ -151,7 +151,9 @@ const index = ({ direction }) => {
             otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
             insulineTime: values?.insulineTime?._d,
             currentTreatments:
-                values?.treatmentType === 'INSULINE'
+                values?.treatmentType === undefined
+                    ? null
+                    : values?.treatmentType === 'INSULINE'
                     ? [
                           {
                               units: values?.insulineUnit,
@@ -170,22 +172,23 @@ const index = ({ direction }) => {
                               treatment: values?.treatmentType
                           }
                       ],
-            acutes:
-                values?.acuteSelect?.length >= 1
-                    ? {
-                          condition: values?.acuteSelect,
-                          times: Number(values?.DKAtimes),
-                          severity: values?.Severity
-                      }
-                    : [],
-            chronics:
-                values?.chronicSelect?.length >= 1
-                    ? [
-                          {
-                              condition: values?.chronicSelect
-                          }
-                      ]
-                    : []
+            acutes: values?.acuteSelect?.map((ac) => {
+                if (ac === 'DIABETIC_KETOACIDOSIS') {
+                    return {
+                        condition: ac,
+                        times: Number(values?.DKAtimes),
+                        severity: values?.Severity
+                    };
+                }
+                return {
+                    condition: ac
+                };
+            }),
+            chronics: values?.chronicSelect?.map((ch) => {
+                return {
+                    condition: ch
+                };
+            })
         };
 
         try {

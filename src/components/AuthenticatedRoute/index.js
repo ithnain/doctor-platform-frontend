@@ -59,7 +59,7 @@ const authenticatedRoute = (Component = null) => {
         }
     }
     AuthenticatedRoute.propTypes = {
-        isLoggedIn: PropTypes.bool.isRequired
+        isLoggedIn: PropTypes.string.isRequired
     };
 
     return connect((state) => ({
