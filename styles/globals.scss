@@ -68,7 +68,7 @@ a {
 .ant-layout-header {
     background: $white !important;
 
-    > .trigger {
+    >.trigger {
         font-size: 24px !important;
         padding-left: 5px;
     }
@@ -96,7 +96,7 @@ a {
     // background: #00a0e9;
 }
 
-.dropdown-btn > .ant-dropdown-trigger {
+.dropdown-btn>.ant-dropdown-trigger {
     &:hover {
         color: inherit;
         background: transparent;
@@ -107,7 +107,7 @@ a {
     border: none;
 }
 
-.dropdown-btn > .ant-dropdown-trigger > span {
+.dropdown-btn>.ant-dropdown-trigger>span {
     background-color: $white !important;
 }
 
@@ -249,13 +249,38 @@ a {
     margin: 0 !important;
 }
 
+.mb-1 {
+    margin-bottom: 0.5rem !important;
+}
+
+.toggle {
+    width: 100%;
+    text-align: start;
+
+    .radio-title {
+        font-family: 'gothic-bold';
+        font-size: 18px;
+    }
+
+    .ant-radio-inner:after {
+        background: $darkBlue !important;
+    }
+
+    .ant-radio-checked .ant-radio-inner,
+    .ant-radio:hover .ant-radio-inner,
+    .ant-radio-wrapper:hover,
+    .ant-radio-input:focus .ant-radio-inner {
+        border-color: $darkBlue !important;
+    }
+}
+
 .create {
     .ant-col.ant-form-item-control {
         width: 100%;
     }
 }
 
-.ant-radio-wrapper > span:nth-child(2) {
+.ant-radio-wrapper>span:nth-child(2) {
     width: 100%;
 }
 
