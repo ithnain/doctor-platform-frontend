@@ -27,6 +27,8 @@ $MarginName: 1rem;
 .infoTextvalue {
     font-size: 0.65rem;
     color: #002c44;
+    min-width: 150px;
+    justify-content: space-between;
 }
 
 .infoTextvalueValue {
@@ -34,6 +36,7 @@ $MarginName: 1rem;
     color: #005792;
     font-weight: normal;
     padding: 0 4px;
+    min-width: 100px;
 }
 
 .avatarWrapper {
@@ -170,9 +173,7 @@ $MarginName: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-
     flex-wrap: wrap;
-    //backgroundColor: "red",
     margin-right: 1rem;
     margin-left: 1rem;
 }
@@ -190,6 +191,7 @@ $MarginName: 1rem;
     display: flex;
     align-self: center;
     min-width: 200px;
+    flex-direction: column;
 }
 
 .diabetsInformationWrapper {
@@ -214,4 +216,130 @@ $MarginName: 1rem;
 
 .flex1 {
     flex: 1;
+}
+
+.goalsWrapperOne {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    flex-wrap: wrap;
+    background-color: #f7f8f9;
+    border-radius: 0.2rem;
+    padding: 0.7rem;
+    margin: 0.7rem;
+}
+
+.progressBarOuterRingGreen {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    background-color: #12bf5c;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.progressBarOuterRingGrey {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    background-color: #c9c9c9;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.progressBarInnerCircleGreen {
+    height: 42px;
+    width: 42px;
+    border-radius: 40px;
+    background-color: #12bf5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressBarInnerCircleGrey {
+    height: 42px;
+    width: 42px;
+    border-radius: 40px;
+    background-color: #c9c9c9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressBarLineGreen {
+    background-color: #12bf5c;
+    width: 200px;
+    height: 4px;
+    align-self: center;
+}
+
+.progressBarLineGrey {
+    background-color: #c9c9c9;
+    width: 200px;
+    height: 4px;
+    align-self: center;
+}
+
+.sessionsStatsBackground {
+    width: 15rem;
+    height: 5rem;
+    border-radius: 0.3rem;
+    background-color: #f7f8f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.sessionsStatsTitle {
+    font-size: 0.8rem;
+    font-weight: 1000;
+}
+
+.sessionsStatsInfo {
+    font-size: 1rem;
+}
+
+.progressBarWrapper {
+    flex-direction: row;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.progressBarContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.progressBarSegmentContianer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.progressBarWhiteRing {
+    display: flex;
+    height: 46px;
+    width: 46px;
+    border-radius: 44px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressBarCheckMarkIcon {
+    color: white;
+    font-size: 1.3rem;
+}
+
+.progressBarStepText {
+    position: inherit;
+    text-align: left;
+    justify-content: center;
+    margin-left: -0.7rem;
 }
