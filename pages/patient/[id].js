@@ -18,17 +18,7 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import toastr from 'toastr';
 
-const getPatient = async (query) =>
-    API.get(`patient/patient?id=${query.query}`).catch((err) => {
-        if (err.response) {
-            const { data = {} } = err.response;
-            toastr.error(data.message[0]);
-        } else if (err.message) {
-            toastr.error(err.message);
-        } else if (err.request) {
-            toastr.error(err.request);
-        }
-    });
+const getPatient = async (query) => API.get(`patient/patient?id=${query.query}`);
 const PatientProfile = ({ direction }) => {
     const { t } = useTranslation('patient');
     const router = useRouter();
@@ -36,7 +26,19 @@ const PatientProfile = ({ direction }) => {
     const { data: patientData } = useQuery(
         ['onePatient', { query: id }],
         () => getPatient({ query: id }),
-        { enabled: !!id }
+        {
+            enabled: !!id,
+            onError: (err) => {
+                if (err.response) {
+                    const { data = {} } = err.response;
+                    toastr.error(data.message[0]);
+                } else if (err.message) {
+                    toastr.error(err.message);
+                } else if (err.request) {
+                    toastr.error(err.request);
+                }
+            }
+        }
     );
     if (!patientData?.data) return <h1>{t('NotFOund')}</h1>;
     return (

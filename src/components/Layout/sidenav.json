@@ -8,8 +8,7 @@
                 "image": "registration.svg",
                 "key": "3",
                 "link": "registration/1"
-            },
-            { "title": "My Support Cases", "image": "question.svg", "key": "5", "link": "cases" }
+            }
         ]
     },
     "CASEHANDLER": {
@@ -20,15 +19,13 @@
                 "image": "hospital.svg",
                 "key": "3",
                 "link": "transfer"
-            },
-            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
+            }
         ]
     },
     "DOCTOR": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
-            { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients/1" },
-            { "title": "My Support Cases", "image": "question.svg", "key": "4", "link": "cases" }
+            { "title": "My Patients", "image": "patient.svg", "key": "3", "link": "patients/1" }
         ]
     }
 }

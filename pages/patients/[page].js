@@ -9,17 +9,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import toastr from 'toastr';
 
-const getPatients = async (query) =>
-    API.get(`/patient/getPatients?page=${query.query}&limit=9`).catch((err) => {
-        if (err.response) {
-            const { data = {} } = err.response;
-            toastr.error(data.message[0]);
-        } else if (err.message) {
-            toastr.error(err.message);
-        } else if (err.request) {
-            toastr.error(err.request);
-        }
-    });
+const getPatients = async (query) => API.get(`/patient/getPatients?page=${query.query}&limit=9`);
 
 function Patients({ direction }) {
     const { t } = useTranslation('patients');
@@ -28,7 +18,19 @@ function Patients({ direction }) {
     const { data: patientsData } = useQuery(
         ['allPatients', { query: page }],
         () => getPatients({ query: page }),
-        { enabled: !!page }
+        {
+            enabled: !!page,
+            onError: (err) => {
+                if (err.response) {
+                    const { data = {} } = err.response;
+                    toastr.error(data.message[0]);
+                } else if (err.message) {
+                    toastr.error(err.message);
+                } else if (err.request) {
+                    toastr.error(err.request);
+                }
+            }
+        }
     );
     const { Title } = Typography;
     const handlePagination = (page) => {
