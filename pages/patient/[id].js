@@ -82,7 +82,7 @@ const PatientProfile = ({ direction }) => {
 
 export const getServerSideProps = async ({ params }) => {
     const qClient = new QueryClient();
-    await qClient.prefetchQuery('getPatient', getPatient(params.id));
+    await qClient.prefetchQuery('getPatient', () => getPatient(params.id));
 
     return {
         props: {

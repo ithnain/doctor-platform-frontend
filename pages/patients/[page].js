@@ -105,7 +105,7 @@ Patients.propTypes = {
 };
 export const getServerSideProps = async ({ query }) => {
     const qClient = new QueryClient();
-    await qClient.prefetchQuery('allPatients', getPatients({ query }));
+    await qClient.prefetchQuery('allPatients', () => getPatients({ query }));
 
     return {
         props: {
