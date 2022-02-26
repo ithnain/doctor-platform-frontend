@@ -1,9 +1,10 @@
-import { EditIcon, GenderIcon, PersonIcon } from '@utils/svg/patientProfile';
-
+import { EditIcon, GenderIcon } from '@utils/svg/patientProfile';
+import Link from 'next/link';
 import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
+import Image from 'next/image';
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
     <div className={patienProfileSyle.UserCardInfoWrapper}>
@@ -94,20 +95,31 @@ NotesCard.propTypes = {
     t: PropTypes.func
 };
 
-export const AvatarWithEdit = ({ name }) => (
-    <div className={patienProfileSyle.avatarWrapper}>
-        <div className={patienProfileSyle.avatarWrapperIconAndName}>
-            <div className={patienProfileSyle.personIconWrapper}>
-                <PersonIcon />
+export const AvatarWithEdit = ({ name, id }) => {
+    return (
+        <div className={patienProfileSyle.avatarWrapper}>
+            <div className={patienProfileSyle.avatarWrapperIconAndName}>
+                <div className={patienProfileSyle.personIconWrapper}>
+                    <Image width={75} height={75} src="/assets/images/educatorPink.png" />
+                </div>
+                <h3 className={patienProfileSyle.avatarWrapperIconAndNameAvatarName}>{name}</h3>
+                <GenderIcon />
             </div>
-            <h3 className={patienProfileSyle.avatarWrapperIconAndNameAvatarName}>{name}</h3>
-            <GenderIcon />
+            <Link
+                href={{
+                    pathname: `/create-patient`,
+                    query: { id }
+                }}>
+                <div>
+                    <EditIcon />
+                </div>
+            </Link>
         </div>
-        <EditIcon />
-    </div>
-);
+    );
+};
 AvatarWithEdit.propTypes = {
-    name: PropTypes.string
+    name: PropTypes.string,
+    id: PropTypes.string
 };
 
 const RenderInfoText = ({ title, info }) => (
@@ -118,7 +130,7 @@ const RenderInfoText = ({ title, info }) => (
 );
 RenderInfoText.propTypes = {
     title: PropTypes.string,
-    info: PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    info: PropTypes.string
 };
 
 export const DividerLine = () => <div className={patienProfileSyle.dvider} />;
