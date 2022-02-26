@@ -38,7 +38,7 @@ const PatientProfile = ({ direction }) => {
                         )}`}</h6>
                     </Col>
                     <Col xs={24}>
-                        <AvatarWithEdit name={patientData?.data.name} />
+                        <AvatarWithEdit name={patientData?.data.name} id={id} />
                         <UserCardInfo
                             t={t}
                             age={patientData?.data.age}

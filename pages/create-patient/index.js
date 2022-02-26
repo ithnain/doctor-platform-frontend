@@ -3,12 +3,11 @@ import { ConfigProvider } from 'antd';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import useTranslation from 'next-translate/useTranslation';
-
-//import PropTypes from 'prop-types';
-// import styles from './Doctor.module.scss';
+import { useRouter } from 'next/router';
 
 function createPatient({ direction }) {
     const { t } = useTranslation('create-patient');
+    const router = useRouter();
 
     return (
         <SliderLayout
@@ -16,7 +15,7 @@ function createPatient({ direction }) {
             keywords={'doctor,platform,any word'}
             description={'this is the doctor create patient page'}>
             <ConfigProvider direction={direction}>
-                <AddPatientForm direction={direction} />
+                <AddPatientForm direction={direction} id={router.query.id} />
             </ConfigProvider>
         </SliderLayout>
     );
