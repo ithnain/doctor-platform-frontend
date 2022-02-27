@@ -1,13 +1,14 @@
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
+import { QueryClient, dehydrate, useQuery } from 'react-query';
+
 import API from '@utils/axios';
 import Card from '@components/Card';
 import PropTypes from 'prop-types';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
+import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
-import toastr from 'toastr';
 
 const getPatients = async (query) => API.get(`/patient/getPatients?page=${query.query}&limit=9`);
 

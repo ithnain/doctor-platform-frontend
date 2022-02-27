@@ -6,6 +6,7 @@ import {
     UserCardInfo
 } from '@components/PatientProfile';
 import { Col, ConfigProvider, Row } from 'antd';
+import { QueryClient, dehydrate, useQuery } from 'react-query';
 
 import API from '@utils/axios';
 import PropTypes from 'prop-types';
@@ -13,10 +14,9 @@ import React from 'react';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
-import useTranslation from 'next-translate/useTranslation';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { useRouter } from 'next/router';
 import toastr from 'toastr';
+import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 
 const getPatient = async (query) => API.get(`patient/patient?id=${query.query}`);
 const PatientProfile = ({ direction }) => {
