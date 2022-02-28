@@ -1,4 +1,5 @@
 import { Col, ConfigProvider, Pagination, Row, Typography } from 'antd';
+import { QueryClient, dehydrate, useQuery } from 'react-query';
 
 import API from '@utils/axios';
 import Card from '@components/Card';
@@ -7,7 +8,6 @@ import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 const getHospitals = async (query) => {
     return API.get(`/patient/getHospitalPatients?page=${query.page}&limit=9`);

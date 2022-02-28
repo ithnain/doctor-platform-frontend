@@ -33,15 +33,14 @@ UserCardInfo.propTypes = {
     city: PropTypes.string,
     t: PropTypes.func
 };
-export const DbCarInfo = ({ t }) => (
+export const DbCarInfo = ({ t, type }) => (
     <div className={patienProfileSyle.diabetsInformationWrapper}>
         <h6 className={patienProfileSyle.labelWidht}>{`${t('Diabetes')} ${t('information')}`}</h6>
         <div className={patienProfileSyle.diabetsInformationWrapperOne}>
             <div className={patienProfileSyle.flex1}>
                 <div className={patienProfileSyle.columOneTwoWrapper}>
                     <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
-                        <RenderInfoText title={t('patientType')} info=" " />
-                        <RenderInfoText title={t('patientType')} info=" " />
+                        <RenderInfoText title={t('patientType')} info={type} />
                         <RenderInfoText title={t('ResponsableOfPatient')} info=" " />
                         <RenderInfoText title={t('PatientIsOn')} info=" " />
                         {/* <RenderInfoText title={t('ISF')} info={ISF} /> */}
@@ -65,7 +64,8 @@ DbCarInfo.propTypes = {
     sliding_scale: PropTypes.string,
     is_other_health_issues: PropTypes.bool,
     I_C: PropTypes.string,
-    health_issues: PropTypes.string
+    health_issues: PropTypes.string,
+    type: PropTypes.string
 };
 
 export const NotesCard = ({ note, t }) => (

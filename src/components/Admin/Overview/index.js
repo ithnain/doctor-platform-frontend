@@ -1,7 +1,6 @@
 import { Col, ConfigProvider, Row, Typography } from 'antd';
 
 import Card from '@components/Card';
-import CustomButton from '@src/components/CustomBtn';
 import PropTypes from 'prop-types';
 import QRCode from 'react-qr-code';
 import print from '@utils/helpers/print';

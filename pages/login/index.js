@@ -1,6 +1,8 @@
 import { Col, ConfigProvider, Form, Input, Row, Typography } from 'antd';
+
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
+import Image from 'next/image';
 import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
@@ -8,11 +10,10 @@ import PropTypes from 'prop-types';
 import authStyles from '@styles/Auth.module.scss';
 import authenticatedRoute from '@components/AuthenticatedRoute';
 import toastr from 'toastr';
+import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { useMutation } from 'react-query';
-import Image from 'next/image';
 
 const { Text } = Typography;
 

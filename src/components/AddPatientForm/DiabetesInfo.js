@@ -45,7 +45,7 @@ const DiabetesInfo = ({
                     label={<p className={styles.label_form}>{t('Diabetes type')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please select Diabetes type'
                         }
                     ]}>
@@ -64,7 +64,7 @@ const DiabetesInfo = ({
                     label={<p className={styles.label_form}>{t('Diabetes duration')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please select Diabetes duration'
                         }
                     ]}>
@@ -76,7 +76,7 @@ const DiabetesInfo = ({
                     label={<p className={styles.label_form}>{t('Diabetes status')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please select Diabetes status'
                         }
                     ]}>
@@ -113,7 +113,7 @@ const DiabetesInfo = ({
                     label={<p className={styles.label_form}>{t('Current Treatment')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please select Current Treatment '
                         }
                     ]}>
@@ -155,7 +155,7 @@ const DiabetesInfo = ({
                                     name="insulineType"
                                     rules={[
                                         {
-                                            required: true,
+                                            required: false,
                                             message: 'Please select insuline type'
                                         }
                                     ]}>
@@ -182,7 +182,7 @@ const DiabetesInfo = ({
                                         name="insulineDose"
                                         rules={[
                                             {
-                                                required: true,
+                                                required: false,
                                                 message: 'Please select insuline dose'
                                             }
                                         ]}>

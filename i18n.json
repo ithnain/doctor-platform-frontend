@@ -14,6 +14,9 @@
         "/doctors/[page]": ["doctors"],
         "/registration/[page]": ["registration"],
         "/patient/[id]": ["patient"],
-        "/forgetpassword": ["forgetpassword"]
+        "/forgetpassword": ["forgetpassword"],
+        "/resetPassword": ["resetPassword"],
+        "/qr-code": ["qr-code"]
+
     }
 }

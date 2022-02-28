@@ -10,7 +10,7 @@ const ReasonsForRefeal = ({ styles, t }) => {
             className={styles.form_item}
             rules={[
                 {
-                    required: true,
+                    required: false,
                     message: 'Please select reasons of referral'
                 }
             ]}
