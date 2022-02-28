@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-const ForgetPassword = ({ direction = 'rtl' }) => {
+const ForgetPassword = ({ direction }) => {
     const { t } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
