@@ -12,15 +12,53 @@ import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
+import { useQuery, useMutation } from 'react-query';
 
+const getHospitals = async () => await API.get(`/hospitals`);
 const { Text } = Typography;
-const SignUp = ({ direction, hospitals }) => {
-    const { t } = useTranslation('signup');
+const SignUp = ({ direction }) => {
+    const { t, lang } = useTranslation('signup');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [doctorStatus, setDoctorStatus] = useState('partner');
     const requiredField = t('common:requiredInput');
+    const { data: hospitals } = useQuery('allPatients', getHospitals);
 
+    const setUser = async (credintials) => {
+        await API.post('auth/signUp', {
+            email: credintials.email,
+            password: credintials.password,
+            name: credintials.name,
+            nationalId: credintials.nationalId,
+            specialty: credintials.specialty,
+            phoneNumber: credintials.phoneNumber,
+            hospital: credintials.hospital,
+            gender: credintials.gender
+        });
+    };
+    const { mutate: signMutate } = useMutation((credintials) => setUser(credintials), {
+        onSuccess: () => {
+            toastr.success('User registed successfully');
+            setTimeout(() => {
+                router.push('/login');
+            }, 2000);
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                const { error = {} } = data;
+                const { message = 'Something went wrong' } = error;
+                toastr.error(message[`${lang}`]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
     const onFinish = ({
         email,
         password,
@@ -33,14 +71,14 @@ const SignUp = ({ direction, hospitals }) => {
     }) => {
         setLoading(true);
         let selectedHospital;
-        hospitals.map((h) => {
+        hospitals?.data.map((h) => {
             if (h.id === hospital) {
                 selectedHospital = h;
             } else {
                 return;
             }
         });
-        API.post('auth/signup', {
+        signMutate({
             email,
             password,
             name,
@@ -48,35 +86,8 @@ const SignUp = ({ direction, hospitals }) => {
             specialty,
             phoneNumber,
             hospital: selectedHospital,
-            gender,
-            role: 'DOCTOR'
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
-                    if (res?.status === 201) {
-                        toastr.success('User registed successfully');
-                        setTimeout(() => {
-                            router.push('/login');
-                        }, 2000);
-                    }
-                } catch (error) {
-                    toastr.error('something went wrong');
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
+            gender
+        });
     };
     const handleDoctorStatus = (newState) => {
         setDoctorStatus(newState);
@@ -105,12 +116,7 @@ const SignUp = ({ direction, hospitals }) => {
                         <LangChanger abs={true} />
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
-                                <Image
-                                    preview="false"
-                                    width={100}
-                                    src="/assets/logo-dark-notext.png"
-                                    className="logo-signup"
-                                />
+                                <Image width={100} height={45} src="/assets/logo-dark-notext.png" />
                             </Row>
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
@@ -155,8 +161,8 @@ const SignUp = ({ direction, hospitals }) => {
                                                     }
                                                 ]}>
                                                 <Select size="medium">
-                                                    {hospitals?.length ? (
-                                                        hospitals.map((hospital) => {
+                                                    {hospitals?.data?.length ? (
+                                                        hospitals?.data.map((hospital) => {
                                                             return (
                                                                 <Select.Option
                                                                     key={hospital.id}

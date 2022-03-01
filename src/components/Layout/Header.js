@@ -1,6 +1,8 @@
-import { Badge, Button, Dropdown, Menu, Typography } from 'antd';
+import { useState } from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import { Typography, Button } from 'antd';
 
-import { BellOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import LangToggle from '@components/LangToggle';
 import Link from 'next/link';
@@ -8,9 +10,6 @@ import PropTypes from 'prop-types';
 import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import useTranslation from 'next-translate/useTranslation';
 
 function Header({ name, showAddPatientBtn }) {
     const { Text } = Typography;
@@ -56,7 +55,7 @@ function Header({ name, showAddPatientBtn }) {
 
             <Link href="/doctor/profile">
                 <div className={styles.header__img}>
-                    <Image width={30} height={30} src="/assets/images/educatorBlue.png" />
+                    <Image width={30} height={30} src="/assets/images/doctor-150.jpg" />
                 </div>
             </Link>
             {name && <Text> {name} </Text>}

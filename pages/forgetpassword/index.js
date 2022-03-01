@@ -1,57 +1,50 @@
-// import PropTypes from 'prop-types';
-
-import { Col, ConfigProvider, Form, Image, Input, Row } from 'antd';
+import { Col, ConfigProvider, Form, Input, Row } from 'antd';
 
 import API from '@utils/axios';
 import CustomButton from '@src/components/CustomBtn';
+import Image from 'next/image';
 import LangChanger from '@src/components/LangToggle';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
-import Toast from '@components/ToastMsg';
 import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
+import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-const ForgetPassword = ({ direction = 'rtl' }) => {
+const ForgetPassword = ({ direction }) => {
     const { t } = useTranslation('forgetpassword');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const forgetUser = async (credintials) =>
+        await API.post('auth/signin', {
+            email: credintials.email
+        });
 
+    const { mutate: forgetMutate } = useMutation((credintials) => forgetUser(credintials), {
+        onSuccess: () => {
+            router.push('/login');
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
     const onFinish = ({ email }) => {
         setLoading(true);
-        API.post('auth/reset', {
-            email
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
-
-                    if (res?.status === 201) {
-                        router.push('/login');
-                    }
-                } catch (error) {
-                    direction === 'rtl' ? Toast(error.ar) : Toast(error.en);
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
+        forgetMutate({ email });
     };
-    // const onFinishFailed = (errorInfo) => {
-    //     toastr.warning('Something went wrong');
-    // };
+
     return (
         <Row>
             <Col
@@ -76,12 +69,7 @@ const ForgetPassword = ({ direction = 'rtl' }) => {
                         <LangChanger abs={true} />
                         <Col span={18}>
                             <Row justify="center">
-                                <Image
-                                    preview="false"
-                                    width={100}
-                                    src="/assets/logo-dark-notext.png"
-                                    className="logo-Login"
-                                />
+                                <Image width={100} height={45} src="/assets/logo-dark-notext.png" />
                             </Row>
                             <Row justify="space-around">
                                 <p className="title-1 dark-blue">{t('forgetPassword')}</p>
@@ -135,5 +123,4 @@ const ForgetPassword = ({ direction = 'rtl' }) => {
 ForgetPassword.propTypes = {
     direction: PropTypes.string.isRequired
 };
-// export default Login;
 export default ForgetPassword;

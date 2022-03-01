@@ -43,11 +43,11 @@
             height: 14% !important;
             border-radius: 5px !important;
 
-            >img:first-of-type {
+            > img:first-of-type {
                 font-size: 3vw;
             }
 
-            >span {
+            > span {
                 margin: 0 !important;
 
                 &:first-of-type {
@@ -119,17 +119,14 @@
         border-radius: 7px;
         text-transform: none;
         -webkit-appearance: button;
-
         a {
             color: $white;
         }
     }
-
     &__btn:hover {
         color: $pinkBG;
         border-color: $pinkBG;
     }
-
     // a {
     //     color: $darkBlue;
     // }
@@ -139,7 +136,7 @@
     margin: 0 4.4vw 0 2.3vw;
     overflow: initial;
 
-    >div:first-of-type {
+    > div:first-of-type {
         padding-top: 24px;
         background: $white;
         text-align: center;

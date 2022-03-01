@@ -19,6 +19,6 @@ const RecommendationGlycemicRange = ({ styles, t }) => {
     );
 };
 
-RecommendationGlycemicRange.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+RecommendationGlycemicRange.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default RecommendationGlycemicRange;

@@ -12,6 +12,6 @@ const DoctorNote = ({ styles, t }) => {
         </Form.Item>
     );
 };
-DoctorNote.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+DoctorNote.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default DoctorNote;
