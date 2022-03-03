@@ -110,5 +110,13 @@
     "units": "units",
     "time": "time",
     "unit": "unit",
-    "Diabetes duration": "Diabetes duration"
+    "Diabetes duration": "Diabetes duration",
+    "Plan type": "Plan type",
+    "Plan duration": "Plan duration",
+    "intense": "intense",
+    "Light": "Light",
+    "1 Month": "1 Month",
+    "3 Month": "3 Month",
+    "choosePlan": "Choose Plan",
+    "askForRecommendation": "Ask For Recommendation"
 }

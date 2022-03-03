@@ -33,6 +33,7 @@ a {
 .textCenter {
     text-align: center;
 }
+
 .ant-layout {
     background: $white !important;
 }
@@ -243,8 +244,13 @@ a {
 .w-100 {
     width: 100% !important;
 }
+
 .w-75 {
     width: 75% !important;
+}
+
+.w-50 {
+    width: 50% !important;
 }
 
 .m-0 {
@@ -294,6 +300,24 @@ a {
     background-color: $pinkBG !important;
     color: $white !important;
 }
+
 .pinkBorder {
     border: 1px solid $pinkBG !important;
+}
+
+#educator-create-patient {
+    .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+        background-color: $darkBlue;
+    }
+
+    .ant-steps-item-subtitle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-70%, 90%);
+    }
+
+    .ant-steps.ant-steps-label-horizontal.ant-steps-horizontal {
+        height: 85px;
+    }
 }

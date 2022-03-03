@@ -1,7 +1,7 @@
-import '../styles/globals.scss';
 import 'normalize.css';
 import 'antd/dist/antd.css';
 import 'toastr/toastr.scss';
+import '../styles/globals.scss';
 
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useRef, useState } from 'react';
