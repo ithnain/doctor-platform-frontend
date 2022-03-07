@@ -1,7 +1,6 @@
 import { Col, ConfigProvider, Form, Row, Typography, notification } from 'antd';
 import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
 import DiabetesComplications from './DiabetesComplications';
@@ -17,14 +16,15 @@ import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
-
+import moment from 'moment';
 const { Title, Text } = Typography;
 
 const getInsuline = async () => {
     return API.get(`/insuline-type`);
 };
+const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 
-const index = ({ direction, userdata }) => {
+const index = ({ direction, id, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -50,15 +50,17 @@ const index = ({ direction, userdata }) => {
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
     const [acuteShow, setAcuteShow] = useState(false);
-
     const onValuesChange = ({
         diabetesComplications,
         treatmentType,
         insulineType,
         isf,
         acuteSelect,
-        chronicSelect
+        chronicSelect,
+        reasonForReferral,
+        diabetesDuration
     }) => {
+        console.log({ diabetesDuration, reasonForReferral });
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
@@ -84,7 +86,8 @@ const index = ({ direction, userdata }) => {
             setChronicShow(true);
         } else if (
             Array.isArray(diabetesComplications) &&
-            !diabetesComplications.includes('Chronic')
+            !diabetesComplications.includes('Chronic') &&
+            chronicSelect
         ) {
             setChronicShow(false);
             chronicSelect.length = 0;
@@ -211,12 +214,67 @@ const index = ({ direction, userdata }) => {
     const onFinish = async (values) => {
         signMutate(values);
     };
-    // {
-    //     isError &&
-    //         notification.warn({
-    //             message: t('Error in the server')
-    //         });
-    // }
+    const { data: patientData, isSuccess: onePateintSuccess } = useQuery(
+        ['onePatient', { query: id }],
+        getPatient,
+        {
+            enabled: !!id
+        }
+    );
+    useEffect(() => {
+        if (onePateintSuccess) {
+            const chronicValues =
+                patientData.data.chronics?.length >= 1
+                    ? [
+                          ...patientData?.data.chronics[0].condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+            const acuteValues =
+                patientData.data.acutes?.length >= 1
+                    ? [
+                          ...patientData?.data.acutes[0]?.condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+
+            chronicValues.length >= 1 && setChronicShow(true);
+            acuteValues.length >= 1 && setAcuteShow(true);
+            const diabetesComplications =
+                chronicValues.length == 0 && acuteValues.length === 0
+                    ? []
+                    : acuteValues.length >= 1
+                    ? ['Acute']
+                    : chronicValues.length >= 1
+                    ? ['Chronic']
+                    : ['Chronic', 'Acute'];
+            form.setFieldsValue({
+                name: patientData.data.name,
+                age: `${patientData.data.age}`,
+                gender: patientData.data.gender,
+                phoneNumber: patientData.data.phone_number,
+                chronicSelect: chronicValues,
+                diabetesComplications,
+                remarkableNote: patientData.data.remarkable_note,
+                diabetesType: patientData.data.diabetesType,
+                reasonForReferral: JSON.parse(patientData.data.reason_for_referral),
+                doctorNote: patientData.data.doctor_note,
+                diabetesStatus: patientData.data.diabetes_status,
+                factorsEffectinglearning: patientData.data.factors_effecting_learning,
+                long_term_goals: patientData.data.long_term_goals,
+                medicalHistory: JSON.parse(patientData.data.medical_history),
+                short_term_goals: patientData.data.short_term_goals,
+                treatmentType: patientData.data.treatment[0].treatment,
+                medicationEffectingGlucose: patientData.data.medication_effecting_glucose,
+                otherHealthIssues: JSON.parse(patientData.data.other_health_issues).doctor,
+                recommendationGlycemicRange: patientData.data.recommendation_glycemic_range,
+                diabetesDuration: moment(patientData.data.diabetes_duration)
+            });
+        }
+    }, [patientData]);
+
     return (
         <ConfigProvider direction={direction}>
             <div

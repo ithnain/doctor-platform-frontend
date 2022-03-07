@@ -38,7 +38,6 @@ function Patients({ direction }) {
         const currentPath = router.pathname;
         const currentQuery = router.query;
         currentQuery.page = page;
-
         router.push({
             pathname: currentPath,
             query: currentQuery
