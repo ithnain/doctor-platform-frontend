@@ -24,7 +24,7 @@ const getInsuline = async () => {
     return API.get(`/insuline-type`);
 };
 
-const index = ({ direction, userData }) => {
+const index = ({ direction, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -124,7 +124,7 @@ const index = ({ direction, userData }) => {
     }, [errorsCreatingPatient]);
     const createPatient = async (credintials) => {
         const data = {
-            doctorId: userData?.data.id,
+            doctorId: userdata?.data.id,
             name: credintials?.name?.trim(),
             gender: credintials.gender,
             age: credintials.age,

@@ -2,9 +2,8 @@ import 'antd/dist/antd.css';
 
 import { Col, Layout, Menu, Row } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-
+import { dehydrate, QueryClient, useQuery, useMutation } from 'react-query';
 import API from '@utils/axios';
 import Head from 'next/head';
 import HeaderMenu from './Header';
@@ -66,13 +65,15 @@ function SliderLayout({ title, keywords, description, active, children }) {
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
 
     const logoutHandler = () => {
-        fetch('/api/auth/logout', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        }).then(() => router.push('/login'));
+        router.push('/login').then(() => {
+            fetch('/api/auth/logout', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+        });
     };
     return (
         <Layout>
@@ -134,7 +135,6 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 {userData && (
                     <Content className={styles.content}>
                         {React.Children.map(children, (child) => {
-                            // Checking isValidElement is the safe way and avoids a TS error too.
                             return React.cloneElement(child, { userdata: userData.data });
                         })}
                     </Content>
