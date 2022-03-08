@@ -1,4 +1,4 @@
-import { EditIcon, GenderIcon } from '@utils/svg/patientProfile';
+import { EditIcon, GenderIcon, PersonIcon } from '@utils/svg/patientProfile';
 import Link from 'next/link';
 import { Col } from 'antd';
 import PropTypes from 'prop-types';
@@ -99,7 +99,7 @@ export const AvatarWithEdit = ({ name, id }) => {
         <div className={patienProfileSyle.avatarWrapper}>
             <div className={patienProfileSyle.avatarWrapperIconAndName}>
                 <div className={patienProfileSyle.personIconWrapper}>
-                    <Image width={75} height={75} src="/assets/images/educatorPink.png" />
+                    <PersonIcon />
                 </div>
                 <h3 className={patienProfileSyle.avatarWrapperIconAndNameAvatarName}>{name}</h3>
                 <GenderIcon />

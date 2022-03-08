@@ -24,7 +24,7 @@ const getInsuline = async () => {
 };
 const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 
-const index = ({ direction, id, userdata }) => {
+const index = ({ direction, id }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -127,7 +127,7 @@ const index = ({ direction, id, userdata }) => {
     }, [errorsCreatingPatient]);
     const createPatient = async (credintials) => {
         const data = {
-            doctorId: userdata?.data.id,
+            doctorId: id,
             name: credintials?.name?.trim(),
             gender: credintials.gender,
             age: credintials.age,
@@ -254,7 +254,7 @@ const index = ({ direction, id, userdata }) => {
                 name: patientData.data.name,
                 age: `${patientData.data.age}`,
                 gender: patientData.data.gender,
-                phoneNumber: patientData.data.phone_number,
+                phoneNumber: patientData.data.phone_number.slice(3),
                 chronicSelect: chronicValues,
                 diabetesComplications,
                 remarkableNote: patientData.data.remarkable_note,
