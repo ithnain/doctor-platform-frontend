@@ -226,7 +226,7 @@ const index = ({ direction, id }) => {
             const chronicValues =
                 patientData.data.chronics?.length >= 1
                     ? [
-                          ...patientData?.data.chronics[0].condition
+                          ...patientData?.data?.chronics[0].condition
                               .replaceAll(/[{}"']+/g, '')
                               .split(',')
                       ]
@@ -234,7 +234,7 @@ const index = ({ direction, id }) => {
             const acuteValues =
                 patientData.data.acutes?.length >= 1
                     ? [
-                          ...patientData?.data.acutes[0]?.condition
+                          ...patientData?.data?.acutes[0]?.condition
                               .replaceAll(/[{}"']+/g, '')
                               .split(',')
                       ]
@@ -251,26 +251,26 @@ const index = ({ direction, id }) => {
                     ? ['Chronic']
                     : ['Chronic', 'Acute'];
             form.setFieldsValue({
-                name: patientData.data.name,
-                age: `${patientData.data.age}`,
-                gender: patientData.data.gender,
-                phoneNumber: patientData.data.phone_number.slice(3),
+                name: patientData.data?.name,
+                age: `${patientData.data?.age}`,
+                gender: patientData.data?.gender,
+                phoneNumber: patientData.data?.phone_number.slice(3),
                 chronicSelect: chronicValues,
                 diabetesComplications,
-                remarkableNote: patientData.data.remarkable_note,
-                diabetesType: patientData.data.diabetesType,
-                reasonForReferral: JSON.parse(patientData.data.reason_for_referral),
-                doctorNote: patientData.data.doctor_note,
-                diabetesStatus: patientData.data.diabetes_status,
-                factorsEffectinglearning: patientData.data.factors_effecting_learning,
-                long_term_goals: patientData.data.long_term_goals,
-                medicalHistory: JSON.parse(patientData.data.medical_history),
-                short_term_goals: patientData.data.short_term_goals,
-                treatmentType: patientData.data.treatment[0].treatment,
-                medicationEffectingGlucose: patientData.data.medication_effecting_glucose,
-                otherHealthIssues: JSON.parse(patientData.data.other_health_issues).doctor,
-                recommendationGlycemicRange: patientData.data.recommendation_glycemic_range,
-                diabetesDuration: moment(patientData.data.diabetes_duration)
+                remarkableNote: patientData.data?.remarkable_note,
+                diabetesType: patientData.data?.diabetesType,
+                reasonForReferral: JSON.parse(patientData.data?.reason_for_referral),
+                doctorNote: patientData.data?.doctor_note,
+                diabetesStatus: patientData.data?.diabetes_status,
+                factorsEffectinglearning: patientData.data?.factors_effecting_learning,
+                long_term_goals: patientData.data?.long_term_goals,
+                medicalHistory: JSON.parse(patientData.data?.medical_history),
+                short_term_goals: patientData.data?.short_term_goals,
+                treatmentType: patientData.data?.treatment[0]?.treatment,
+                medicationEffectingGlucose: patientData.data?.medication_effecting_glucose,
+                otherHealthIssues: JSON.parse(patientData.data?.other_health_issues)?.doctor,
+                recommendationGlycemicRange: patientData.data?.recommendation_glycemic_range,
+                diabetesDuration: moment(patientData.data?.diabetes_duration)
             });
         }
     }, [patientData]);
