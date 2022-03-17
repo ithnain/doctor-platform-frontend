@@ -2,8 +2,9 @@ import 'antd/dist/antd.css';
 
 import { Col, Layout, Menu, Row } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-import { dehydrate, QueryClient, useQuery, useMutation } from 'react-query';
+
 import API from '@utils/axios';
 import Head from 'next/head';
 import HeaderMenu from './Header';
@@ -95,7 +96,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 </div>
                 <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
                     {userData?.data.role &&
-                        sideNavIcons[userData?.data.role].sidenavData.map((item) => (
+                        sideNavIcons[userData?.data.role]?.sidenavData?.map((item) => (
                             <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
                                 <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
                                 <span className="nav-text">

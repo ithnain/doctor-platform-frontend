@@ -1,6 +1,7 @@
 import { Col, ConfigProvider, Form, Row, Typography, notification } from 'antd';
 import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
+
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
 import DiabetesComplications from './DiabetesComplications';
@@ -14,9 +15,10 @@ import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
 import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
+import moment from 'moment';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
-import moment from 'moment';
+
 const { Title, Text } = Typography;
 
 const getInsuline = async () => {
@@ -24,7 +26,7 @@ const getInsuline = async () => {
 };
 const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 
-const index = ({ direction, id }) => {
+const index = ({ direction, id, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -56,11 +58,8 @@ const index = ({ direction, id }) => {
         insulineType,
         isf,
         acuteSelect,
-        chronicSelect,
-        reasonForReferral,
-        diabetesDuration
+        chronicSelect
     }) => {
-        console.log({ diabetesDuration, reasonForReferral });
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
@@ -127,7 +126,7 @@ const index = ({ direction, id }) => {
     }, [errorsCreatingPatient]);
     const createPatient = async (credintials) => {
         const data = {
-            doctorId: id,
+            doctorId: userdata.id,
             name: credintials?.name?.trim(),
             gender: credintials.gender,
             age: credintials.age,
