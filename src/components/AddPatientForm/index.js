@@ -160,11 +160,13 @@ const index = ({ direction, id, userdata }) => {
                               dinner: credintials?.dinner
                           }
                       ]
-                    : [
+                    : credintials?.treatmentType
+                    ? [
                           {
                               treatment: credintials?.treatmentType
                           }
-                      ],
+                      ]
+                    : '',
             acutes:
                 credintials?.acuteSelect?.length >= 1
                     ? {
@@ -172,7 +174,7 @@ const index = ({ direction, id, userdata }) => {
                           times: Number(credintials?.DKAtimes),
                           severity: credintials?.Severity
                       }
-                    : [],
+                    : '',
             chronics:
                 credintials?.chronicSelect?.length >= 1
                     ? [
@@ -180,7 +182,7 @@ const index = ({ direction, id, userdata }) => {
                               condition: credintials?.chronicSelect
                           }
                       ]
-                    : []
+                    : ''
         };
         API.post('patient/createPatient', data).then((res) => {
             try {
