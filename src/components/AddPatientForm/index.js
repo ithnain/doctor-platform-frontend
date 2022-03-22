@@ -143,7 +143,9 @@ const index = ({ direction, id, userdata }) => {
             recommendationGlycemicRange: credintials?.recommendationGlycemicRange,
             doctorNote: credintials?.doctorNote,
             medicalHistory: credintials?.medicalHistory,
-            otherHealthIssues: credintials?.otherHealthIssues || [credintials.OotherHealthIssues],
+            otherHealthIssues: credintials.OotherHealthIssues
+                ? credintials.OotherHealthIssues
+                : credintials?.otherHealthIssues,
             insulineTime: credintials?.insulineTime?._d,
             currentTreatments:
                 credintials?.treatmentType === 'INSULINE'
@@ -166,7 +168,7 @@ const index = ({ direction, id, userdata }) => {
                               treatment: credintials?.treatmentType
                           }
                       ]
-                    : '',
+                    : credintials?.treatmentType,
             acutes:
                 credintials?.acuteSelect?.length >= 1
                     ? {
@@ -174,7 +176,7 @@ const index = ({ direction, id, userdata }) => {
                           times: Number(credintials?.DKAtimes),
                           severity: credintials?.Severity
                       }
-                    : '',
+                    : credintials?.acuteSelect,
             chronics:
                 credintials?.chronicSelect?.length >= 1
                     ? [
@@ -182,7 +184,7 @@ const index = ({ direction, id, userdata }) => {
                               condition: credintials?.chronicSelect
                           }
                       ]
-                    : ''
+                    : credintials?.chronicSelect
         };
         API.post('patient/createPatient', data).then((res) => {
             try {
