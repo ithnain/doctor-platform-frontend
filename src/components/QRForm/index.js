@@ -9,6 +9,7 @@ import React from 'react';
 import router from 'next/router';
 import styles from './QR.module.scss';
 import { useState } from 'react';
+import { isValidName } from 'src/utils/helpers/index';
 
 const { Option } = Select;
 
@@ -104,6 +105,13 @@ const QRForm = ({ name, id }) => {
         }
         return Promise.reject(new Error('5xxxxxxxx شكل الرقم'));
     };
+    const nameValidation = (rule, value, callback) => {
+        if (!isValidName(value)) {
+            callback('ادخل الاسم الكامل');
+        } else {
+            callback();
+        }
+    };
     return (
         <Row justify="space-around">
             <ConfigProvider direction="rtl">
@@ -157,7 +165,10 @@ const QRForm = ({ name, id }) => {
                                 autoComplete="off">
                                 <Form.Item
                                     wrapperCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'فضلا املأ البيانات' }]}
+                                    rules={[
+                                        { required: true, message: 'فضلا املأ البيانات' },
+                                        { validator: nameValidation }
+                                    ]}
                                     label="اسم بالكامل"
                                     name="username">
                                     <Input />
