@@ -15,6 +15,7 @@ import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
 import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
+import moment from 'moment';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -23,8 +24,9 @@ const { Title, Text } = Typography;
 const getInsuline = async () => {
     return API.get(`/insuline-type`);
 };
+const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 
-const index = ({ direction, userData }) => {
+const index = ({ direction, id, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -50,7 +52,6 @@ const index = ({ direction, userData }) => {
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
     const [acuteShow, setAcuteShow] = useState(false);
-
     const onValuesChange = ({
         diabetesComplications,
         treatmentType,
@@ -84,7 +85,8 @@ const index = ({ direction, userData }) => {
             setChronicShow(true);
         } else if (
             Array.isArray(diabetesComplications) &&
-            !diabetesComplications.includes('Chronic')
+            !diabetesComplications.includes('Chronic') &&
+            chronicSelect
         ) {
             setChronicShow(false);
             chronicSelect.length = 0;
@@ -124,7 +126,7 @@ const index = ({ direction, userData }) => {
     }, [errorsCreatingPatient]);
     const createPatient = async (credintials) => {
         const data = {
-            doctorId: userData?.data.id,
+            doctorId: userdata.id,
             name: credintials?.name?.trim(),
             gender: credintials.gender,
             age: credintials.age,
@@ -141,7 +143,9 @@ const index = ({ direction, userData }) => {
             recommendationGlycemicRange: credintials?.recommendationGlycemicRange,
             doctorNote: credintials?.doctorNote,
             medicalHistory: credintials?.medicalHistory,
-            otherHealthIssues: credintials?.otherHealthIssues || [credintials.OotherHealthIssues],
+            otherHealthIssues: credintials.OotherHealthIssues
+                ? credintials.OotherHealthIssues
+                : credintials?.otherHealthIssues,
             insulineTime: credintials?.insulineTime?._d,
             currentTreatments:
                 credintials?.treatmentType === 'INSULINE'
@@ -158,11 +162,13 @@ const index = ({ direction, userData }) => {
                               dinner: credintials?.dinner
                           }
                       ]
-                    : [
+                    : credintials?.treatmentType
+                    ? [
                           {
                               treatment: credintials?.treatmentType
                           }
-                      ],
+                      ]
+                    : credintials?.treatmentType,
             acutes:
                 credintials?.acuteSelect?.length >= 1
                     ? {
@@ -170,7 +176,7 @@ const index = ({ direction, userData }) => {
                           times: Number(credintials?.DKAtimes),
                           severity: credintials?.Severity
                       }
-                    : [],
+                    : credintials?.acuteSelect,
             chronics:
                 credintials?.chronicSelect?.length >= 1
                     ? [
@@ -178,7 +184,7 @@ const index = ({ direction, userData }) => {
                               condition: credintials?.chronicSelect
                           }
                       ]
-                    : []
+                    : credintials?.chronicSelect
         };
         API.post('patient/createPatient', data).then((res) => {
             try {
@@ -211,12 +217,67 @@ const index = ({ direction, userData }) => {
     const onFinish = async (values) => {
         signMutate(values);
     };
-    // {
-    //     isError &&
-    //         notification.warn({
-    //             message: t('Error in the server')
-    //         });
-    // }
+    const { data: patientData, isSuccess: onePateintSuccess } = useQuery(
+        ['onePatient', { query: id }],
+        getPatient,
+        {
+            enabled: !!id
+        }
+    );
+    useEffect(() => {
+        if (onePateintSuccess) {
+            const chronicValues =
+                patientData.data.chronics?.length >= 1
+                    ? [
+                          ...patientData?.data?.chronics[0].condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+            const acuteValues =
+                patientData.data.acutes?.length >= 1
+                    ? [
+                          ...patientData?.data?.acutes[0]?.condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+
+            chronicValues.length >= 1 && setChronicShow(true);
+            acuteValues.length >= 1 && setAcuteShow(true);
+            const diabetesComplications =
+                chronicValues.length == 0 && acuteValues.length === 0
+                    ? []
+                    : acuteValues.length >= 1
+                    ? ['Acute']
+                    : chronicValues.length >= 1
+                    ? ['Chronic']
+                    : ['Chronic', 'Acute'];
+            form.setFieldsValue({
+                name: patientData.data?.name,
+                age: `${patientData.data?.age}`,
+                gender: patientData.data?.gender,
+                phoneNumber: patientData.data?.phone_number.slice(3),
+                chronicSelect: chronicValues,
+                diabetesComplications,
+                remarkableNote: patientData.data?.remarkable_note,
+                diabetesType: patientData.data?.diabetesType,
+                reasonForReferral: JSON.parse(patientData.data?.reason_for_referral),
+                doctorNote: patientData.data?.doctor_note,
+                diabetesStatus: patientData.data?.diabetes_status,
+                factorsEffectinglearning: patientData.data?.factors_effecting_learning,
+                long_term_goals: patientData.data?.long_term_goals,
+                medicalHistory: JSON.parse(patientData.data?.medical_history),
+                short_term_goals: patientData.data?.short_term_goals,
+                treatmentType: patientData.data?.treatment[0]?.treatment,
+                medicationEffectingGlucose: patientData.data?.medication_effecting_glucose,
+                otherHealthIssues: JSON.parse(patientData.data?.other_health_issues)?.doctor,
+                recommendationGlycemicRange: patientData.data?.recommendation_glycemic_range,
+                diabetesDuration: moment(patientData.data?.diabetes_duration)
+            });
+        }
+    }, [patientData]);
+
     return (
         <ConfigProvider direction={direction}>
             <div
