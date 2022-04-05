@@ -1,10 +1,10 @@
 import { EditIcon, GenderIcon, PersonIcon } from '@utils/svg/patientProfile';
-import Link from 'next/link';
+
 import { Col } from 'antd';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import React from 'react';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
-import Image from 'next/image';
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
     <div className={patienProfileSyle.UserCardInfoWrapper}>
