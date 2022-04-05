@@ -18,6 +18,7 @@ import RecommendationGlycemicRange from './RecommendationGlycemicRange';
 import moment from 'moment';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
+import moment from 'moment';
 
 const { Title, Text } = Typography;
 
@@ -58,8 +59,11 @@ const index = ({ direction, id, userdata }) => {
         insulineType,
         isf,
         acuteSelect,
-        chronicSelect
+        chronicSelect,
+        reasonForReferral,
+        diabetesDuration
     }) => {
+        console.log({ diabetesDuration, reasonForReferral });
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
@@ -213,7 +217,9 @@ const index = ({ direction, id, userdata }) => {
             }
         });
     };
-    const { mutate: signMutate } = useMutation((credintials) => createPatient(credintials));
+    const { mutate: signMutate, isError } = useMutation((credintials) =>
+        createPatient(credintials)
+    );
     const onFinish = async (values) => {
         signMutate(values);
     };

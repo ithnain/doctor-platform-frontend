@@ -4,6 +4,7 @@ import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
+import Image from 'next/image';
 
 export const UserCardInfo = ({ age, phone_number, city, t }) => (
     <div className={patienProfileSyle.UserCardInfoWrapper}>
@@ -129,7 +130,7 @@ const RenderInfoText = ({ title, info }) => (
 );
 RenderInfoText.propTypes = {
     title: PropTypes.string,
-    info: PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    info: PropTypes.string
 };
 
 export const DividerLine = () => <div className={patienProfileSyle.dvider} />;
