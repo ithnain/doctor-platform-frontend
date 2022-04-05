@@ -66,13 +66,15 @@ function SliderLayout({ title, keywords, description, active, children }) {
     const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
 
     const logoutHandler = () => {
-        fetch('/api/auth/logout', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        }).then(() => router.push('/login'));
+        router.push('/login').then(() => {
+            fetch('/api/auth/logout', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+        });
     };
     return (
         <Layout>
@@ -94,7 +96,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 </div>
                 <Menu className={styles.sider__menu} mode="inline" defaultSelectedKeys={[active]}>
                     {userData?.data.role &&
-                        sideNavIcons[userData?.data.role].sidenavData.map((item) => (
+                        sideNavIcons[userData?.data.role]?.sidenavData?.map((item) => (
                             <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
                                 <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
                                 <span className="nav-text">
@@ -134,7 +136,6 @@ function SliderLayout({ title, keywords, description, active, children }) {
                 {userData && (
                     <Content className={styles.content}>
                         {React.Children.map(children, (child) => {
-                            // Checking isValidElement is the safe way and avoids a TS error too.
                             return React.cloneElement(child, { userdata: userData.data });
                         })}
                     </Content>

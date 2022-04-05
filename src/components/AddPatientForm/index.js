@@ -15,6 +15,7 @@ import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
 import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
+import moment from 'moment';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
 import moment from 'moment';
@@ -26,7 +27,7 @@ const getInsuline = async () => {
 };
 const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
 
-const index = ({ direction, userData, id }) => {
+const index = ({ direction, id, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
@@ -129,7 +130,7 @@ const index = ({ direction, userData, id }) => {
     }, [errorsCreatingPatient]);
     const createPatient = async (credintials) => {
         const data = {
-            doctorId: userData?.data.id,
+            doctorId: userdata.id,
             name: credintials?.name?.trim(),
             gender: credintials.gender,
             age: credintials.age,
@@ -146,7 +147,9 @@ const index = ({ direction, userData, id }) => {
             recommendationGlycemicRange: credintials?.recommendationGlycemicRange,
             doctorNote: credintials?.doctorNote,
             medicalHistory: credintials?.medicalHistory,
-            otherHealthIssues: credintials?.otherHealthIssues || [credintials.OotherHealthIssues],
+            otherHealthIssues: credintials.OotherHealthIssues
+                ? credintials.OotherHealthIssues
+                : credintials?.otherHealthIssues,
             insulineTime: credintials?.insulineTime?._d,
             currentTreatments:
                 credintials?.treatmentType === 'INSULINE'
@@ -163,11 +166,13 @@ const index = ({ direction, userData, id }) => {
                               dinner: credintials?.dinner
                           }
                       ]
-                    : [
+                    : credintials?.treatmentType
+                    ? [
                           {
                               treatment: credintials?.treatmentType
                           }
-                      ],
+                      ]
+                    : credintials?.treatmentType,
             acutes:
                 credintials?.acuteSelect?.length >= 1
                     ? {
@@ -175,7 +180,7 @@ const index = ({ direction, userData, id }) => {
                           times: Number(credintials?.DKAtimes),
                           severity: credintials?.Severity
                       }
-                    : [],
+                    : credintials?.acuteSelect,
             chronics:
                 credintials?.chronicSelect?.length >= 1
                     ? [
@@ -183,7 +188,7 @@ const index = ({ direction, userData, id }) => {
                               condition: credintials?.chronicSelect
                           }
                       ]
-                    : []
+                    : credintials?.chronicSelect
         };
         API.post('patient/createPatient', data).then((res) => {
             try {
@@ -218,12 +223,6 @@ const index = ({ direction, userData, id }) => {
     const onFinish = async (values) => {
         signMutate(values);
     };
-    {
-        isError &&
-            notification.warn({
-                message: t('Error in the server')
-            });
-    }
     const { data: patientData, isSuccess: onePateintSuccess } = useQuery(
         ['onePatient', { query: id }],
         getPatient,
@@ -236,7 +235,7 @@ const index = ({ direction, userData, id }) => {
             const chronicValues =
                 patientData.data.chronics?.length >= 1
                     ? [
-                          ...patientData?.data.chronics[0].condition
+                          ...patientData?.data?.chronics[0].condition
                               .replaceAll(/[{}"']+/g, '')
                               .split(',')
                       ]
@@ -244,7 +243,7 @@ const index = ({ direction, userData, id }) => {
             const acuteValues =
                 patientData.data.acutes?.length >= 1
                     ? [
-                          ...patientData?.data.acutes[0]?.condition
+                          ...patientData?.data?.acutes[0]?.condition
                               .replaceAll(/[{}"']+/g, '')
                               .split(',')
                       ]
@@ -260,29 +259,27 @@ const index = ({ direction, userData, id }) => {
                     : chronicValues.length >= 1
                     ? ['Chronic']
                     : ['Chronic', 'Acute'];
-            console.log(JSON.parse(patientData.data.reason_for_referral));
-            console.log(form.getFieldValue('diabetesDuration'));
             form.setFieldsValue({
-                name: patientData.data.name,
-                age: `${patientData.data.age}`,
-                gender: patientData.data.gender,
-                phoneNumber: patientData.data.phone_number,
+                name: patientData.data?.name,
+                age: `${patientData.data?.age}`,
+                gender: patientData.data?.gender,
+                phoneNumber: patientData.data?.phone_number.slice(3),
                 chronicSelect: chronicValues,
                 diabetesComplications,
-                remarkableNote: patientData.data.remarkable_note,
-                diabetesType: patientData.data.diabetesType,
-                reasonForReferral: JSON.parse(patientData.data.reason_for_referral),
-                doctorNote: patientData.data.doctor_note,
-                diabetesStatus: patientData.data.diabetes_status,
-                factorsEffectinglearning: patientData.data.factors_effecting_learning,
-                long_term_goals: patientData.data.long_term_goals,
-                medicalHistory: JSON.parse(patientData.data.medical_history),
-                short_term_goals: patientData.data.short_term_goals,
-                treatmentType: patientData.data.treatment[0].treatment,
-                medicationEffectingGlucose: patientData.data.medication_effecting_glucose,
-                otherHealthIssues: JSON.parse(patientData.data.other_health_issues).doctor,
-                recommendationGlycemicRange: patientData.data.recommendation_glycemic_range,
-                diabetesDuration: moment(patientData.data.diabetes_duration)
+                remarkableNote: patientData.data?.remarkable_note,
+                diabetesType: patientData.data?.diabetesType,
+                reasonForReferral: JSON.parse(patientData.data?.reason_for_referral),
+                doctorNote: patientData.data?.doctor_note,
+                diabetesStatus: patientData.data?.diabetes_status,
+                factorsEffectinglearning: patientData.data?.factors_effecting_learning,
+                long_term_goals: patientData.data?.long_term_goals,
+                medicalHistory: JSON.parse(patientData.data?.medical_history),
+                short_term_goals: patientData.data?.short_term_goals,
+                treatmentType: patientData.data?.treatment[0]?.treatment,
+                medicationEffectingGlucose: patientData.data?.medication_effecting_glucose,
+                otherHealthIssues: JSON.parse(patientData.data?.other_health_issues)?.doctor,
+                recommendationGlycemicRange: patientData.data?.recommendation_glycemic_range,
+                diabetesDuration: moment(patientData.data?.diabetes_duration)
             });
         }
     }, [patientData]);

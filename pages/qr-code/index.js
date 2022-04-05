@@ -9,7 +9,7 @@ import print from '@utils/helpers/print';
 import { useRef } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
-function QRCodeComp({ direction, userData }) {
+function QRCodeComp({ direction, userdata }) {
     const printQR = useRef('');
     const { Title, Paragraph } = Typography;
     const { t } = useTranslation('qr-code');
@@ -32,7 +32,7 @@ function QRCodeComp({ direction, userData }) {
                         <Row gutter={[20, 8]} justify="start" align="middle">
                             <Col ref={printQR} xs={16}>
                                 <QRCode
-                                    value={`${window.origin}/create-patient-qr/${userData?.data.id}?name=${userData?.data.name}`}
+                                    value={`${window.origin}/create-patient-qr/${userdata?.data.id}?name=${userdata?.data.name}`}
                                 />
                             </Col>
                             <Col xs={24}>
@@ -66,7 +66,7 @@ function QRCodeComp({ direction, userData }) {
 
 QRCodeComp.propTypes = {
     direction: PropTypes.string.isRequired,
-    userData: PropTypes.object
+    userdata: PropTypes.object
 };
 export const getServerSideProps = async () => {
     const qClient = new QueryClient();
