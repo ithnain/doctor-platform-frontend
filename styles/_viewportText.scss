@@ -1,10 +1,11 @@
+@use "sass:math";
 $min_width: 500px;
 $max_width: 1900px;
 $min_font: 14px;
 $max_font: 24px;
 
 @function strip-unit($value) {
-    @return $value / ($value * 0 + 1);
+    @return math.div($value, $value * 0 + 1);
 }
 
 @mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {

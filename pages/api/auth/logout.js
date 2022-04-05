@@ -1,7 +1,6 @@
 import cookie from 'cookie';
-import { withSentry } from '@sentry/nextjs';
 
-const handler = async (req, res) => {
+export default (req, res) => {
     res.setHeader(
         'Set-Cookie',
         cookie.serialize('token', '', {
@@ -15,5 +14,3 @@ const handler = async (req, res) => {
     res.statusCode = 200;
     res.json({ success: true });
 };
-
-export default withSentry(handler);

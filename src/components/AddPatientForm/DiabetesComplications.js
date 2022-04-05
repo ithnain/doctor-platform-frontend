@@ -51,7 +51,7 @@ const DiabetesComplications = ({ styles, t, acuteShow, diabeticKetoacidosis, chr
                                                         name="DKAtimes"
                                                         rules={[
                                                             {
-                                                                required: true,
+                                                                required: false,
                                                                 message: 'Please select DKA TIMES'
                                                             }
                                                         ]}>
@@ -67,7 +67,7 @@ const DiabetesComplications = ({ styles, t, acuteShow, diabeticKetoacidosis, chr
                                                     <Form.Item
                                                         rules={[
                                                             {
-                                                                required: true,
+                                                                required: false,
                                                                 message: 'Please input severity'
                                                             }
                                                         ]}
@@ -174,7 +174,7 @@ const DiabetesComplications = ({ styles, t, acuteShow, diabeticKetoacidosis, chr
 
 DiabetesComplications.propTypes = {
     styles: PropTypes.object,
-    t: PropTypes.object,
+    t: PropTypes.func,
     acuteShow: PropTypes.bool,
     chronicShow: PropTypes.bool,
     diabeticKetoacidosis: PropTypes.bool

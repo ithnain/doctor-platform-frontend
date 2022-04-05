@@ -27,21 +27,6 @@
     font-size: 1.5rem;
 }
 
-.errorHappenedCol {
-    display: flex;  
-}
-
-.errorHappened {
-    display: flex;
-    font-size: 2rem;
-}
-
-.explainationText {
-    display: flex;
-    font-size: 1.5rem;
-    line-height: 2rem;
-}
-
 .signThrough {
     display: flex;
     font-size: 1rem;
@@ -71,16 +56,6 @@
     width: 75%;
     height: 50%;
     border-radius: 15px;
-}
-
-.smallRedBtn {
-    background-color: $pinkBG;
-    color: $white;
-    border: none;
-    width: 75%;
-    height: 50%;
-    border-radius: 15px;
-    font-size: 1.2rem;
 }
 
 .center-box {

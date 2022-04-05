@@ -17,6 +17,5 @@
         "/forgetpassword": ["forgetpassword"],
         "/resetPassword": ["resetPassword"],
         "/qr-code": ["qr-code"]
-
     }
 }

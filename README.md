@@ -1,4 +1,3 @@
-
 # Ithnain Doctor Platform
 
 This is a Next.js app built for doctors that have signed with ithnain in order to be able to register their patients and access their data after

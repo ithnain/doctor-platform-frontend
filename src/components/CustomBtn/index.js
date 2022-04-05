@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './Custom.module.scss';
 
-function CustomButton({ text, handleClick: handleclick, loading, className, ...props }) {
+function CustomButton({ text, handleButtonClick, loading, className, ...props }) {
     return (
         <Button
             {...props}
-            onClick={handleclick}
+            onClick={handleButtonClick}
             className={`${className} ${styles.customBtn}`}
             loading={loading}>
             {text}
@@ -17,7 +17,7 @@ function CustomButton({ text, handleClick: handleclick, loading, className, ...p
 
 CustomButton.propTypes = {
     text: PropTypes.string.isRequired,
-    handleClick: PropTypes.func,
+    handleButtonClick: PropTypes.func,
     loading: PropTypes.bool,
     className: PropTypes.string
 };
