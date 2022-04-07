@@ -17,14 +17,16 @@ export const SessionsCard = ({ t, appointments }) => {
                 <text className={patienProfileSyle.sessionsStatsTitle}>
                     {t('Sessions completed')}
                 </text>
-                <text className={patienProfileSyle.sessionsStatsInfo}>{`${t(
-                    appointments?.length
-                )}`}</text>
+                <text className={patienProfileSyle.sessionsStatsInfo}>
+                    {appointments?.length ? `${t(appointments?.length)}` : '0'}
+                </text>
             </div>
             <div className={patienProfileSyle.sessionsStatsBackground}>
                 <text className={patienProfileSyle.sessionsStatsTitle}>{t('Last Session')}</text>
                 <text className={patienProfileSyle.sessionsStatsInfo}>
-                    {t(new Date(lastAppointment?.[0]?.date).toDateString())}
+                    {lastAppointment?.length
+                        ? t(new Date(lastAppointment?.[0]?.date).toDateString())
+                        : 'N/A'}
                 </text>
             </div>
         </div>
@@ -61,11 +63,11 @@ export const ProgressCardInfo = ({ t, appointments, invoice }) => {
                         <ProgressBar
                             t={t}
                             steps={[
-                                'Signed up',
+                                'Signed Up',
                                 'Assessment',
-                                'Received plan',
-                                'Plan on going',
-                                'Plan excuted'
+                                'Received Plan',
+                                'Plan Ongoing',
+                                'Plan Excuted'
                             ]}
                             finished={finished}
                         />

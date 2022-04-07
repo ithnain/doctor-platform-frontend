@@ -59,7 +59,7 @@ const PatientProfile = ({ direction }) => {
     );
     const patient = patientData?.data;
     const appointments = appointmentsData?.data;
-    if (!patient?.data) return <h1>{t('NotFOund')}</h1>;
+    if (!patient) return <h1>{t('NotFOund')}</h1>;
     return (
         <SliderLayout
             title={'PatientProfile'}
