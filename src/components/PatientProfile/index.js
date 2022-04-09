@@ -5,94 +5,352 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import React from 'react';
 import patienProfileSyle from '@styles/PatientProfile.module.scss';
+import { CheckOutlined } from '@ant-design/icons';
 
-export const UserCardInfo = ({ age, phone_number, city, t }) => (
-    <div className={patienProfileSyle.UserCardInfoWrapper}>
-        <h6 className={patienProfileSyle.labelWidht}>{`${t('patient')} ${t('information')}`}</h6>
+export const SessionsCard = ({ t, appointments }) => {
+    const lastAppointment = appointments?.sort(function (a, b) {
+        return Date.parse(a.date) - Date.parse(b.date);
+    });
+    return (
+        <div className={patienProfileSyle.UserCardInfoWrapper}>
+            <div className={patienProfileSyle.sessionsStatsBackground}>
+                <text className={patienProfileSyle.sessionsStatsTitle}>
+                    {t('Sessions completed')}
+                </text>
+                <text className={patienProfileSyle.sessionsStatsInfo}>
+                    {appointments?.length ? `${appointments?.length}` : '0'}
+                </text>
+            </div>
+            <div className={patienProfileSyle.sessionsStatsBackground}>
+                <text className={patienProfileSyle.sessionsStatsTitle}>{t('Last Session')}</text>
+                <text className={patienProfileSyle.sessionsStatsInfo}>
+                    {lastAppointment?.length
+                        ? t(new Date(lastAppointment?.[0]?.date).toDateString())
+                        : t('No session booked')}
+                </text>
+            </div>
+        </div>
+    );
+};
+SessionsCard.propTypes = {
+    appointments: PropTypes.object,
+    t: PropTypes.func
+};
 
-        <div className={patienProfileSyle.userinfoCard}>
-            <div className={patienProfileSyle.flex1}>
-                <div className={patienProfileSyle.columOneTwoWrapper}>
-                    <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
-                        <RenderInfoText title={t('age')} info={age} />
-                        <RenderInfoText title={t('phone')} info={phone_number} />
-                        <RenderInfoText title={t('city')} info={city} />
+export const ProgressCardInfo = ({ t, appointments, invoice }) => {
+    let finished = 1;
+    if (appointments?.length > 0) {
+        finished = finished + 1;
+    }
+    if (invoice) {
+        finished = finished + 1;
+    }
+    if (invoice?.status === 'successful') {
+        finished = finished + 1;
+    }
+    const invoiceDate = new Date(invoice?.updatedOn);
+    const modifiedDate = new Date(invoiceDate.setMonth(invoiceDate.getMonth() + 3));
+    if (new Date() > modifiedDate) {
+        finished = finished + 1;
+    }
+    return (
+        <div className={patienProfileSyle.UserCardInfoWrapper}>
+            <h6 className={patienProfileSyle.labelWidht}>{`${t('Timeline')}`}</h6>
+
+            <div className={patienProfileSyle.userinfoCard}>
+                <div className={patienProfileSyle.flex1}>
+                    <div className={patienProfileSyle.progressBarWrapper}>
+                        <ProgressBar
+                            t={t}
+                            steps={[
+                                'Signed Up',
+                                'Assessment',
+                                'Received Plan',
+                                'Plan Ongoing',
+                                'Plan Excuted'
+                            ]}
+                            finished={finished}
+                        />
                     </div>
-                    <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
-                        <RenderInfoText title={t('CoveredTopics')} info="xxx,xxxxx,xxxxx" />
-                    </div>
-                    <div />
                 </div>
             </div>
-            <a className={patienProfileSyle.basicButton}>{t('viewHistory')} </a>
         </div>
-    </div>
-);
+    );
+};
+ProgressCardInfo.propTypes = {
+    invoice: PropTypes.object,
+    appointments: PropTypes.object,
+    t: PropTypes.func
+};
+
+export const ProgressBar = ({ t, steps, finished }) => {
+    return steps.map((step, index) => {
+        return (
+            <div className={patienProfileSyle.progressBarContainer} key={index}>
+                <div className={patienProfileSyle.progressBarSegmentContianer}>
+                    <div
+                        className={
+                            index < finished
+                                ? patienProfileSyle.progressBarOuterRingGreen
+                                : patienProfileSyle.progressBarOuterRingGrey
+                        }>
+                        <div className={patienProfileSyle.progressBarWhiteRing}>
+                            <div
+                                className={
+                                    index < finished
+                                        ? patienProfileSyle.progressBarInnerCircleGreen
+                                        : patienProfileSyle.progressBarInnerCircleGrey
+                                }>
+                                <CheckOutlined
+                                    className={patienProfileSyle.progressBarCheckMarkIcon}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {index !== steps.length - 1 ? (
+                        <div
+                            className={
+                                index < finished - 1
+                                    ? patienProfileSyle.progressBarLineGreen
+                                    : patienProfileSyle.progressBarLineGrey
+                            }
+                        />
+                    ) : (
+                        ''
+                    )}
+                    <div />
+                </div>
+                <text className={patienProfileSyle.progressBarStepText}>{t(step)}</text>
+            </div>
+        );
+    });
+};
+ProgressBar.propTypes = {
+    steps: PropTypes.Object,
+    finished: PropTypes.number,
+    t: PropTypes.func
+};
+
+export const UserCardInfo = ({ age, phone_number, topics, t }) => {
+    let topicsWithSpaces = '';
+    topics?.forEach((treat, index) => {
+        topicsWithSpaces = topicsWithSpaces.concat(index === 0 ? '' : '| ', treat);
+    });
+    return (
+        <div className={patienProfileSyle.UserCardInfoWrapper}>
+            <h6 className={patienProfileSyle.labelWidht}>{`${t('patient')} ${t(
+                'information'
+            )}`}</h6>
+
+            <div className={patienProfileSyle.userinfoCard}>
+                <div className={patienProfileSyle.flex1}>
+                    <div className={patienProfileSyle.columOneTwoWrapper}>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
+                            <RenderInfoText title={t('age')} info={`${age} Years`} />
+                            <RenderInfoText title={t('phone')} info={phone_number} />
+                        </div>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
+                            <RenderInfoText title={t('CoveredTopics')} info={topicsWithSpaces} />
+                        </div>
+                        <div />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 UserCardInfo.propTypes = {
     age: PropTypes.number,
     phone_number: PropTypes.string,
-    city: PropTypes.string,
+    topics: PropTypes.string,
     t: PropTypes.func
 };
-export const DbCarInfo = ({ t, type }) => (
+export const DbCarInfo = ({ t, diabetesType, diabetesStatus, treatment }) => {
+    let treatmentWithSpaces = '';
+    treatment?.forEach((treat, index) => {
+        treatmentWithSpaces = treatmentWithSpaces.concat(index === 0 ? '' : '| ', treat?.treatment);
+    });
+    return (
+        <div className={patienProfileSyle.diabetsInformationWrapper}>
+            <h6 className={patienProfileSyle.labelWidht}>{`${t('Diabetes')} ${t(
+                'information'
+            )}`}</h6>
+            <div className={patienProfileSyle.diabetsInformationWrapperOne}>
+                <div className={patienProfileSyle.flex1}>
+                    <div className={patienProfileSyle.columOneTwoWrapper}>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
+                            <RenderInfoText title={t('Patient Type')} info={diabetesType} />
+                            <RenderInfoText title={t('Diabetes status')} info={diabetesStatus} />
+                        </div>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
+                            <text></text>
+                            <RenderInfoText
+                                title={t('Current treatment')}
+                                info={treatmentWithSpaces}
+                            />
+                        </div>
+                        <div />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+DbCarInfo.propTypes = {
+    t: PropTypes.func,
+    diabetesType: PropTypes.string,
+    diabetesStatus: PropTypes.string,
+    treatment: PropTypes.string
+};
+
+export const RefCardInfo = ({ t, reasonForReferral, factorsEffectingLearning }) => (
     <div className={patienProfileSyle.diabetsInformationWrapper}>
-        <h6 className={patienProfileSyle.labelWidht}>{`${t('Diabetes')} ${t('information')}`}</h6>
+        <h6 className={patienProfileSyle.labelWidht}>{`${t('Referral')} ${t('information')}`}</h6>
         <div className={patienProfileSyle.diabetsInformationWrapperOne}>
             <div className={patienProfileSyle.flex1}>
                 <div className={patienProfileSyle.columOneTwoWrapper}>
                     <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
-                        <RenderInfoText title={t('patientType')} info={type} />
-                        <RenderInfoText title={t('ResponsableOfPatient')} info=" " />
-                        <RenderInfoText title={t('PatientIsOn')} info=" " />
-                        {/* <RenderInfoText title={t('ISF')} info={ISF} /> */}
-                        {/* <RenderInfoText title={t('IC')} info={I_C} /> */}
-                        {/* <RenderInfoText title={t('SlidingSclae')} info={sliding_scale} /> */}
-                        {/* <RenderInfoText title={t('CriticalHealthIssue')} info={health_issues[0]} /> */}
+                        <RenderInfoText
+                            title={t('Reason of referral: ')}
+                            info={reasonForReferral}
+                        />
+                        <RenderInfoText
+                            title={t('Factors that may affect learning: ')}
+                            info={factorsEffectingLearning}
+                        />
                     </div>
-                    <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
-                        <RenderInfoText title={t('MedicalConditions')} info="xxx,xxxxx,xxxxx" />
-                    </div>
+                    <div className={patienProfileSyle.columOneTwoWrapperColumTwo}></div>
                     <div />
                 </div>
             </div>
-            <a className={patienProfileSyle.basicButton}>{t('viewHistory')} </a>
         </div>
     </div>
 );
-DbCarInfo.propTypes = {
+RefCardInfo.propTypes = {
     t: PropTypes.func,
-    ISF: PropTypes.string,
-    sliding_scale: PropTypes.string,
-    is_other_health_issues: PropTypes.bool,
-    I_C: PropTypes.string,
-    health_issues: PropTypes.string,
-    type: PropTypes.string
+    reasonForReferral: PropTypes.string,
+    factorsEffectingLearning: PropTypes.string
 };
 
-export const NotesCard = ({ note, t }) => (
+export const NotesCard = ({ t, doctorNote }) => (
     <div className={patienProfileSyle.NotesCardWrapper}>
         <Col>
             <h6 className={patienProfileSyle.labelWidht}>{t('Notes')}</h6>
         </Col>
         <div className={patienProfileSyle.NotesCardWrapperInformation}>
             <div className={patienProfileSyle.NotesCardWrapperInformationNote}>
-                <h6 className={patienProfileSyle.infoTextvalue}>
-                    {t('DoctorRecommendationNotes')}
-                </h6>
-                <p className={patienProfileSyle.infoTextvalueValue}>{note}</p>
+                <RenderInfoText title={t('Doctor recommendation & notes: ')} info={doctorNote} />
             </div>
-            <div className={patienProfileSyle.NotesCardWrapperInformationViewHistoyWrapper}>
-                <a className={patienProfileSyle.NotesCardWrapperInformationViewHistoyWrapperBtn}>
-                    {t('ViewAllNotes')}
-                </a>
-                <a className={patienProfileSyle.basicButtonBlue}>{t('EditNotes')}</a>
-            </div>
+            <div className={patienProfileSyle.NotesCardWrapperInformationViewHistoyWrapper}></div>
         </div>
     </div>
 );
 NotesCard.propTypes = {
-    note: PropTypes.string,
-    t: PropTypes.func
+    t: PropTypes.func,
+    doctorNote: PropTypes.string
+};
+
+export const GoalsCard = ({ t, shortTermGoals, longTermGoals }) => (
+    <div className={patienProfileSyle.diabetsInformationWrapper}>
+        <div className={patienProfileSyle.diabetsInformationWrapperOne}>
+            <div className={patienProfileSyle.flex1}>
+                <div className={patienProfileSyle.goalsWrapperOne}>
+                    <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
+                        <RenderInfoText title={t('Short Term Goals')} info={shortTermGoals} />
+                    </div>
+                    <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
+                        <RenderInfoText title={t('Long Term Goals')} info={longTermGoals} />
+                    </div>
+                    <div />
+                </div>
+            </div>
+        </div>
+    </div>
+);
+GoalsCard.propTypes = {
+    t: PropTypes.func,
+    shortTermGoals: PropTypes.string,
+    longTermGoals: PropTypes.string
+};
+
+export const PatientMedication = ({ t, medicationEffectingGlucose }) => (
+    <div className={patienProfileSyle.diabetsInformationWrapper}>
+        <h6 className={patienProfileSyle.labelWidht}>{}</h6>
+        <div className={patienProfileSyle.diabetsInformationWrapperOne}>
+            <div className={patienProfileSyle.flex1}>
+                <div className={patienProfileSyle.columOneTwoWrapper}>
+                    <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
+                        <RenderInfoText
+                            title={t(
+                                'Is the patient on medication that may affect blood glucose ?*'
+                            )}
+                            info={medicationEffectingGlucose}
+                        />
+                    </div>
+
+                    <div />
+                </div>
+            </div>
+        </div>
+    </div>
+);
+PatientMedication.propTypes = {
+    t: PropTypes.func,
+    medicationEffectingGlucose: PropTypes.string
+};
+
+export const MedicalConditions = ({ t, otherHealthIssues, medicalHistory, chronics, acutes }) => {
+    let medicalHistoryWithSpaces = '';
+    medicalHistory?.forEach((med, index) => {
+        medicalHistoryWithSpaces = medicalHistoryWithSpaces?.concat(index === 0 ? '' : '| ', med);
+    });
+    let acutesWithSpaces = '';
+    acutes?.forEach((acute, index) => {
+        acutesWithSpaces = acutesWithSpaces?.concat(index === 0 ? '' : '| ', acute?.condition);
+    });
+    let chronicsWithSpaces = '';
+    chronics?.forEach((chronic, index) => {
+        chronicsWithSpaces = chronicsWithSpaces?.concat(
+            index === 0 ? '' : '| ',
+            chronic?.condition
+        );
+    });
+    return (
+        <div className={patienProfileSyle.diabetsInformationWrapper}>
+            <h6 className={patienProfileSyle.labelWidht}>{`${t('Medical')} ${t('Conditions')}`}</h6>
+            <div className={patienProfileSyle.diabetsInformationWrapperOne}>
+                <div className={patienProfileSyle.flex1}>
+                    <div className={patienProfileSyle.columOneTwoWrapper}>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumOne}>
+                            <RenderInfoText
+                                title={t('Any other critical health issues')}
+                                info={otherHealthIssues}
+                            />
+                            <RenderInfoText
+                                title={t('Type of complications')}
+                                info={chronicsWithSpaces}
+                            />
+                            <RenderInfoText title={t('Acute')} info={acutesWithSpaces} />
+                        </div>
+                        <div className={patienProfileSyle.columOneTwoWrapperColumTwo}>
+                            <RenderInfoText
+                                title={t("Patient's medical history")}
+                                info={medicalHistoryWithSpaces}
+                            />
+                        </div>
+                        <div />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+MedicalConditions.propTypes = {
+    t: PropTypes.func,
+    otherHealthIssues: PropTypes.string,
+    medicalHistory: PropTypes.string,
+    chronics: PropTypes.object,
+    acutes: PropTypes.object
 };
 
 export const AvatarWithEdit = ({ name, id }) => {
