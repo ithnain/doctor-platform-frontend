@@ -82,7 +82,7 @@ const PatientProfile = ({ direction }) => {
                         <ProgressCardInfo
                             t={t}
                             appointments={appointments}
-                            invoice={patient?.invoice}
+                            invoice={patient?.invoices[0]}
                         />
                         <DividerLine />
                         <DbCarInfo

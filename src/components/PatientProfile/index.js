@@ -8,7 +8,7 @@ import patienProfileSyle from '@styles/PatientProfile.module.scss';
 import { CheckOutlined } from '@ant-design/icons';
 
 export const SessionsCard = ({ t, appointments }) => {
-    const lastAppointment = appointments.sort(function (a, b) {
+    const lastAppointment = appointments?.sort(function (a, b) {
         return Date.parse(a.date) - Date.parse(b.date);
     });
     return (
@@ -18,7 +18,7 @@ export const SessionsCard = ({ t, appointments }) => {
                     {t('Sessions completed')}
                 </text>
                 <text className={patienProfileSyle.sessionsStatsInfo}>
-                    {appointments?.length ? `${t(appointments?.length)}` : '0'}
+                    {appointments?.length ? `${appointments?.length}` : '0'}
                 </text>
             </div>
             <div className={patienProfileSyle.sessionsStatsBackground}>
@@ -26,7 +26,7 @@ export const SessionsCard = ({ t, appointments }) => {
                 <text className={patienProfileSyle.sessionsStatsInfo}>
                     {lastAppointment?.length
                         ? t(new Date(lastAppointment?.[0]?.date).toDateString())
-                        : 'N/A'}
+                        : t('No session booked')}
                 </text>
             </div>
         </div>
