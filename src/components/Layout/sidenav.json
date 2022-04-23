@@ -11,7 +11,7 @@
             }
         ]
     },
-    "CASEHANDLER": {
+    "REPRESENTATIVE": {
         "sidenavData": [
             { "title": "Overview", "image": "icon.svg", "key": "1", "link": "overview" },
             {

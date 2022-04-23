@@ -320,4 +320,10 @@ a {
     .ant-steps.ant-steps-label-horizontal.ant-steps-horizontal {
         height: 85px;
     }
+    .ant-col.ant-form-item-control {
+        width: 100%;
+    }
+    div[role='alert'] {
+        text-align: start;
+    }
 }

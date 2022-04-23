@@ -1,21 +1,123 @@
-import { ConfigProvider, Form, Input, Radio, Select, Space, Steps } from 'antd';
+import { Col, ConfigProvider, Form, Input, Radio, Row, Select, Space, Steps } from 'antd';
 import React, { useState } from 'react';
 
+import { QueryClient, dehydrate, useQuery, useMutation } from 'react-query';
+
+import API from '@utils/axios';
 import CustomButton from '../CustomBtn';
 import FormStyles from '../AddPatientForm/Patient.module.scss';
 import PropTypes from 'prop-types';
 import Styles from './educator.module.scss';
 import types from '../AddPatientForm/types.json';
 import useTranslation from 'next-translate/useTranslation';
+import toastr from 'toastr';
+import { useRouter } from 'next/router';
+import ErrorList from 'antd/lib/form/ErrorList';
 
 const { Step } = Steps;
-
+const getIntensity = async () => API.get(`invoice/intensity`);
+const getTopics = async () => API.get(`invoice/topic`);
+const getDoctors = async () => API.get(`invoice/topic`);
+const intensitiesArray = ['Light', 'Moderate', 'Intensive'];
 const EducatorForm = ({ direction }) => {
+    const addPlan = async (data) => {
+        await API.post('invoice', {
+            patientId: data.patientId,
+            topics: data.topics,
+            intensityId: data.intensityId,
+            description: data.description
+        });
+    };
+    const addPatient = async (data) => {
+        console.log(data);
+        await API.post('patient/createPatient', {
+            ...formValues
+        });
+    };
     const { t } = useTranslation('create-patient');
+    const router = useRouter();
     const [current, setCurrent] = React.useState(1);
     const [form] = Form.useForm();
     const { Option } = Select;
     const [planStatus, setPlanStatus] = useState('plan');
+    const [loading, setLoading] = useState(false);
+    const [topics, setTopics] = useState([]);
+    const [doctor, setDoctor] = useState([]);
+    const [formValues, setFormValues] = useState({});
+
+    const { data: doctors } = useQuery('intensities', () => getDoctors(), {
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+    const { data: intensities } = useQuery('intensities', () => getDoctors(), {
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+
+    const { data: topicsData } = useQuery('topics', () => getTopics(), {
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+    const { mutate: addPlanMutate } = useMutation((data) => addPlan(data), {
+        onSuccess: () => {
+            router.push('/overview');
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
+    const { mutate: addPatientMutate } = useMutation((data) => addPatient(data), {
+        onSuccess: () => {
+            setCurrent(current + 1);
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
 
     const steps = [
         {
@@ -93,53 +195,110 @@ const EducatorForm = ({ direction }) => {
                 <>
                     {planStatus === 'plan' ? (
                         <Form form={form} layout="vertical">
-                            <Form.Item
-                                name="planType"
-                                className={FormStyles.form_item}
-                                label={<p className={FormStyles.label_form}>{t('Plan type')}</p>}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please select Plan type'
-                                    }
-                                ]}>
-                                <Radio.Group className="toggle">
-                                    <Space direction="vertical">
-                                        <Radio value={'intense'}>
-                                            <span>{t('intense')}</span>
-                                        </Radio>
-                                        <Radio value={'moderate'}>
-                                            <span>{t('Moderate')}</span>
-                                        </Radio>
-                                        <Radio value={'Light'}>
-                                            <span>{t('Light')}</span>
-                                        </Radio>
-                                    </Space>
-                                </Radio.Group>
-                            </Form.Item>
-                            <Form.Item
-                                name="planDuration"
-                                className={FormStyles.form_item}
-                                label={
-                                    <p className={FormStyles.label_form}>{t('Plan duration')}</p>
-                                }
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please select Plan duration'
-                                    }
-                                ]}>
-                                <Radio.Group className="toggle">
-                                    <Space direction="vertical">
-                                        <Radio value={'1 Month'}>
-                                            <span>{t('1 Month')}</span>
-                                        </Radio>
-                                        <Radio value={'3 Month'}>
-                                            <span>{t('3 Month')}</span>
-                                        </Radio>
-                                    </Space>
-                                </Radio.Group>
-                            </Form.Item>
+                            <Row>
+                                <Col span={24}>
+                                    <Form.Item
+                                        name="doctorSelect"
+                                        className={`w-100 ${FormStyles.form_item}`}
+                                        label={
+                                            <p className={FormStyles.label_form}>{t('doctor')}</p>
+                                        }
+                                        rules={[
+                                            { required: true, message: 'Please select doctor' }
+                                        ]}>
+                                        <Select
+                                            allowClear
+                                            className="w-100"
+                                            onChange={(e) => {
+                                                setDoctor((prev) => [...prev, e]);
+                                            }}>
+                                            {topicsData?.data.map((topic, i) => (
+                                                <Option key={i} value={topic.id}>
+                                                    {topic.title}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="planType"
+                                        className={FormStyles.form_item}
+                                        label={
+                                            <p className={FormStyles.label_form}>
+                                                {t('Plan type')}
+                                            </p>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select Plan type'
+                                            }
+                                        ]}>
+                                        <Radio.Group className="toggle">
+                                            <Space direction="vertical">
+                                                {intensitiesArray?.map((intensity, i) => (
+                                                    <Radio key={i} value={intensity}>
+                                                        <span>{intensity}</span>
+                                                    </Radio>
+                                                ))}
+                                            </Space>
+                                        </Radio.Group>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="planDuration"
+                                        className={FormStyles.form_item}
+                                        label={
+                                            <p className={FormStyles.label_form}>
+                                                {t('Plan duration')}
+                                            </p>
+                                        }
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please select Plan duration'
+                                            }
+                                        ]}>
+                                        <Radio.Group className="toggle">
+                                            <Space direction="vertical">
+                                                <Radio value={1}>
+                                                    <span>1 Month</span>
+                                                </Radio>
+                                                <Radio value={3}>
+                                                    <span>3 Months</span>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={24}>
+                                    <Form.Item
+                                        mode="multiple"
+                                        name="topics"
+                                        className={`w-100 ${FormStyles.form_item}`}
+                                        label={
+                                            <p className={FormStyles.label_form}>{t('topics')}</p>
+                                        }
+                                        rules={[
+                                            { required: true, message: 'Please select topics' }
+                                        ]}>
+                                        <Select
+                                            placeholder="Please select topics"
+                                            allowClear
+                                            className="w-100"
+                                            mode="multiple"
+                                            onChange={(e) => setTopics((prev) => [...prev, e])}>
+                                            {topicsData?.data.map((topic, i) => (
+                                                <Option key={i} value={topic.id}>
+                                                    {topic.title}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                         </Form>
                     ) : (
                         ''
@@ -152,18 +311,33 @@ const EducatorForm = ({ direction }) => {
         setPlanStatus(newState);
     };
     const next = () => {
-        // setCurrent(current + 1);
         switch (current) {
             case 0:
                 form.validateFields(['name', 'phoneNumber', 'diabetesType'])
-                    .then(() => setCurrent(current + 1))
+                    .then(() => {
+                        setFormValues({ ...form.getFieldsValue() });
+                        addPatientMutate(formValues);
+                    })
                     .catch((err) => console.log({ err }));
                 break;
             case 1:
                 planStatus === 'plan'
                     ? form
                           .validateFields(['planType', 'planDuration'])
-                          .then((res) => console.log(res))
+                          .then(() => {
+                              setFormValues((prev) => {
+                                  return {
+                                      ...prev,
+                                      ...form.getFieldsValue(),
+                                      topics: topics.map((topic) => {
+                                          return { id: topic[0] };
+                                      })
+                                  };
+                              });
+                          })
+                          .then(() => {
+                              console.log(formValues);
+                          })
                           .catch((err) => console.log({ err }))
                     : console.log('first');
                 break;
@@ -171,6 +345,12 @@ const EducatorForm = ({ direction }) => {
                 break;
         }
     };
+    React.useEffect(() => {
+        if (current === 1 && formValues?.topics?.length >= 1 && doctor) {
+            console.log({ formValues });
+            addPlanMutate(formValues);
+        }
+    }, [formValues]);
 
     return (
         <div id="educator-create-patient">
@@ -205,6 +385,7 @@ const EducatorForm = ({ direction }) => {
                             text="Next"
                             handleButtonClick={() => next()}
                             className="pinkBG w-50"
+                            loading={loading}
                         />
                     )}
                     {current === steps.length - 1 && (
@@ -212,12 +393,25 @@ const EducatorForm = ({ direction }) => {
                             text="Done"
                             className="pinkBG w-50"
                             handleButtonClick={() => next()}
+                            loading={loading}
                         />
                     )}
                 </div>
             </ConfigProvider>
         </div>
     );
+};
+export const getServerSideProps = async () => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('intensities', () => getIntensity());
+    await qClient.prefetchQuery('topics', () => getTopics());
+    await qClient.prefetchQuery('topics', () => getDoctors());
+
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
 };
 EducatorForm.propTypes = {
     direction: PropTypes.string.isRequired

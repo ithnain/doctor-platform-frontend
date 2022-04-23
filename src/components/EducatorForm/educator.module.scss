@@ -14,6 +14,12 @@
     border: solid 1px rgba(102, 111, 232, 0.08);
     background-color: $white;
     box-shadow: 0px 5px 10px 0px $mediumGrey;
+    .ant-space-item {
+        width: 100% !important;
+    }
+    .ant-col.ant-form-item-control {
+        display: none;
+    }
 }
 
 .action {
@@ -27,14 +33,14 @@
 .steps {
     display: flex;
     width: 75%;
-    margin: auto;
+    margin-left: 12.5%;
 
     > :first-child {
-        flex: 1;
+        flex: 5;
     }
 
     > :nth-child(2) {
-        flex: 4;
+        flex: 1;
         text-align: left;
     }
 }
