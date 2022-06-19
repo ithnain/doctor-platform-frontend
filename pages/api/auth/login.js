@@ -7,8 +7,9 @@ export default (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
             maxAge: 10 * 365 * 24 * 60 * 60,
-            sameSite: 'strict',
-            path: '/'
+            sameSite: 'lax',
+            path: '/',
+            domain: 'http://dev.doctors.ithnain.com/'            
         })
     );
     res.statusCode = 200;
