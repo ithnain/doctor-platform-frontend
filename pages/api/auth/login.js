@@ -9,7 +9,7 @@ export default (req, res) => {
             // secure: process.env.NODE_ENV !== 'development',
             secure: false,
             maxAge: 10 * 365 * 24 * 60 * 60,
-            sameSite: 'none',
+            sameSite: 'strict',
             path: '/',
         })
     );
