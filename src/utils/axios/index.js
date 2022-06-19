@@ -10,6 +10,7 @@ const API = axios.create({
 
 API.interceptors.request.use(
     (config) => {
+        console.log(process.env.NEXT_PUBLIC_APP_ENV)
         if (config.url === 'auth/signin') return config;
         return fetch('/api/auth/getToken')
             .then((res) => res.json())
