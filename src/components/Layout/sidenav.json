@@ -18,7 +18,7 @@
                 "title": "Patient Transfer",
                 "image": "hospital.svg",
                 "key": "3",
-                "link": "transfer"
+                "link": "representative-create-patient"
             }
         ]
     },

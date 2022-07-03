@@ -1,7 +1,7 @@
-import { Col, ConfigProvider, Form, Input, Radio, Row, Select, Space, Steps } from 'antd';
-import React, { useState } from 'react';
+import { Checkbox, Col, ConfigProvider, Form, Input, Radio, Row, Select, Space, Steps } from 'antd';
+import React, { useEffect, useState } from 'react';
 
-import { QueryClient, dehydrate, useQuery, useMutation } from 'react-query';
+import { QueryClient, dehydrate, useQuery, useMutation, useQueryClient } from 'react-query';
 
 import API from '@utils/axios';
 import CustomButton from '../CustomBtn';
@@ -12,40 +12,59 @@ import types from '../AddPatientForm/types.json';
 import useTranslation from 'next-translate/useTranslation';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
-import ErrorList from 'antd/lib/form/ErrorList';
 
 const { Step } = Steps;
-const getIntensity = async () => API.get(`invoice/intensity`);
+const getIntensity = async () => await API.get(`invoice/intensity`);
+const getEducators = async () => await API.get(`invoice/educators`);
 const getTopics = async () => API.get(`invoice/topic`);
-const getDoctors = async () => API.get(`invoice/topic`);
-const intensitiesArray = ['Light', 'Moderate', 'Intensive'];
 const EducatorForm = ({ direction }) => {
+    const queryClient = useQueryClient();
+    const user = queryClient.getQueryState('user').data?.data;
+    const getDoctors = async () => API.get(`hospitals/${user?.hospital.id}`);
     const addPlan = async (data) => {
         await API.post('invoice', {
-            patientId: data.patientId,
-            topics: data.topics,
-            intensityId: data.intensityId,
-            description: data.description
-        });
-    };
-    const addPatient = async (data) => {
-        console.log(data);
-        await API.post('patient/createPatient', {
-            ...formValues
+            patientId: patient.id,
+            topics: topics.map((topic) => {
+                return { id: topic };
+            }),
+            intensityId: intensityId,
+            planPaid
         });
     };
     const { t } = useTranslation('create-patient');
     const router = useRouter();
-    const [current, setCurrent] = React.useState(1);
+    const [current, setCurrent] = React.useState(0);
     const [form] = Form.useForm();
     const { Option } = Select;
     const [planStatus, setPlanStatus] = useState('plan');
     const [loading, setLoading] = useState(false);
     const [topics, setTopics] = useState([]);
-    const [doctor, setDoctor] = useState([]);
+    const [doctors, setDoctors] = useState([]);
     const [formValues, setFormValues] = useState({});
+    const [patient, setPatinet] = useState({});
+    const [intensitiesArray, setIntensitiesArray] = useState(['aaa', 'bbb']);
+    const [intensityId, setIntensityId] = useState('');
+    const [planPaid, setPlanPaid] = useState(false);
 
-    const { data: doctors } = useQuery('intensities', () => getDoctors(), {
+    useEffect(() => {
+        const intensitiesQuery = queryClient.getQueryState('intensities').data;
+        const doctorsQuery = queryClient.getQueryState('doctors').data;
+        if (intensitiesQuery) {
+            setIntensitiesArray(intensitiesQuery?.data?.enumeration?.intesities);
+        }
+        if (doctorsQuery) {
+            setDoctors(doctorsQuery?.data?.users);
+        }
+    }, [getDoctors]);
+
+    const addPatient = async (data) => {
+        const patient = await API.post('patient/createPatient', {
+            ...formValues
+        });
+        setPatinet(patient?.data);
+    };
+
+    const { data } = useQuery('doctors', () => getDoctors(), {
         onError: (err) => {
             if (err.response) {
                 const { data = {} } = err.response;
@@ -57,7 +76,26 @@ const EducatorForm = ({ direction }) => {
             }
         }
     });
-    const { data: intensities } = useQuery('intensities', () => getDoctors(), {
+    const { data: intensities } = useQuery('intensities', () => getIntensity(), {
+        onSuccess: (data) => {
+            return data;
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+
+    const { data: educatorsData } = useQuery('educators', () => getEducators(), {
+        onSuccess: (data) => {
+            return data;
+        },
         onError: (err) => {
             if (err.response) {
                 const { data = {} } = err.response;
@@ -100,8 +138,8 @@ const EducatorForm = ({ direction }) => {
             setLoading(false);
         }
     });
-    const { mutate: addPatientMutate } = useMutation((data) => addPatient(data), {
-        onSuccess: () => {
+    const { mutate: addPatientMutate } = useMutation('patient', (data) => addPatient(data), {
+        onSuccess: (data) => {
             setCurrent(current + 1);
         },
         onError: (err) => {
@@ -125,9 +163,25 @@ const EducatorForm = ({ direction }) => {
             subTitle: 'Patient Info',
             content: (
                 <Form form={form} layout="vertical">
+                    <Col span={24}>
+                        <Form.Item
+                            name="doctorId"
+                            className={`w-100 ${FormStyles.form_item}`}
+                            label={<p className={FormStyles.label_form}>{t('doctor')}</p>}
+                            rules={[{ required: true, message: 'Please select doctor' }]}>
+                            <Select allowClear className="w-100" onChange={(e) => {}}>
+                                {doctors?.map((doctor) => (
+                                    <Option key={doctor.id} value={doctor.id}>
+                                        {doctor.name ? doctor.name : doctor.email}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+
                     <Form.Item
                         name="name"
-                        label={<p className={FormStyles.label_form}>{t('Name')}</p>}
+                        label={<p className={FormStyles.label_form}>{t('Full Name')}</p>}
                         rules={[
                             {
                                 required: true,
@@ -145,7 +199,7 @@ const EducatorForm = ({ direction }) => {
                                 message: 'Please input patient phone'
                             },
                             {
-                                pattern: /^(5)(0|2|3|4|5|6|7|8|9)([0-9]{7})$/,
+                                pattern: /^(5)(0|1|2|3|4|5|6|7|8|9)([0-9]{7})$/,
                                 message: 'Phone number should be in this format 5xxxxxxxx'
                             }
                         ]}>
@@ -196,33 +250,9 @@ const EducatorForm = ({ direction }) => {
                     {planStatus === 'plan' ? (
                         <Form form={form} layout="vertical">
                             <Row>
-                                <Col span={24}>
-                                    <Form.Item
-                                        name="doctorSelect"
-                                        className={`w-100 ${FormStyles.form_item}`}
-                                        label={
-                                            <p className={FormStyles.label_form}>{t('doctor')}</p>
-                                        }
-                                        rules={[
-                                            { required: true, message: 'Please select doctor' }
-                                        ]}>
-                                        <Select
-                                            allowClear
-                                            className="w-100"
-                                            onChange={(e) => {
-                                                setDoctor((prev) => [...prev, e]);
-                                            }}>
-                                            {topicsData?.data.map((topic, i) => (
-                                                <Option key={i} value={topic.id}>
-                                                    {topic.title}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
                                 <Col span={12}>
                                     <Form.Item
-                                        name="planType"
+                                        name="intensityId"
                                         className={FormStyles.form_item}
                                         label={
                                             <p className={FormStyles.label_form}>
@@ -237,38 +267,33 @@ const EducatorForm = ({ direction }) => {
                                         ]}>
                                         <Radio.Group className="toggle">
                                             <Space direction="vertical">
-                                                {intensitiesArray?.map((intensity, i) => (
-                                                    <Radio key={i} value={intensity}>
-                                                        <span>{intensity}</span>
-                                                    </Radio>
-                                                ))}
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        name="planDuration"
-                                        className={FormStyles.form_item}
-                                        label={
-                                            <p className={FormStyles.label_form}>
-                                                {t('Plan duration')}
-                                            </p>
-                                        }
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please select Plan duration'
-                                            }
-                                        ]}>
-                                        <Radio.Group className="toggle">
-                                            <Space direction="vertical">
-                                                <Radio value={1}>
-                                                    <span>1 Month</span>
-                                                </Radio>
-                                                <Radio value={3}>
-                                                    <span>3 Months</span>
-                                                </Radio>
+                                                {intensitiesArray?.length &&
+                                                    intensitiesArray
+                                                        ?.sort(
+                                                            (a, b) =>
+                                                                a?.intensityDuration -
+                                                                b?.intensityDuration
+                                                        )
+                                                        ?.map((intensity) => {
+                                                            return (
+                                                                <Radio
+                                                                    key={intensity?.intensityId}
+                                                                    value={intensity?.intensityId}
+                                                                    onChange={(e) => {
+                                                                        setIntensityId(
+                                                                            e.target.value
+                                                                        );
+                                                                    }}>
+                                                                    <span>
+                                                                        {intensity?.intensityTitle},{' '}
+                                                                        {
+                                                                            intensity?.intensityDuration
+                                                                        }{' '}
+                                                                        Months
+                                                                    </span>
+                                                                </Radio>
+                                                            );
+                                                        })}
                                             </Space>
                                         </Radio.Group>
                                     </Form.Item>
@@ -289,13 +314,25 @@ const EducatorForm = ({ direction }) => {
                                             allowClear
                                             className="w-100"
                                             mode="multiple"
-                                            onChange={(e) => setTopics((prev) => [...prev, e])}>
-                                            {topicsData?.data.map((topic, i) => (
-                                                <Option key={i} value={topic.id}>
-                                                    {topic.title}
-                                                </Option>
-                                            ))}
+                                            onChange={(e) => setTopics(e)}>
+                                            {topicsData?.data &&
+                                                topicsData?.data.map((topic, i) => (
+                                                    <Option key={topic.id} value={topic.id}>
+                                                        {topic.title}
+                                                    </Option>
+                                                ))}
                                         </Select>
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <Checkbox
+                                            onChange={() => {
+                                                setPlanPaid((prevState) => {
+                                                    return !prevState;
+                                                });
+                                            }}
+                                            name="planPaid">
+                                            {t('Pre Paid Plan')}
+                                        </Checkbox>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -310,47 +347,33 @@ const EducatorForm = ({ direction }) => {
     const handlePlanStatus = (newState) => {
         setPlanStatus(newState);
     };
-    const next = () => {
-        switch (current) {
-            case 0:
-                form.validateFields(['name', 'phoneNumber', 'diabetesType'])
-                    .then(() => {
-                        setFormValues({ ...form.getFieldsValue() });
-                        addPatientMutate(formValues);
-                    })
-                    .catch((err) => console.log({ err }));
-                break;
-            case 1:
-                planStatus === 'plan'
-                    ? form
-                          .validateFields(['planType', 'planDuration'])
-                          .then(() => {
-                              setFormValues((prev) => {
-                                  return {
-                                      ...prev,
-                                      ...form.getFieldsValue(),
-                                      topics: topics.map((topic) => {
-                                          return { id: topic[0] };
-                                      })
-                                  };
-                              });
-                          })
-                          .then(() => {
-                              console.log(formValues);
-                          })
-                          .catch((err) => console.log({ err }))
-                    : console.log('first');
-                break;
-            default:
-                break;
-        }
+    const onCreatePatient = () => {
+        form.validateFields(['name', 'phoneNumber', 'diabetesType'])
+            .then(() => {
+                setFormValues({ ...form.getFieldsValue() });
+                addPatientMutate(formValues);
+            })
+            .catch((err) => console.log({ err }));
     };
-    React.useEffect(() => {
-        if (current === 1 && formValues?.topics?.length >= 1 && doctor) {
-            console.log({ formValues });
-            addPlanMutate(formValues);
-        }
-    }, [formValues]);
+    const onCreatePlan = () => {
+        form.validateFields(['intensityId', 'planDuration'])
+            .then(() => {
+                setFormValues((prev) => {
+                    return {
+                        ...prev,
+                        ...form.getFieldsValue(),
+                        topics: topics.map((topic) => {
+                            return { id: topic[0] };
+                        }),
+                        intensityId
+                    };
+                });
+            })
+            .then(() => {
+                addPlanMutate(formValues);
+            })
+            .catch((err) => console.log({ err }));
+    };
 
     return (
         <div id="educator-create-patient">
@@ -370,9 +393,9 @@ const EducatorForm = ({ direction }) => {
                             <Radio value={'plan'}>
                                 <span className="radio-title">{t('choosePlan')}</span>
                             </Radio>
-                            <Radio value={'recommendation'}>
+                            {/* <Radio value={'recommendation'}>
                                 <span className="radio-title">{t('askForRecommendation')} </span>
-                            </Radio>
+                            </Radio> */}
                         </Space>
                     </Radio.Group>
                 )}
@@ -383,7 +406,7 @@ const EducatorForm = ({ direction }) => {
                     {current < steps.length - 1 && (
                         <CustomButton
                             text="Next"
-                            handleButtonClick={() => next()}
+                            handleButtonClick={() => onCreatePatient()}
                             className="pinkBG w-50"
                             loading={loading}
                         />
@@ -392,7 +415,7 @@ const EducatorForm = ({ direction }) => {
                         <CustomButton
                             text="Done"
                             className="pinkBG w-50"
-                            handleButtonClick={() => next()}
+                            handleButtonClick={() => onCreatePlan()}
                             loading={loading}
                         />
                     )}
@@ -404,8 +427,8 @@ const EducatorForm = ({ direction }) => {
 export const getServerSideProps = async () => {
     const qClient = new QueryClient();
     await qClient.prefetchQuery('intensities', () => getIntensity());
+    await qClient.prefetchQuery('educators', () => getEducators());
     await qClient.prefetchQuery('topics', () => getTopics());
-    await qClient.prefetchQuery('topics', () => getDoctors());
 
     return {
         props: {
