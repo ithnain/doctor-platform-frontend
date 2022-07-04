@@ -10,8 +10,9 @@ import PropTypes from 'prop-types';
 import { Row } from 'antd';
 import styles from './Layout.module.scss';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
+import { roles } from '@src/utils/ROLE';
 
-function Header({ name, showAddPatientBtn }) {
+function Header({ name, userRole }) {
     const { Text } = Typography;
     const router = useRouter();
     const [, setLang] = useLocalStorage('storageLang', 'en');
@@ -20,7 +21,7 @@ function Header({ name, showAddPatientBtn }) {
 
     return (
         <Row align="middle" justify="end">
-            {showAddPatientBtn ? (
+            {userRole === roles.doctor && (
                 <Button
                     className={styles.header__btn}
                     loading={loadingCreatePatient}
@@ -33,7 +34,21 @@ function Header({ name, showAddPatientBtn }) {
                     }}>
                     {`${t('registerPatient')} + `}
                 </Button>
-            ) : null}
+            )}
+            {userRole === roles.REPRESENTATIVE && (
+                <Button
+                    className={styles.header__btn}
+                    loading={loadingCreatePatient}
+                    onClick={async () => {
+                        if (router.pathname === '/create-patient') {
+                            return;
+                        }
+                        setloadingCreatePatient(true);
+                        await router.push('/representative-create-patient');
+                    }}>
+                    {`${t('registerPatient')} + `}
+                </Button>
+            )}
 
             {/* <div className={styles.header__notifications}>
                  <Badge size="small" offset={[0, 12]} count={5}>
@@ -64,7 +79,7 @@ function Header({ name, showAddPatientBtn }) {
 }
 
 Header.propTypes = {
-    showAddPatientBtn: PropTypes.bool,
+    userRole: PropTypes.string,
     name: PropTypes.string,
     textBtn: PropTypes.string
 };

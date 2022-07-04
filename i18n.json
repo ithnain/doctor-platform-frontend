@@ -16,6 +16,7 @@
         "/patient/[id]": ["patient"],
         "/forgetpassword": ["forgetpassword"],
         "/resetPassword": ["resetPassword"],
-        "/qr-code": ["qr-code"]
+        "/qr-code": ["qr-code"],
+        "representative-create-patient": ["create-patient"]
     }
 }

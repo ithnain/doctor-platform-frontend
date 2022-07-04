@@ -12,7 +12,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { roles } from '@src/utils/ROLE';
 import sideNavIcons from './sidenav.json';
 import styles from './Layout.module.scss';
 import { useRouter } from 'next/router';
@@ -52,18 +51,11 @@ function SliderLayout({ title, keywords, description, active, children }) {
     }, [userData?.data.refreshToken]);
 
     const router = useRouter();
-    const path = router.pathname;
-    useEffect(() => {
-        if (userData?.data.role === roles.doctor) {
-            setShowAddPatientBtn(true);
-        }
-    }, [path, userData?.data?.role]);
+
     const [collapsed, setCollapsed] = useState(false);
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-
-    const [showAddPatientBtn, setShowAddPatientBtn] = useState(false);
 
     const logoutHandler = () => {
         router.push('/login').then(() => {
@@ -129,7 +121,7 @@ function SliderLayout({ title, keywords, description, active, children }) {
                             ) : (
                                 <MenuFoldOutlined className="trigger" onClick={toggle} />
                             )}
-                            <HeaderMenu showAddPatientBtn={showAddPatientBtn} />
+                            <HeaderMenu userRole={userData?.data.role} />
                         </Header>
                     </Col>
                 </Row>
