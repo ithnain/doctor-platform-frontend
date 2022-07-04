@@ -15,7 +15,6 @@ import { useRouter } from 'next/router';
 
 const { Step } = Steps;
 const getIntensity = async () => await API.get(`invoice/intensity`);
-const getEducators = async () => await API.get(`invoice/educators`);
 const getTopics = async () => API.get(`invoice/topic`);
 const EducatorForm = ({ direction }) => {
     const queryClient = useQueryClient();
@@ -92,21 +91,6 @@ const EducatorForm = ({ direction }) => {
         }
     });
 
-    const { data: educatorsData } = useQuery('educators', () => getEducators(), {
-        onSuccess: (data) => {
-            return data;
-        },
-        onError: (err) => {
-            if (err.response) {
-                const { data = {} } = err.response;
-                toastr.error(data.message[0]);
-            } else if (err.message) {
-                toastr.error(err.message);
-            } else if (err.request) {
-                toastr.error(err.request);
-            }
-        }
-    });
 
     const { data: topicsData } = useQuery('topics', () => getTopics(), {
         onError: (err) => {
@@ -427,7 +411,6 @@ const EducatorForm = ({ direction }) => {
 export const getServerSideProps = async () => {
     const qClient = new QueryClient();
     await qClient.prefetchQuery('intensities', () => getIntensity());
-    await qClient.prefetchQuery('educators', () => getEducators());
     await qClient.prefetchQuery('topics', () => getTopics());
 
     return {
