@@ -36,7 +36,6 @@
         "eslint-plugin-prettier": "^3.4.0",
         "eslint-plugin-react": "^7.24.0",
         "eslint-plugin-react-hooks": "^4.2.0",
-        "husky": "^6.0.0",
         "next-compose-plugins": "^2.2.1",
         "prettier": "^2.3.1"
     }
