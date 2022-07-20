@@ -7,8 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint --fix .",
-        "format": "prettier --write .",
-        "prepare": "husky install"
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@ant-design/icons": "^4.7.0",
