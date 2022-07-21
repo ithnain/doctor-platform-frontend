@@ -1,22 +1,24 @@
-import AddPatientForm from 'src/components/AddPatientForm';
+import EducatorForm from 'src/components/EducatorForm';
+import PropTypes from 'prop-types';
 import SliderLayout from '@components/Layout';
 import authenticatedRoute from '@components/AuthenticatedRoute';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 
-function createPatient({ direction, userdata }) {
+function createPatient({ direction }) {
     const { t } = useTranslation('create-patient');
-    const router = useRouter();
+
     return (
         <SliderLayout
             title={t('Register Patient')}
             keywords={'doctor,platform,any word'}
             description={'this is the doctor create patient page'}>
-            <AddPatientForm direction={direction} id={router.query.id} userdata={userdata} />
+            <EducatorForm direction={direction} />
         </SliderLayout>
     );
 }
 
-createPatient.propTypes = {};
+createPatient.propTypes = {
+    direction: PropTypes.string.isRequired
+};
 
 export default authenticatedRoute(createPatient);

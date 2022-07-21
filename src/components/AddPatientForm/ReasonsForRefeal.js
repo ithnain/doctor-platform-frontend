@@ -10,7 +10,7 @@ const ReasonsForRefeal = ({ styles, t }) => {
             className={styles.form_item}
             rules={[
                 {
-                    required: true,
+                    required: false,
                     message: 'Please select reasons of referral'
                 }
             ]}
@@ -79,6 +79,6 @@ const ReasonsForRefeal = ({ styles, t }) => {
         </Form.Item>
     );
 };
-ReasonsForRefeal.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+ReasonsForRefeal.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default ReasonsForRefeal;

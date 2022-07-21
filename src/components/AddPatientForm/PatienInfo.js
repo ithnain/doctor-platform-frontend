@@ -39,7 +39,7 @@ const PatienInfo = ({ styles, t }) => {
                     label={<p className={styles.label_form}>{t('Gender')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please select Gender'
                         }
                     ]}>
@@ -58,7 +58,7 @@ const PatienInfo = ({ styles, t }) => {
                     label={<p className={styles.label_form}>{t('age')}</p>}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: 'Please input patient age'
                         }
                     ]}>
@@ -94,5 +94,5 @@ const PatienInfo = ({ styles, t }) => {
     );
 };
 
-PatienInfo.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+PatienInfo.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 export default PatienInfo;

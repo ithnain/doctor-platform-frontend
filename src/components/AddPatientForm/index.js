@@ -1,6 +1,6 @@
-import { Col, Form, Row, Typography, notification } from 'antd';
+import { Col, ConfigProvider, Form, Row, Typography, notification } from 'antd';
+import { QueryClient, dehydrate, useMutation, useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import API from '@src/utils/axios';
 import CustomButton from '../CustomBtn';
@@ -15,30 +15,26 @@ import MedicalHistory from './MedicalHistory';
 import PatienInfo from './PatienInfo';
 import ReasonsForRefeal from './ReasonsForRefeal';
 import RecommendationGlycemicRange from './RecommendationGlycemicRange';
-import { registerPatient } from '@redux/actions/patient';
+import moment from 'moment';
 import styles from './Patient.module.scss';
 import useTranslation from 'next-translate/useTranslation';
 
-// import { insulineDoses, insulineTypes } from './insuline';
-
 const { Title, Text } = Typography;
 
-const index = ({ direction }) => {
+const getInsuline = async () => {
+    return API.get(`/insuline-type`);
+};
+const getPatient = async (query) => API.get(`patient/patient?id=${query.queryKey[1].query}`);
+
+const index = ({ direction, id, userdata }) => {
     const { t } = useTranslation('create-patient');
     const [form] = Form.useForm();
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.user);
     const [errorsCreatingPatient, setErrorsCreatingPatient] = useState([]);
     const [createdPatientSuccess, setCreatedPatientSuccess] = useState(false);
     const [insulineDoseSelectArray, setInsulineDoseSelectArray] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [insulineTypes, setInsulineTypes] = useState([]);
+    const { data: insulineType } = useQuery('insulineTypes', getInsuline);
 
-    useEffect(() => {
-        API.get('/insuline-type').then((data) => {
-            setInsulineTypes(data.data);
-        });
-    }, []);
     useEffect(() => {
         if (createdPatientSuccess) {
             notification.success({
@@ -56,15 +52,17 @@ const index = ({ direction }) => {
     const [currentTreatmentShow, setCurrentTreatmentShow] = useState(false);
     const [chronicShow, setChronicShow] = useState(false);
     const [acuteShow, setAcuteShow] = useState(false);
-
     const onValuesChange = ({
         diabetesComplications,
         treatmentType,
         insulineType,
         isf,
         acuteSelect,
-        chronicSelect
+        chronicSelect,
+        reasonForReferral,
+        diabetesDuration
     }) => {
+        console.log({ diabetesDuration, reasonForReferral });
         if (isf) {
             isf = isf.toString().substring(0, 1) + ':' + isf.toString().substring(1, isf.length);
         }
@@ -90,7 +88,8 @@ const index = ({ direction }) => {
             setChronicShow(true);
         } else if (
             Array.isArray(diabetesComplications) &&
-            !diabetesComplications.includes('Chronic')
+            !diabetesComplications.includes('Chronic') &&
+            chronicSelect
         ) {
             setChronicShow(false);
             chronicSelect.length = 0;
@@ -117,7 +116,7 @@ const index = ({ direction }) => {
     useEffect(() => {
         insulineTypeSelect &&
             setInsulineDoseSelectArray(
-                insulineTypes.filter((type) => type.type === insulineTypeSelect)
+                insulineType?.data.filter((type) => type.type === insulineTypeSelect)
             );
     }, [insulineTypeSelect]);
     useEffect(() => {
@@ -128,189 +127,265 @@ const index = ({ direction }) => {
             });
         }
     }, [errorsCreatingPatient]);
-
-    const onFinish = async (values) => {
+    const createPatient = async (credintials) => {
         const data = {
-            name: values?.name?.trim(),
-
-            gender: values.gender,
-            age: values.age,
-            phoneNumber: values?.phoneNumber,
-            remarkableNote: values?.remarkableNote?.trim(),
-            diabetesType: values?.diabetesType,
-            diabetesStatus: values?.diabetesStatus,
-            diabetesDuration: values?.diabetesDuration?._d,
-            reasonForReferral: values?.reasonForReferral,
-            factorsEffectinglearning: values?.factorsEffectinglearning,
-            short_term_goals: values?.short_term_goals,
-            long_term_goals: values?.long_term_goals,
-            medicationEffectingGlucose: values?.medicationEffectingGlucose,
-            recommendationGlycemicRange: values?.recommendationGlycemicRange,
-            doctorNote: values?.doctorNote,
-            medicalHistory: values?.medicalHistory,
-            otherHealthIssues: values?.otherHealthIssues || [values.OotherHealthIssues],
-            insulineTime: values?.insulineTime?._d,
+            doctorId: userdata.id,
+            name: credintials?.name?.trim(),
+            gender: credintials.gender,
+            age: credintials.age,
+            phoneNumber: credintials?.phoneNumber,
+            remarkableNote: credintials?.remarkableNote?.trim(),
+            diabetesType: credintials?.diabetesType,
+            diabetesStatus: credintials?.diabetesStatus,
+            diabetesDuration: credintials?.diabetesDuration?._d,
+            reasonForReferral: credintials?.reasonForReferral,
+            factorsEffectinglearning: credintials?.factorsEffectinglearning,
+            short_term_goals: credintials?.short_term_goals,
+            long_term_goals: credintials?.long_term_goals,
+            medicationEffectingGlucose: credintials?.medicationEffectingGlucose,
+            recommendationGlycemicRange: credintials?.recommendationGlycemicRange,
+            doctorNote: credintials?.doctorNote,
+            medicalHistory: credintials?.medicalHistory,
+            otherHealthIssues: credintials.OotherHealthIssues
+                ? credintials.OotherHealthIssues
+                : credintials?.otherHealthIssues,
+            insulineTime: credintials?.insulineTime?._d,
             currentTreatments:
-                values?.treatmentType === 'INSULINE'
+                credintials?.treatmentType === 'INSULINE'
                     ? [
                           {
-                              units: values?.insulineUnit,
-                              treatment: values?.treatmentType,
-                              doseType: values?.insulineType,
-                              numberOfDoses: values?.insulineDose,
-                              I_C: values?.I ? `${values?.I}:${values.C}` : '',
-                              ISF: values?.isf,
-                              breakfast: values?.breakfast,
-                              lunch: values?.lunch,
-                              dinner: values?.dinner
+                              units: credintials?.insulineUnit,
+                              treatment: credintials?.treatmentType,
+                              doseType: credintials?.insulineType,
+                              numberOfDoses: credintials?.insulineDose,
+                              I_C: credintials?.I ? `${credintials?.I}:${credintials.C}` : '',
+                              ISF: credintials?.isf,
+                              breakfast: credintials?.breakfast,
+                              lunch: credintials?.lunch,
+                              dinner: credintials?.dinner
                           }
                       ]
-                    : [
+                    : credintials?.treatmentType
+                    ? [
                           {
-                              treatment: values?.treatmentType
+                              treatment: credintials?.treatmentType
                           }
-                      ],
+                      ]
+                    : credintials?.treatmentType,
             acutes:
-                values?.acuteSelect?.length >= 1
+                credintials?.acuteSelect?.length >= 1
                     ? {
-                          condition: values?.acuteSelect,
-                          times: Number(values?.DKAtimes),
-                          severity: values?.Severity
+                          condition: credintials?.acuteSelect,
+                          times: Number(credintials?.DKAtimes),
+                          severity: credintials?.Severity
                       }
-                    : [],
+                    : credintials?.acuteSelect,
             chronics:
-                values?.chronicSelect?.length >= 1
+                credintials?.chronicSelect?.length >= 1
                     ? [
                           {
-                              condition: values?.chronicSelect
+                              condition: credintials?.chronicSelect
                           }
                       ]
-                    : []
+                    : credintials?.chronicSelect
         };
-
-        try {
-            setLoading(true);
-            const res = await API.post('patient/createPatient', data, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-            if (res.status === 201) {
-                dispatch(registerPatient(res.data));
-                setCreatedPatientSuccess(true);
+        API.post('patient/createPatient', data).then((res) => {
+            try {
+                if (res.status === 201) {
+                    setCreatedPatientSuccess(true);
+                    setLoading(false);
+                }
+                setTimeout(() => {
+                    setCreatedPatientSuccess(false);
+                    setDiabeticketoacidosis(false);
+                    setInsulineType(null);
+                    setCurrentTreatmentShow(false);
+                    setChronicShow(false);
+                    setAcuteShow(false);
+                }, 3000);
+            } catch (error) {
+                if (error?.response?.data?.error?.message) {
+                    // TO DO  if RTL ? or LTR
+                    setErrorsCreatingPatient([error.response.data.error.message.en]);
+                } else if (error?.response?.data?.message?.length) {
+                    setErrorsCreatingPatient(error.response.data.message);
+                } else {
+                    setErrorsCreatingPatient([t('Error in the server')]);
+                }
                 setLoading(false);
             }
-            setTimeout(() => {
-                setCreatedPatientSuccess(false);
-                setDiabeticketoacidosis(false);
-                setInsulineType(null);
-                setCurrentTreatmentShow(false);
-                setChronicShow(false);
-                setAcuteShow(false);
-            }, 3000);
-        } catch (error) {
-            if (error?.response?.data?.error?.message) {
-                // TO DO  if RTL ? or LTR
-                setErrorsCreatingPatient([error.response.data.error.message.en]);
-            } else if (error?.response?.data?.message?.length) {
-                setErrorsCreatingPatient(error.response.data.message);
-            } else {
-                setErrorsCreatingPatient([t('Error in the server')]);
-            }
-            setLoading(false);
-        }
+        });
     };
+    const { mutate: signMutate } = useMutation((credintials) => createPatient(credintials));
+    const onFinish = async (values) => {
+        signMutate(values);
+    };
+    const { data: patientData, isSuccess: onePateintSuccess } = useQuery(
+        ['onePatient', { query: id }],
+        getPatient,
+        {
+            enabled: !!id
+        }
+    );
+    useEffect(() => {
+        if (onePateintSuccess) {
+            const chronicValues =
+                patientData.data.chronics?.length >= 1
+                    ? [
+                          ...patientData?.data?.chronics[0].condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+            const acuteValues =
+                patientData.data.acutes?.length >= 1
+                    ? [
+                          ...patientData?.data?.acutes[0]?.condition
+                              .replaceAll(/[{}"']+/g, '')
+                              .split(',')
+                      ]
+                    : [];
+
+            chronicValues.length >= 1 && setChronicShow(true);
+            acuteValues.length >= 1 && setAcuteShow(true);
+            const diabetesComplications =
+                chronicValues.length == 0 && acuteValues.length === 0
+                    ? []
+                    : acuteValues.length >= 1
+                    ? ['Acute']
+                    : chronicValues.length >= 1
+                    ? ['Chronic']
+                    : ['Chronic', 'Acute'];
+            form.setFieldsValue({
+                name: patientData.data?.name,
+                age: `${patientData.data?.age}`,
+                gender: patientData.data?.gender,
+                phoneNumber: patientData.data?.phone_number.slice(3),
+                chronicSelect: chronicValues,
+                diabetesComplications,
+                remarkableNote: patientData.data?.remarkable_note,
+                diabetesType: patientData.data?.diabetesType,
+                reasonForReferral: JSON.parse(patientData.data?.reason_for_referral),
+                doctorNote: patientData.data?.doctor_note,
+                diabetesStatus: patientData.data?.diabetes_status,
+                factorsEffectinglearning: patientData.data?.factors_effecting_learning,
+                long_term_goals: patientData.data?.long_term_goals,
+                medicalHistory: JSON.parse(patientData.data?.medical_history),
+                short_term_goals: patientData.data?.short_term_goals,
+                treatmentType: patientData.data?.treatment[0]?.treatment,
+                medicationEffectingGlucose: patientData.data?.medication_effecting_glucose,
+                otherHealthIssues: JSON.parse(patientData.data?.other_health_issues)?.doctor,
+                recommendationGlycemicRange: patientData.data?.recommendation_glycemic_range,
+                diabetesDuration: moment(patientData.data?.diabetes_duration)
+            });
+        }
+    }, [patientData]);
 
     return (
-        <div
-            className={
-                direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
-            }>
-            <Title className={styles.title__registration}>{t('Register Patient')}</Title>
-            <Form
-                form={form}
-                layout={'vertical'}
-                name="register"
-                onFinish={onFinish}
-                onValuesChange={onValuesChange}
-                scrollToFirstError>
-                <Row type="flex" justify="space-around" align="flex-start">
-                    <Col lg={7} xs={24} className={styles.patient_register_column}>
-                        <Row type="flex" justify="start">
-                            <PatienInfo styles={styles} t={t} />
-                            <DiabetesInfo
-                                styles={styles}
-                                t={t}
-                                currentTreatmentShow={currentTreatmentShow}
-                                insulineTypes={insulineTypes}
-                                insulineDoseSelectArray={insulineDoseSelectArray}
-                            />
-                        </Row>
-                    </Col>
-                    <Col lg={7} sm={24} className={styles.patient_register_column}>
-                        <Row>
-                            <Col sm={24} className={styles.patient_register_column}>
-                                <div className={styles.title_form}>
+        <ConfigProvider direction={direction}>
+            <div
+                className={
+                    direction === 'rtl' ? `${styles.form_containerRTL}` : `${styles.form_container}`
+                }>
+                <Title className={styles.title__registration}>{t('Register Patient')}</Title>
+                <Form
+                    form={form}
+                    layout={'vertical'}
+                    name="register"
+                    onFinish={onFinish}
+                    onValuesChange={onValuesChange}
+                    scrollToFirstError>
+                    <Row type="flex" justify="space-around" align="flex-start">
+                        <Col lg={7} xs={24} className={styles.patient_register_column}>
+                            <Row type="flex" justify="start">
+                                <PatienInfo styles={styles} t={t} />
+                                <DiabetesInfo
+                                    styles={styles}
+                                    t={t}
+                                    currentTreatmentShow={currentTreatmentShow}
+                                    insulineTypes={insulineType?.data}
+                                    insulineDoseSelectArray={insulineDoseSelectArray}
+                                />
+                            </Row>
+                        </Col>
+                        <Col lg={7} sm={24} className={styles.patient_register_column}>
+                            <Row>
+                                <Col sm={24} className={styles.patient_register_column}>
+                                    <div className={styles.title_form}>
+                                        <Text className={styles.title_form}>
+                                            {t('ReferalInformation')}
+                                        </Text>
+                                    </div>
+                                    <div className={styles.patient_register_column_wrapper}>
+                                        <ReasonsForRefeal styles={styles} t={t} />
+                                        <FactorsAffectLearning styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                                <Col xs={24} className={styles.patient_register_column}>
+                                    <div
+                                        className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                        <Goals styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                                <Col xs={24} className={styles.patient_register_column}>
+                                    <div
+                                        className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                        <EffectGlocuse styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col sm={24} lg={7} className={styles.patient_register_column}>
+                            <Row xs={24}>
+                                <Col xs={24}>
                                     <Text className={styles.title_form}>
-                                        {t('ReferalInformation')}
+                                        {t('Medical  Conditions')}
                                     </Text>
-                                </div>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <ReasonsForRefeal styles={styles} t={t} />
-                                    <FactorsAffectLearning styles={styles} t={t} />
-                                </div>
-                            </Col>
-                            <Col xs={24} className={styles.patient_register_column}>
-                                <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <Goals styles={styles} t={t} />
-                                </div>
-                            </Col>
-                            <Col xs={24} className={styles.patient_register_column}>
-                                <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                                    <EffectGlocuse styles={styles} t={t} />
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col sm={24} lg={7} className={styles.patient_register_column}>
-                        <Row xs={24}>
-                            <Col xs={24}>
-                                <Text className={styles.title_form}>
-                                    {t('Medical  Conditions')}
-                                </Text>
-                                <div className={styles.patient_register_column_wrapper}>
-                                    <HealthIssues styles={styles} t={t} />
-                                    <DiabetesComplications
-                                        styles={styles}
-                                        t={t}
-                                        acuteShow={acuteShow}
-                                        diabeticKetoacidosis={diabeticKetoacidosis}
-                                        chronicShow={chronicShow}
-                                    />
-                                    <MedicalHistory styles={styles} t={t} />
-                                    <RecommendationGlycemicRange styles={styles} t={t} />
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
+                                    <div className={styles.patient_register_column_wrapper}>
+                                        <HealthIssues styles={styles} t={t} />
+                                        <DiabetesComplications
+                                            styles={styles}
+                                            t={t}
+                                            acuteShow={acuteShow}
+                                            diabeticKetoacidosis={diabeticKetoacidosis}
+                                            chronicShow={chronicShow}
+                                        />
+                                        <MedicalHistory styles={styles} t={t} />
+                                        <RecommendationGlycemicRange styles={styles} t={t} />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
 
-                    <Col lg={23} className={`w-100 ${styles.patient_register_column}`}>
-                        <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
-                            <DoctorNote styles={styles} t={t} />
-                        </div>
-                    </Col>
-                </Row>
-                <Row type="flex" justify="center" align="middle">
-                    <Form.Item>
-                        <CustomButton
-                            htmlType="submit"
-                            text={t('Register')}
-                            className={`${styles.btn_text}`}
-                            loading={loading}
-                        />
-                    </Form.Item>
-                </Row>
-            </Form>
-        </div>
+                        <Col lg={23} className={`w-100 ${styles.patient_register_column}`}>
+                            <div className={`w-100 ${styles.patient_register_column_wrapper}`}>
+                                <DoctorNote styles={styles} t={t} />
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="center" align="middle">
+                        <Form.Item>
+                            <CustomButton
+                                htmlType="submit"
+                                text={t('Register')}
+                                className={`${styles.btn_text}`}
+                                loading={loading}
+                            />
+                        </Form.Item>
+                    </Row>
+                </Form>
+            </div>
+        </ConfigProvider>
     );
 };
+export const getServerSideProps = async () => {
+    const qClient = new QueryClient();
+    await qClient.prefetchQuery('insulineTypes', getInsuline);
 
+    return {
+        props: {
+            dehydratedState: dehydrate(qClient)
+        }
+    };
+};
 export default index;

@@ -245,8 +245,41 @@ a {
     width: 100% !important;
 }
 
+.w-75 {
+    width: 75% !important;
+}
+
+.w-50 {
+    width: 50% !important;
+}
+
 .m-0 {
     margin: 0 !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem !important;
+}
+
+.toggle {
+    width: 100%;
+    text-align: start;
+
+    .radio-title {
+        font-family: 'gothic-bold';
+        font-size: 18px;
+    }
+
+    .ant-radio-inner:after {
+        background: $darkBlue !important;
+    }
+
+    .ant-radio-checked .ant-radio-inner,
+    .ant-radio:hover .ant-radio-inner,
+    .ant-radio-wrapper:hover,
+    .ant-radio-input:focus .ant-radio-inner {
+        border-color: $darkBlue !important;
+    }
 }
 
 .create {
@@ -261,4 +294,36 @@ a {
 
 .ant-form-item .ant-select {
     width: 100% !important;
+}
+
+.pinkBG {
+    background-color: $pinkBG !important;
+    color: $white !important;
+}
+
+.pinkBorder {
+    border: 1px solid $pinkBG !important;
+}
+
+#educator-create-patient {
+    .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+        background-color: $darkBlue;
+    }
+
+    .ant-steps-item-subtitle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-70%, 90%);
+    }
+
+    .ant-steps.ant-steps-label-horizontal.ant-steps-horizontal {
+        height: 85px;
+    }
+    .ant-col.ant-form-item-control {
+        width: 100%;
+    }
+    div[role='alert'] {
+        text-align: start;
+    }
 }

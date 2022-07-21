@@ -76,8 +76,8 @@ function Registration({ direction, doctors, totalCount }) {
 
 Registration.propTypes = {
     direction: PropTypes.string.isRequired,
-    doctors: PropTypes.array.isRequired,
-    totalCount: PropTypes.string.isRequired
+    doctors: PropTypes.array,
+    totalCount: PropTypes.string
 };
 export const getServerSideProps = async ({ req, query }) => {
     try {

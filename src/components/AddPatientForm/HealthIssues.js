@@ -10,7 +10,7 @@ const HealthIssues = ({ styles, t }) => {
             label={<p className={styles.label_form}>{t('Any other critical health issues?')}</p>}
             rules={[
                 {
-                    required: true,
+                    required: false,
                     message: 'Please select other healt issues'
                 }
             ]}>
@@ -34,6 +34,6 @@ const HealthIssues = ({ styles, t }) => {
         </Form.Item>
     );
 };
-HealthIssues.propTypes = { styles: PropTypes.object, t: PropTypes.object };
+HealthIssues.propTypes = { styles: PropTypes.object, t: PropTypes.func };
 
 export default HealthIssues;

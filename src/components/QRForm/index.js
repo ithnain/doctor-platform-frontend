@@ -121,7 +121,6 @@ const QRForm = ({ name, id }) => {
                             <Col xs={24}>
                                 <div className={styles.logo}>
                                     <Image
-                                        preview={false}
                                         width={80}
                                         height={80}
                                         src="/assets/logo-dark-notext.png"

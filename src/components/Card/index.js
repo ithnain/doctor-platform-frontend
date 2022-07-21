@@ -159,7 +159,7 @@ const Card = ({
                                         <CustomButton
                                             className={`${styles.card__btn} redBtn redBtn--outline`}
                                             text={t('editProfile')}
-                                            handleClick={() => {
+                                            handleButtonClick={() => {
                                                 API.get(
                                                     `/supervisor/doctors/reject?doctor=${doctor.id}`
                                                 ).then(() => {
@@ -204,7 +204,7 @@ const Card = ({
                                     <CustomButton
                                         className={`${styles.card__btn} redBtn--outline`}
                                         text={t('reject')}
-                                        handleClick={() => {
+                                        handleButtonClick={() => {
                                             API.get(
                                                 `/supervisor/doctors/reject?doctor=${doctor.id}`
                                             ).then(() => {
@@ -221,14 +221,14 @@ const Card = ({
                                     <CustomButton
                                         className={`${styles.card__btn} blueBtn`}
                                         text={t('addToMyPatient')}
-                                        handleClick={addPatientToDoctor}
+                                        handleButtonClick={addPatientToDoctor}
                                     />
                                 ) : (
                                     // this case happen only if the Card will come form Doctors view, If addPatient false display the accept button for doctor
                                     <CustomButton
                                         className={`${styles.card__btn} greenBtn`}
                                         text={t('accept')}
-                                        handleClick={() => {
+                                        handleButtonClick={() => {
                                             API.get(
                                                 `/supervisor/doctors/accept?doctor=${doctor.id}`
                                             ).then(() => {
@@ -248,7 +248,7 @@ const Card = ({
 };
 
 Card.propTypes = {
-    doctor: PropTypes.object.isRequired,
+    doctor: PropTypes.object,
     actions: PropTypes.bool,
     setShow: PropTypes.func,
     patient: PropTypes.object,

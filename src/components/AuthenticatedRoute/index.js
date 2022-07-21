@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
+import SliderLayout from '@components/Layout';
 import router from 'next/router';
+import { withCookies } from 'react-cookie';
 
-const authenticatedRoute = (Component = null) => {
+function authenticatedRoute(Component = null) {
     class AuthenticatedRoute extends React.Component {
         constructor(props) {
             super(props);
@@ -11,50 +12,64 @@ const authenticatedRoute = (Component = null) => {
                 loading: true
             };
         }
-
         componentDidMount() {
-            if (router.pathname === '/login' && this.props.isLoggedIn) {
-                router.push('/overview');
-                return;
-            }
-            if (router.pathname === '/' && this.props.isLoggedIn) {
-                router.push('/overview');
-                return;
-            } else if (router.pathname === '/' && !this.props.isLoggedIn) {
-                this.setState({ loading: true });
-                router.push('/login').then(() => {
-                    this.setState({ loading: false });
+            fetch('/api/auth/getToken')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (!data.token) {
+                        this.setState({ loading: true });
+                        router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
+                            this.setState({ loading: false });
+                        });
+                        return;
+                    } else {
+                        if (
+                            (router.pathname === '/login' && data.token) ||
+                            (router.pathname === '/' && data.token)
+                        ) {
+                            router.push({ pathname: '/overview', options: { shallow: true } });
+                            return;
+                        } else if (router.pathname === '/' && !data.token) {
+                            this.setState({ loading: true });
+                            router
+                                .push({ pathname: '/login', options: { shallow: true } })
+                                .then(() => {
+                                    this.setState({ loading: false });
+                                });
+                        }
+                        if (data.token) {
+                            this.setState({ loading: false });
+                            return;
+                        }
+                    }
+                })
+                .catch(() => {
+                    this.setState({ loading: true });
+                    router.push({ pathname: '/login', options: { shallow: true } }).then(() => {
+                        this.setState({ loading: false });
+                    });
                 });
-            }
-            if (this.props.isLoggedIn) {
-                this.setState({ loading: false });
-                return;
-            }
-            if (this.props.isLoggedIn === '') {
-                this.setState({ loading: true });
-                router.push('/login').then(() => {
-                    this.setState({ loading: false });
-                });
-                return;
-            }
         }
         render() {
             const { loading } = this.state;
 
             if (loading) {
-                return <div />;
+                return (
+                    <SliderLayout title="loading">
+                        <div />
+                    </SliderLayout>
+                );
             }
 
             return <Component {...this.props} />;
         }
     }
     AuthenticatedRoute.propTypes = {
-        isLoggedIn: PropTypes.bool.isRequired
+        isLoggedIn: PropTypes.bool,
+        cookies: PropTypes.any
     };
 
-    return connect((state) => ({
-        isLoggedIn: state?.user.accessToken
-    }))(AuthenticatedRoute);
-};
+    return withCookies(AuthenticatedRoute);
+}
 
 export default authenticatedRoute;

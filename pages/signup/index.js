@@ -1,4 +1,4 @@
-import { Col, Form, Image, Input, Row, Select, Typography } from 'antd';
+import { Col, Form, Image, Input, Radio, Row, Select, Space, Typography } from 'antd';
 
 import API from '@src/utils/axios';
 import { ConfigProvider } from 'antd';
@@ -7,21 +7,58 @@ import LangChanger from '@src/components/LangToggle';
 import Link from 'next/link';
 import Placeholder from '@components/Placeholder';
 import PropTypes from 'prop-types';
-import Style from './Signup.module.scss';
 import authStyles from '@styles/Auth.module.scss';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
+import { useQuery, useMutation } from 'react-query';
 
+const getHospitals = async () => await API.get(`/hospitals`);
 const { Text } = Typography;
-const SignUp = ({ direction, hospitals }) => {
-    const { t } = useTranslation('signup');
+const SignUp = ({ direction }) => {
+    const { t, lang } = useTranslation('signup');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [doctorStatus, setDoctorStatus] = useState('partner');
     const requiredField = t('common:requiredInput');
+    const { data: hospitals } = useQuery('allPatients', getHospitals);
 
+    const setUser = async (credintials) => {
+        await API.post('auth/signUp', {
+            email: credintials.email,
+            password: credintials.password,
+            name: credintials.name,
+            nationalId: credintials.nationalId,
+            specialty: credintials.specialty,
+            phoneNumber: credintials.phoneNumber,
+            hospital: credintials.hospital,
+            gender: credintials.gender
+        });
+    };
+    const { mutate: signMutate } = useMutation((credintials) => setUser(credintials), {
+        onSuccess: () => {
+            toastr.success('User registed successfully');
+            setTimeout(() => {
+                router.push('/login');
+            }, 2000);
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                const { error = {} } = data;
+                const { message = 'Something went wrong' } = error;
+                toastr.error(message[`${lang}`]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        },
+        onSettled: () => {
+            setLoading(false);
+        }
+    });
     const onFinish = ({
         email,
         password,
@@ -34,14 +71,14 @@ const SignUp = ({ direction, hospitals }) => {
     }) => {
         setLoading(true);
         let selectedHospital;
-        hospitals.map((h) => {
+        hospitals?.data.map((h) => {
             if (h.id === hospital) {
                 selectedHospital = h;
             } else {
                 return;
             }
         });
-        API.post('auth/signup', {
+        signMutate({
             email,
             password,
             name,
@@ -49,35 +86,8 @@ const SignUp = ({ direction, hospitals }) => {
             specialty,
             phoneNumber,
             hospital: selectedHospital,
-            gender,
-            role: 'DOCTOR'
-        })
-            .then((res) => {
-                try {
-                    setLoading(false);
-                    if (res?.status === 201) {
-                        toastr.success('User registed successfully');
-                        setTimeout(() => {
-                            router.push('/login');
-                        }, 2000);
-                    }
-                } catch (error) {
-                    toastr.error('something went wrong');
-                }
-            })
-            .catch((err) => {
-                if (err.response) {
-                    const { data = {} } = err.response;
-                    const { error = {} } = data;
-                    const { message = 'Something went wrong' } = error;
-                    direction === 'rtl' ? toastr.error(message.ar) : toastr.error(message.en);
-                } else if (err.message) {
-                    toastr.error(err.message);
-                } else if (err.request) {
-                    toastr.error(err.request);
-                }
-                setLoading(false);
-            });
+            gender
+        });
     };
     const handleDoctorStatus = (newState) => {
         setDoctorStatus(newState);
@@ -106,88 +116,37 @@ const SignUp = ({ direction, hospitals }) => {
                         <LangChanger abs={true} />
                         <Col span={18} type="flex" justify="start">
                             <Row justify="start">
-                                <Image
-                                    preview={false}
-                                    width={100}
-                                    src="/assets/logo-dark-notext.png"
-                                    className="logo-signup"
-                                />
+                                <Image width={100} height={45} src="/assets/logo-dark-notext.png" />
                             </Row>
                             <Row justify="start">
                                 <p className="title-1 dark-blue">{t('DoctorRegistration')}</p>
                             </Row>
                             <Row justify="start">
-                                <Col span={11} flex>
-                                    <button
-                                        onClick={() => handleDoctorStatus('partner')}
-                                        className={
-                                            doctorStatus === 'partner'
-                                                ? `${Style.doctorStatusBox} ${Style.active}`
-                                                : `${Style.doctorStatusBox}`
-                                        }>
-                                        <picture>
-                                            <source
-                                                media="(max-width: 799px)"
-                                                srcSet="/assets/images/medical-team.png"
-                                            />
-                                            <source
-                                                media="(min-width: 800px)"
-                                                srcSet="/assets/images/medical-team@2x.png"
-                                            />
-
-                                            <source
-                                                media="(min-width: 1200px)"
-                                                srcSet="/assets/images/medical-team@3x.png"
-                                            />
-                                            <img
-                                                srcSet="/assets/images/medical-team@2x.png"
-                                                alt="Medical team for partners"
-                                            />
-                                        </picture>
-                                        <h3>{t('partnerDoctor')}</h3>
-                                        {/* <p>{t('ifPartner')}</p> */}
-                                    </button>
-                                </Col>
-                                <Col span={11}>
-                                    <button
-                                        onClick={() => handleDoctorStatus('individual')}
-                                        className={
-                                            doctorStatus === 'individual'
-                                                ? `${Style.doctorStatusBox} ${Style.active}`
-                                                : `${Style.doctorStatusBox}`
-                                        }>
-                                        <picture>
-                                            <source
-                                                media="(max-width: 799px)"
-                                                srcSet="/assets/images/doctor.png"
-                                            />
-                                            <source
-                                                media="(min-width: 800px)"
-                                                srcSet="/assets/images/doctor@2x.png"
-                                            />
-
-                                            <source
-                                                media="(min-width: 1200px)"
-                                                srcSet="/assets/images/doctor@3x.png"
-                                            />
-                                            <img
-                                                srcSet="/assets/images/doctor@3x.png"
-                                                alt="Medical team for partners"
-                                            />
-                                        </picture>
-                                        <h3>{t('individualDoctor')}</h3>
-                                        {/* <p>{t('ifIndividual')}</p> */}
-                                    </button>
-                                </Col>
+                                <Radio.Group
+                                    className="toggle"
+                                    onChange={(e) => handleDoctorStatus(e.target.value)}
+                                    value={doctorStatus}>
+                                    <Space direction="vertical">
+                                        <Radio value={'individual'}>
+                                            <span className="radio-title">
+                                                {t('individualDoctor')}
+                                            </span>{' '}
+                                            {t('ifIndividual')}
+                                        </Radio>
+                                        <Radio value={'partner'}>
+                                            <span className="radio-title">
+                                                {t('partnerDoctor')}{' '}
+                                            </span>
+                                            {t('ifPartner')}
+                                        </Radio>
+                                    </Space>
+                                </Radio.Group>
                             </Row>
                             <Form
-                                // {...layout}
                                 name="basic"
                                 className="form-container"
                                 layout="vertical"
-                                onFinish={onFinish}
-                                // onFinishFailed={onFinishFailed}
-                            >
+                                onFinish={onFinish}>
                                 {doctorStatus === 'partner' && (
                                     <Row justify="start">
                                         <Col span={22}>
@@ -202,8 +161,8 @@ const SignUp = ({ direction, hospitals }) => {
                                                     }
                                                 ]}>
                                                 <Select size="medium">
-                                                    {hospitals?.length ? (
-                                                        hospitals.map((hospital) => {
+                                                    {hospitals?.data?.length ? (
+                                                        hospitals?.data.map((hospital) => {
                                                             return (
                                                                 <Select.Option
                                                                     key={hospital.id}
@@ -237,21 +196,6 @@ const SignUp = ({ direction, hospitals }) => {
                                             <Input className={authStyles.input} />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('ID')}
-                                            name="nationalId"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: t('idLength'),
-                                                    min: 10
-                                                }
-                                            ]}>
-                                            <Input className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
@@ -287,25 +231,6 @@ const SignUp = ({ direction, hospitals }) => {
                                             <Input className={authStyles.input} />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('password')}
-                                            className="mb-1"
-                                            name="password"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                },
-                                                {
-                                                    pattern:
-                                                        /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                                                    message: t('weakPassword')
-                                                }
-                                            ]}>
-                                            <Input.Password className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
@@ -331,45 +256,9 @@ const SignUp = ({ direction, hospitals }) => {
                                             />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={11}>
-                                        <Form.Item
-                                            label={t('gender')}
-                                            name="gender"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Select size="medium">
-                                                <Select.Option key={'male'} value={'male'}>
-                                                    {t('male')}
-                                                </Select.Option>
-                                                <Select.Option key={'female'} value={'female'}>
-                                                    {t('female')}
-                                                </Select.Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Col> */}
                                 </Row>
 
                                 <Row justify="start">
-                                    {/* <Col span={22}>
-                                        <Form.Item
-                                            label={t('email')}
-                                            name="email"
-                                            className="dark-blue mb-1"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    type: 'email',
-                                                    message: requiredField
-                                                }
-                                            ]}>
-                                            <Input className={authStyles.input} />
-                                        </Form.Item>
-                                    </Col> */}
                                     <Col span={22}>
                                         <Form.Item
                                             label={t('password')}
