@@ -1,3 +1,4 @@
+import { isValidName } from '@src/utils/helpers';
 import { Col, Form, Input, Radio, Typography } from 'antd';
 
 import PropTypes from 'prop-types';
@@ -5,7 +6,13 @@ import React from 'react';
 
 const PatienInfo = ({ styles, t }) => {
     const { Text } = Typography;
-
+    const nameValidation = (rule, value, callback) => {
+        if (!isValidName(value)) {
+            callback('Please enter the First and Last name');
+        } else {
+            callback();
+        }
+    };
     return (
         <Col xs={24}>
             <div className={styles.title_form}>
@@ -22,7 +29,8 @@ const PatienInfo = ({ styles, t }) => {
                         {
                             required: true,
                             message: 'Please input patient name'
-                        }
+                        },
+                        { validator: nameValidation }
                     ]}>
                     <Input placeholder="Omar Saleh" />
                 </Form.Item>
