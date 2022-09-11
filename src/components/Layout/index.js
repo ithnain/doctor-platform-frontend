@@ -90,7 +90,9 @@ function SliderLayout({ title, keywords, description, active, children }) {
                     {userData?.data.role &&
                         sideNavIcons[userData?.data.role]?.sidenavData?.map((item) => (
                             <Menu.Item className={styles.sider__menu__item} key={`/${item.link}`}>
-                                <Image src={`/assets/icons/${item.image}`} width={40} height={40} />
+                                <div className={styles.icon_container}>
+                                    <img src={`/assets/icons/${item.image}`} width={35} height={35} />
+                                </div>
                                 <span className="nav-text">
                                     <Link href={`/${item.link}`}>{item.title}</Link>
                                 </span>
@@ -101,7 +103,10 @@ function SliderLayout({ title, keywords, description, active, children }) {
                         key={`item-logout`}
                         onClick={logoutHandler}
                         className={`sideMenuItem ${styles.sider__menu__item} ${styles.lastMenuItem}`}>
-                        <Image src="/assets/icons/logout.svg" width={40} height={40} />
+                        <div className={styles.icon_container}>
+                            <img src={`/assets/icons/logout.svg`} width={35} height={35} />
+                        </div>
+
                         <span className="nav-text">
                             <button onClick={logoutHandler}>Log out</button>
                         </span>

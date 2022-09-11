@@ -10,6 +10,8 @@ function LangChanger({ abs }) {
     const router = useRouter();
     const comp = (
         <div className={styles.languageDrop}>
+            {/* 
+             #TODO: LOCALIZE ALL THE APP
             <Select
                 defaultValue={router.locale}
                 bordered={false}
@@ -25,7 +27,7 @@ function LangChanger({ abs }) {
                         AR
                     </Link>
                 </Option>
-            </Select>
+            </Select> */}
         </div>
     );
     return (
