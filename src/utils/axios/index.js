@@ -4,7 +4,7 @@ const API = axios.create({
     baseURL:
         process.env.NEXT_PUBLIC_APP_ENV === 'production'
             ? 'https://doctorsapi.ithnain.com/v1/'
-            : 'http://172.31.42.233:3003/v1/',
+            : 'http://15.185.83.226:3003/v1/',
     timeout: 30000
 });
 
