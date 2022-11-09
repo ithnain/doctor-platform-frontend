@@ -23,12 +23,13 @@ const HealthIssues = ({ styles, t }) => {
                         </p>
                     </Checkbox>
 
-                    <Checkbox value="Other">
+                    {/* <Checkbox value="Other">
                         <p className={`gotLight ${styles.label_form}`}>{t('Other')}</p>
                     </Checkbox>
+                    TODO: handle in the backend properly
                     <Form.Item name="OotherHealthIssues">
                         <Input />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Space>
             </Checkbox.Group>
         </Form.Item>
