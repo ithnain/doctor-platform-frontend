@@ -15,7 +15,10 @@ import { useRouter } from 'next/router';
 
 const { Step } = Steps;
 const getIntensity = async () => await API.get(`invoice/intensity`);
-const getTopics = async () => API.get(`invoice/topic`);
+const getTopics = async () => await API.get(`invoice/topic`);
+const getDiseases = async () => await API.get(`/disease-type`);
+const getCaseHandlers = async () => await API.get(`/invoice/educators`);
+
 const EducatorForm = ({ direction }) => {
     const queryClient = useQueryClient();
     const user = queryClient.getQueryState('user').data?.data;
@@ -27,7 +30,8 @@ const EducatorForm = ({ direction }) => {
                 return { id: topic };
             }),
             intensityId: intensityId,
-            planPaid
+            planPaid,
+            dpEducatorId
         });
     };
     const { t } = useTranslation('create-patient');
@@ -43,6 +47,7 @@ const EducatorForm = ({ direction }) => {
     const [patient, setPatinet] = useState({});
     const [intensitiesArray, setIntensitiesArray] = useState(['aaa', 'bbb']);
     const [intensityId, setIntensityId] = useState('');
+    const [dpEducatorId, setEducatorId] = useState('');
     const [planPaid, setPlanPaid] = useState(false);
 
     useEffect(() => {
@@ -76,6 +81,36 @@ const EducatorForm = ({ direction }) => {
         }
     });
     const { data: intensities } = useQuery('intensities', () => getIntensity(), {
+        onSuccess: (data) => {
+            return data;
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+    const { data: diseases=[] } = useQuery('diseasesTypes', () => getDiseases(), {
+        onSuccess: (data) => {
+            return data;
+        },
+        onError: (err) => {
+            if (err.response) {
+                const { data = {} } = err.response;
+                toastr.error(data.message[0]);
+            } else if (err.message) {
+                toastr.error(err.message);
+            } else if (err.request) {
+                toastr.error(err.request);
+            }
+        }
+    });
+    const { data: casehandlers=[] } = useQuery('casehandlers', () => getCaseHandlers(), {
         onSuccess: (data) => {
             return data;
         },
@@ -162,6 +197,21 @@ const EducatorForm = ({ direction }) => {
                             </Select>
                         </Form.Item>
                     </Col>
+                    <Col span={24}>
+                        <Form.Item
+                            name="educatorId"
+                            className={`w-100 ${FormStyles.form_item}`}
+                            label={<p className={FormStyles.label_form}>{t('app casehandler')}</p>}
+                            rules={[{ required: true, message: 'Please select a casehandler' }]}>
+                            <Select allowClear className="w-100" onChange={(e) => { }}>
+                                {casehandlers.data && casehandlers.data?.map((doctor) => (
+                                    <Option key={doctor.id} value={doctor.id}>
+                                        {doctor.name ? doctor.name : doctor.email}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </Col>
 
                     <Form.Item
                         name="name"
@@ -199,10 +249,10 @@ const EducatorForm = ({ direction }) => {
                             }
                         ]}>
                         <Select placeholder="select patient Diabetes type">
-                            {types.map((type) => {
+                            {diseases.data && diseases.data.map((type) => {
                                 return (
-                                    <Option key={type.id} value={type.name_en}>
-                                        {type.name_en}
+                                    <Option key={type.id} value={type.name}>
+                                        {type.name}
                                     </Option>
                                 );
                             })}
@@ -282,6 +332,29 @@ const EducatorForm = ({ direction }) => {
                                         </Radio.Group>
                                     </Form.Item>
                                 </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="dpEducatorId"
+                                        className={`w-100 ${FormStyles.form_item}`}
+                                        label={
+                                            <p className={FormStyles.label_form}>{t('app specialist')}</p>
+                                        }
+                                        rules={[
+                                            { required: true, message: 'Please select specialist' }
+                                        ]}>
+                                        <Select
+                                            placeholder="Please select specialist"
+                                            allowClear
+                                            className="w-100"
+                                            onChange={(e) => setEducatorId(e)}>
+                                            {casehandlers.data && casehandlers.data?.map((doctor) => (
+                                                <Option key={doctor.id} value={doctor.id}>
+                                                    {doctor.name ? doctor.name : doctor.email}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
                                 <Col span={24}>
                                     <Form.Item
                                         mode="multiple"
@@ -340,7 +413,7 @@ const EducatorForm = ({ direction }) => {
             .catch((err) => console.log({ err }));
     };
     const onCreatePlan = () => {
-        form.validateFields(['intensityId', 'planDuration'])
+        form.validateFields(['intensityId', 'planDuration', 'dpEducatorId'])
             .then(() => {
                 setFormValues((prev) => {
                     return {
@@ -349,7 +422,8 @@ const EducatorForm = ({ direction }) => {
                         topics: topics.map((topic) => {
                             return { id: topic[0] };
                         }),
-                        intensityId
+                        intensityId,
+                        dpEducatorId
                     };
                 });
             })
@@ -412,6 +486,7 @@ export const getServerSideProps = async () => {
     const qClient = new QueryClient();
     await qClient.prefetchQuery('intensities', () => getIntensity());
     await qClient.prefetchQuery('topics', () => getTopics());
+    await qClient.prefetchQuery('diseasesTypes', () => getDiseases());
 
     return {
         props: {
