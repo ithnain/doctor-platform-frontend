@@ -14,6 +14,8 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import types from './types.json';
+import { useQuery } from 'react-query';
+import API from '@src/utils/axios';
 
 const style = {
     selectGeneric: {
@@ -21,6 +23,11 @@ const style = {
     },
     selectTrade: { width: 'auto' }
 };
+
+const getDiseases = async () => {
+    return API.get(`/disease-type`);
+};
+
 const DiabetesInfo = ({
     styles,
     t,
@@ -36,6 +43,9 @@ const DiabetesInfo = ({
     function onChange(date, dateString) {
         setDuration(dateString);
     }
+
+    const { data: diseaseType=[] } = useQuery('diseasesTypes', getDiseases);
+
     return (
         <Col lg={24} className={styles.patient_register_column}>
             <Text className={styles.title_form}>{t('diabetes information')}</Text>
@@ -50,10 +60,10 @@ const DiabetesInfo = ({
                         }
                     ]}>
                     <Select placeholder="select patient Diabetes type">
-                        {types.map((type) => {
+                        {diseaseType.data && diseaseType?.data.map((type) => {
                             return (
-                                <Option key={type.id} value={type.name_en}>
-                                    {type.name_en}
+                                <Option key={type.id} value={type.name}>
+                                    {type.name}
                                 </Option>
                             );
                         })}
