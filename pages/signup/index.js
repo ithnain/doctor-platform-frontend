@@ -33,7 +33,8 @@ const SignUp = ({ direction }) => {
             specialty: credintials.specialty,
             phoneNumber: credintials.phoneNumber,
             hospital: credintials.hospital,
-            gender: credintials.gender
+            gender: credintials.gender,
+            role: doctorStatus === 'partner' ? 'REPRESENTATIVE' : 'DOCTOR'
         });
     };
     const { mutate: signMutate } = useMutation((credintials) => setUser(credintials), {

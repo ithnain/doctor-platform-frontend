@@ -1,11 +1,14 @@
 import { isValidName } from '@src/utils/helpers';
-import { Col, Form, Input, Radio, Typography } from 'antd';
+import { Col, Form, Input, Radio, Typography, DatePicker } from 'antd';
+import moment from 'moment';
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 
 const PatienInfo = ({ styles, t }) => {
     const { Text } = Typography;
+    const [, setAge] = useState('');
+
     const nameValidation = (rule, value, callback) => {
         if (!isValidName(value)) {
             callback('Please enter the First and Last name');
@@ -13,6 +16,9 @@ const PatienInfo = ({ styles, t }) => {
             callback();
         }
     };
+    function onChangeAge(date, dateString) {
+        setAge(dateString);
+    }
     return (
         <Col xs={24}>
             <div className={styles.title_form}>
@@ -56,13 +62,17 @@ const PatienInfo = ({ styles, t }) => {
                     className="w-100"
                     name="age"
                     label={<p className={styles.label_form}>{t('age')}</p>}
+                    // getValueFromEvent={(onChange) => moment(onChange).format('YYYY-MM-DD')}
+                    // getValueProps={(i) => ({value: moment(i)})}
                     rules={[
                         {
                             required: false,
                             message: 'Please input patient age'
                         }
                     ]}>
-                    <Input placeholder="15" className="w-100" />
+                    <DatePicker onChange={onChangeAge} className="w-100" />
+
+                    {/* <Input placeholder="15" className="w-100" /> */}
                 </Form.Item>
                 <Form.Item
                     name="phoneNumber"
