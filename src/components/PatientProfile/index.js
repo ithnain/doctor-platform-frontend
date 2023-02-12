@@ -9,7 +9,7 @@ import { CheckOutlined } from '@ant-design/icons';
 
 export const SessionsCard = ({ t, appointments }) => {
     const lastAppointment = appointments?.sort(function (a, b) {
-        return Date.parse(a.date) - Date.parse(b.date);
+        return Date.parse(b.date) - Date.parse(a.date);
     });
     return (
         <div className={patienProfileSyle.UserCardInfoWrapper}>
@@ -284,7 +284,7 @@ export const PatientMedication = ({ t, medicationEffectingGlucose }) => (
                             title={t(
                                 'Is the patient on medication that may affect blood glucose ?*'
                             )}
-                            info={medicationEffectingGlucose}
+                            info={medicationEffectingGlucose ? medicationEffectingGlucose : 'No'}
                         />
                     </div>
 
