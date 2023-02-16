@@ -33,7 +33,9 @@ const DiabetesInfo = ({
     t,
     currentTreatmentShow,
     insulineTypes,
-    insulineDoseSelectArray
+    insulineDoseSelectArray,
+    date: oldDate,
+    onePateintSuccess,
 }) => {
     const { Option } = Select;
     const { Text } = Typography;
@@ -43,9 +45,7 @@ const DiabetesInfo = ({
     function onChange(date, dateString) {
         setDuration(dateString);
     }
-
     const { data: diseaseType=[] } = useQuery('diseasesTypes', getDiseases);
-
     return (
         <Col lg={24} className={styles.patient_register_column}>
             <Text className={styles.title_form}>{t('diabetes information')}</Text>
@@ -69,17 +69,18 @@ const DiabetesInfo = ({
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item
+               {onePateintSuccess ? <Form.Item
                     name="diabetesDuration"
                     label={<p className={styles.label_form}>{t('Diabetes duration')}</p>}
+                    valuePropName='date'
                     rules={[
                         {
                             required: false,
                             message: 'Please select Diabetes duration'
                         }
                     ]}>
-                    <DatePicker onChange={onChange} className="w-100" />
-                </Form.Item>
+                     <DatePicker onChange={onChange} defaultValue={oldDate} className="w-100" /> 
+                </Form.Item> : null}
                 <Form.Item
                     name="diabetesStatus"
                     className={styles.form_item}
