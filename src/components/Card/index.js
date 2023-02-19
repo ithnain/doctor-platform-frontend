@@ -55,7 +55,7 @@ const Card = ({
         name = patient.name;
         isPatientCard = true;
         numberOfAppointments = patient.numberOfAppointments
-        max = patient.max != '' ? new Date(patient.max).toISOString().split('T')[0] : 'No Booked Appointment Yet'
+        max = patient.max != '' && patient.max ? new Date(patient.max).toISOString().split('T')[0] : 'No Booked Appointment Yet'
     }
 
     // add patient to Doctor
