@@ -31,7 +31,7 @@ function Header({ name, userRole }) {
                         }
                         setloadingCreatePatient(true);
                         await router.push('/create-patient');
-                    }}>
+                    }}> 
                     {`${t('registerPatient')} + `}
                 </Button>
             )}
