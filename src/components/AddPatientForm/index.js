@@ -38,7 +38,7 @@ const index = ({ direction, id, userdata }) => {
     useEffect(() => {
         if (createdPatientSuccess) {
             notification.success({
-                message: t('Created patient successfully')
+                message: !patientData ? t('Created patient successfully') : t('Updated patient Successfully')
             });
             form.resetFields();
         }
@@ -130,9 +130,11 @@ const index = ({ direction, id, userdata }) => {
     const createPatient = async (credintials) => {
         const data = {
             doctorId: userdata.id,
+            patientId: id,
             name: credintials?.name?.trim(),
-            gender: credintials.gender,
+            gender: credintials?.gender,
             age: credintials.age,
+            sex: credintials.sex,
             phoneNumber: credintials?.phoneNumber,
             remarkableNote: credintials?.remarkableNote?.trim(),
             diabetesType: credintials?.diabetesType,
@@ -153,68 +155,102 @@ const index = ({ direction, id, userdata }) => {
             currentTreatments:
                 credintials?.treatmentType === 'INSULINE'
                     ? [
-                          {
-                              units: credintials?.insulineUnit,
-                              treatment: credintials?.treatmentType,
-                              doseType: credintials?.insulineType,
-                              numberOfDoses: credintials?.insulineDose,
-                              I_C: credintials?.I ? `${credintials?.I}:${credintials.C}` : '',
-                              ISF: credintials?.isf,
-                              breakfast: credintials?.breakfast,
-                              lunch: credintials?.lunch,
-                              dinner: credintials?.dinner
-                          }
-                      ]
+                        {
+                            units: credintials?.insulineUnit,
+                            treatment: credintials?.treatmentType,
+                            doseType: credintials?.insulineType,
+                            numberOfDoses: credintials?.insulineDose,
+                            I_C: credintials?.I ? `${credintials?.I}:${credintials.C}` : '',
+                            ISF: credintials?.isf,
+                            breakfast: credintials?.breakfast,
+                            lunch: credintials?.lunch,
+                            dinner: credintials?.dinner
+                        }
+                    ]
                     : credintials?.treatmentType
-                    ? [
-                          {
-                              treatment: credintials?.treatmentType
-                          }
-                      ]
-                    : credintials?.treatmentType,
+                        ? [
+                            {
+                                treatment: credintials?.treatmentType
+                            }
+                        ]
+                        : credintials?.treatmentType,
             acutes:
                 credintials?.acuteSelect?.length >= 1
                     ? {
-                          condition: credintials?.acuteSelect,
-                          times: Number(credintials?.DKAtimes),
-                          severity: credintials?.Severity
-                      }
+                        condition: credintials?.acuteSelect,
+                        times: Number(credintials?.DKAtimes),
+                        severity: credintials?.Severity
+                    }
                     : credintials?.acuteSelect,
             chronics:
                 credintials?.chronicSelect?.length >= 1
                     ? [
-                          {
-                              condition: credintials?.chronicSelect
-                          }
-                      ]
+                        {
+                            condition: credintials?.chronicSelect
+                        }
+                    ]
                     : credintials?.chronicSelect
         };
-        API.post('patient/createPatient', data).then((res) => {
-            try {
-                if (res.status === 201) {
-                    setCreatedPatientSuccess(true);
+        if (!patientData) {
+            API.post('patient/createPatient', data).then((res) => {
+                try {
+                    if (res.status === 201) {
+                        setCreatedPatientSuccess(true);
+                        setLoading(false);
+                    }
+                    setTimeout(() => {
+                        setCreatedPatientSuccess(false);
+                        setDiabeticketoacidosis(false);
+                        setInsulineType(null);
+                        setCurrentTreatmentShow(false);
+                        setChronicShow(false);
+                        setAcuteShow(false);
+                    }, 3000);
+                } catch (error) {
+                    if (error?.response?.data?.error?.message) {
+                        // TO DO  if RTL ? or LTR
+                        setErrorsCreatingPatient([error.response.data.error.message.en]);
+                    } else if (error?.response?.data?.message?.length) {
+                        setErrorsCreatingPatient(error.response.data.message);
+                    } else {
+                        setErrorsCreatingPatient([t('Error in the server')]);
+                    }
                     setLoading(false);
                 }
-                setTimeout(() => {
-                    setCreatedPatientSuccess(false);
-                    setDiabeticketoacidosis(false);
-                    setInsulineType(null);
-                    setCurrentTreatmentShow(false);
-                    setChronicShow(false);
-                    setAcuteShow(false);
-                }, 3000);
-            } catch (error) {
-                if (error?.response?.data?.error?.message) {
-                    // TO DO  if RTL ? or LTR
-                    setErrorsCreatingPatient([error.response.data.error.message.en]);
-                } else if (error?.response?.data?.message?.length) {
-                    setErrorsCreatingPatient(error.response.data.message);
-                } else {
-                    setErrorsCreatingPatient([t('Error in the server')]);
+            });
+        }
+        else {
+            console.log('inside with patient Data');
+
+            API.patch('patient/patient', data).then((res) => {
+                try {
+                    if (res.status === 201 || res.status === 200) {
+                        setCreatedPatientSuccess(true);
+                        setLoading(false);
+                        // router.push('/patients/1')                
+                    }
+                    setTimeout(() => {
+                        setCreatedPatientSuccess(false);
+                        setDiabeticketoacidosis(false);
+                        setInsulineType(null);
+                        setCurrentTreatmentShow(false);
+                        setChronicShow(false);
+                        setAcuteShow(false);
+                    }, 3000);
+                } catch (error) {
+                    if (error?.response?.data?.error?.message) {
+                        // TO DO  if RTL ? or LTR
+                        setErrorsCreatingPatient([error.response.data.error.message.en]);
+                    } else if (error?.response?.data?.message?.length) {
+                        setErrorsCreatingPatient(error.response.data.message);
+                    } else {
+                        setErrorsCreatingPatient([t('Error in the server')]);
+                    }
+                    setLoading(false);
                 }
-                setLoading(false);
-            }
-        });
+            });
+        }
+
     };
     const { mutate: signMutate } = useMutation((credintials) => createPatient(credintials));
     const onFinish = async (values) => {
@@ -258,25 +294,24 @@ const index = ({ direction, id, userdata }) => {
                     : ['Chronic', 'Acute'];
             form.setFieldsValue({
                 name: patientData.data?.name,
-                age: `${patientData.data?.age}`,
+                age: moment(patientData.data?.age),
                 gender: patientData.data?.gender,
-                phoneNumber: patientData.data?.phone_number.slice(3),
+                phoneNumber: patientData.data?.phone_number.includes('+') ? patientData.data?.phone_number.slice(4) : patientData.data?.phone_number.slice(3),
                 chronicSelect: chronicValues,
                 diabetesComplications,
-                remarkableNote: patientData.data?.remarkable_note,
+                remarkableNote: patientData.data?.remarkableNote,
                 diabetesType: patientData.data?.diabetesType,
-                reasonForReferral: JSON.parse(patientData.data?.reason_for_referral),
-                doctorNote: patientData.data?.doctor_note,
-                diabetesStatus: patientData.data?.diabetes_status,
-                factorsEffectinglearning: patientData.data?.factors_effecting_learning,
-                long_term_goals: patientData.data?.long_term_goals,
-                medicalHistory: JSON.parse(patientData.data?.medical_history),
-                short_term_goals: patientData.data?.short_term_goals,
+                reasonForReferral: patientData.data?.reasonForReferral,
+                doctorNote: patientData.data?.doctorNote,
+                diabetesStatus: patientData.data?.diabetesStatus,
+                factorsEffectinglearning: patientData.data?.factorsEffectingLearning,
+                long_term_goals: patientData.data?.longTermGoals,
+                medicalHistory: patientData.data?.medicalHistory,
+                short_term_goals: patientData.data?.shortTermGoals,
                 treatmentType: patientData.data?.treatment[0]?.treatment,
                 medicationEffectingGlucose: patientData.data?.medication_effecting_glucose,
-                otherHealthIssues: JSON.parse(patientData.data?.other_health_issues)?.doctor,
-                recommendationGlycemicRange: patientData.data?.recommendation_glycemic_range,
-                diabetesDuration: moment(patientData.data?.diabetes_duration)
+                otherHealthIssues: patientData.data?.otherHealthIssues?.doctor,
+                recommendationGlycemicRange: patientData.data?.recommendationGlycemicRange,
             });
         }
     }, [patientData]);
@@ -298,10 +333,12 @@ const index = ({ direction, id, userdata }) => {
                     <Row type="flex" justify="space-around" align="flex-start">
                         <Col lg={7} xs={24} className={styles.patient_register_column}>
                             <Row type="flex" justify="start">
-                                <PatienInfo styles={styles} t={t} />
+                                <PatienInfo styles={styles} t={t} onePateintSuccess={onePateintSuccess} date={patientData?.data?.age ? moment(patientData?.data?.age) : null} />
                                 <DiabetesInfo
                                     styles={styles}
                                     t={t}
+                                    onePateintSuccess={onePateintSuccess}
+                                    date={patientData?.data?.diabetes_duration ? moment(patientData?.data?.diabetes_duration) : null}
                                     currentTreatmentShow={currentTreatmentShow}
                                     insulineTypes={insulineType?.data}
                                     insulineDoseSelectArray={insulineDoseSelectArray}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Col, Row } from 'antd';
 import { Space, Typography } from 'antd';
 
@@ -26,7 +27,15 @@ const Card = ({
     const router = useRouter();
     const { Title, Text } = Typography;
     // define the variable globbaly , I think if we use state it wii be better, then use useEffect to assign the values;
-    let name, email, age, nationalID, diabetesType, watcher;
+    let name, email, age, nationalID, diabetesType, watcher, numberOfAppointments, max;
+    const [types] = useState([
+        {text: 'أنا المصاب', title: 'For himself'},
+        {text: 'أنا المصابة', title: 'For herself'},
+        {text: 'والدي', title: 'The Son/Daughter'},
+        {text: 'والدتي', title: 'The Son/Daughter'},
+        {text: 'ابني', title: 'The Father/Mother'},
+        {text: 'ابنتي', title: 'The Father/Mother'},
+      ]);
 
     // check if it has doctor object or no;
     if (doctor?.id) {
@@ -41,9 +50,12 @@ const Card = ({
     if (patient?.id) {
         age = patient.age;
         diabetesType = patient.diabetesType;
-        watcher = patient.watcher;
+        const tempWatcher = types.find(type => {if(type.text === patient.whoIsPatient) return type.title});
+        watcher = tempWatcher ? tempWatcher.title : '-';
         name = patient.name;
         isPatientCard = true;
+        numberOfAppointments = patient.numberOfAppointments
+        max = patient.max != '' ? new Date(patient.max).toISOString().split('T')[0] : 'No Booked Appointment Yet'
     }
 
     // add patient to Doctor
@@ -115,7 +127,7 @@ const Card = ({
                                         <>
                                             <Text>
                                                 {t('age')}:{' '}
-                                                <span className={styles.card__blueText}>{age}</span>
+                                                <span className={styles.card__blueText}>{age != 0 ? age : '-'}</span>
                                             </Text>
                                             <Text>
                                                 {t('patientType')}:{' '}
@@ -181,12 +193,12 @@ const Card = ({
                                     <Text>
                                         {t('lastSessionDate')}:{' '}
                                         <span className={styles.card__blueText}>
-                                            {new Date().toLocaleDateString()}
+                                            {max}
                                         </span>
                                     </Text>
                                     <Text>
                                         {t('numberOfSessionsCompleted')}:{' '}
-                                        <span className={styles.card__blueText}>5</span>
+                                        <span className={styles.card__blueText}>{numberOfAppointments}</span>
                                     </Text>
                                 </Space>
                             </Col>

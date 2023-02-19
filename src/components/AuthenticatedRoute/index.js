@@ -37,7 +37,7 @@ function authenticatedRoute(Component = null) {
                                     this.setState({ loading: false });
                                 });
                         }
-                        if (data.token) {
+                        if (data?.token) {
                             this.setState({ loading: false });
                             return;
                         }
