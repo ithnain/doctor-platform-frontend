@@ -5,7 +5,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-const PatienInfo = ({ styles, t }) => {
+const PatienInfo = ({ styles, t, onePateintSuccess, date }) => {
     const { Text } = Typography;
     const [, setAge] = useState('');
 
@@ -58,10 +58,12 @@ const PatienInfo = ({ styles, t }) => {
                         </Radio>
                     </Radio.Group>
                 </Form.Item>
+                {onePateintSuccess ?
                 <Form.Item
                     className="w-100"
                     name="age"
                     label={<p className={styles.label_form}>{t('age')}</p>}
+                    valuePropName='date'
                     // getValueFromEvent={(onChange) => moment(onChange).format('YYYY-MM-DD')}
                     // getValueProps={(i) => ({value: moment(i)})}
                     rules={[
@@ -70,10 +72,11 @@ const PatienInfo = ({ styles, t }) => {
                             message: 'Please input patient age'
                         }
                     ]}>
-                    <DatePicker onChange={onChangeAge} className="w-100" />
+                    <DatePicker defaultValue={date} onChange={onChangeAge} className="w-100" />
 
                     {/* <Input placeholder="15" className="w-100" /> */}
                 </Form.Item>
+                : null}
                 <Form.Item
                     name="phoneNumber"
                     label={<p className={styles.label_form}>{t('Phone')}</p>}
