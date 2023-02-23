@@ -51,7 +51,6 @@ const EducatorForm = ({ direction }) => {
             dpEducatorId
         }).then((result) => {
                 setLoading(false)
-                setCurrent(current + 1);
                 router.push('/overview');
             })
             .catch((error) => {
