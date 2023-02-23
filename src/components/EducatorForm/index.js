@@ -12,6 +12,7 @@ import types from '../AddPatientForm/types.json';
 import useTranslation from 'next-translate/useTranslation';
 import toastr from 'toastr';
 import { useRouter } from 'next/router';
+import UploadCSVfile from '../UploadCSVfile';
 
 const { Step } = Steps;
 const getIntensity = async () => await API.get(`invoice/intensity`);
@@ -33,11 +34,38 @@ const EducatorForm = ({ direction }) => {
             planPaid,
             dpEducatorId
         });
+        router.push('/overview');
     };
+
+    const addPlanList = async (data) => {
+        setLoading(true)
+        return await API.post('invoice/invoiceList', {
+            patientIds: patientList.map((patient) => {
+                return { id: patient.id };
+            }),
+            topics: topics.map((topic) => {
+                return { id: topic };
+            }),
+            intensityId: intensityId,
+            planPaid,
+            dpEducatorId
+        }).then((result) => {
+                setLoading(false)
+                setCurrent(current + 1);
+                router.push('/overview');
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log("ERROR inside list:" + error);
+                return error;
+            });
+    };
+
     const { t } = useTranslation('create-patient');
     const router = useRouter();
     const [current, setCurrent] = React.useState(0);
     const [form] = Form.useForm();
+    const [patientCSVfile, setPatientCSVfile] = useState(null);
     const { Option } = Select;
     const [planStatus, setPlanStatus] = useState('plan');
     const [loading, setLoading] = useState(false);
@@ -45,6 +73,7 @@ const EducatorForm = ({ direction }) => {
     const [doctors, setDoctors] = useState([]);
     const [formValues, setFormValues] = useState({});
     const [patient, setPatinet] = useState({});
+    const [patientList, setPatinetList] = useState([]);
     const [intensitiesArray, setIntensitiesArray] = useState(['aaa', 'bbb']);
     const [intensityId, setIntensityId] = useState('');
     const [dpEducatorId, setEducatorId] = useState('');
@@ -62,11 +91,45 @@ const EducatorForm = ({ direction }) => {
     }, [getDoctors]);
 
     const addPatient = async (data) => {
+        setLoading(true);
         const patient = await API.post('patient/createPatient', {
             ...formValues
+        }).then((result) => {
+            setLoading(false)
+            setCurrent(current + 1);
+            return result;
         });
-        setPatinet(patient?.data);
+        setPatinet(patient.data);
     };
+
+    const addPatientList = async ({ data, file }) => {
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append('doctorId', data.doctorId);
+        formData.append('educatorId', data.educatorId);
+
+        const config = {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "multipart/form-data",
+                charsets: "utf-8",
+            },
+        };
+        setLoading(true)
+        const patients = await API.post("/patient/createPatientList", formData, config)
+            .then((result) => {
+                setLoading(false)
+                setCurrent(current + 1);
+                if (result.status === 201)
+                    return result.data;
+            })
+            .catch((error) => {
+                setLoading(false);
+                toastr.error(error.response.data.error.message.en);
+                return error;
+            });
+        setPatinetList(patients);
+    }
 
     const { data } = useQuery('doctors', () => getDoctors(), {
         onError: (err) => {
@@ -139,9 +202,9 @@ const EducatorForm = ({ direction }) => {
             }
         }
     });
-    const { mutate: addPlanMutate } = useMutation((data) => addPlan(data), {
+    const { mutate: addPlanMutate } = useMutation((data) => !patientCSVfile ? addPlan(data): addPlanList({data}), {
         onSuccess: () => {
-            router.push('/overview');
+            // router.push('/overview');
         },
         onError: (err) => {
             if (err.response) {
@@ -157,9 +220,9 @@ const EducatorForm = ({ direction }) => {
             setLoading(false);
         }
     });
-    const { mutate: addPatientMutate } = useMutation('patient', (data) => addPatient(data), {
+    const { mutate: addPatientMutate } = useMutation('patient', (data) => !patientCSVfile ? addPatient(data) : addPatientList({data, file:patientCSVfile}) , {
         onSuccess: (data) => {
-            setCurrent(current + 1);
+            console.log(data);
         },
         onError: (err) => {
             if (err.response) {
@@ -204,7 +267,7 @@ const EducatorForm = ({ direction }) => {
                             label={<p className={FormStyles.label_form}>{t('app casehandler')}</p>}
                             rules={[{ required: true, message: 'Please select a casehandler' }]}>
                             <Select allowClear className="w-100" onChange={(e) => { }}>
-                                {casehandlers.data && casehandlers.data?.map((doctor) => (
+                                {casehandlers.data && casehandlers.data?.filter((ch) => ch.isCaseHandler).map((doctor) => (
                                     <Option key={doctor.id} value={doctor.id}>
                                         {doctor.name ? doctor.name : doctor.email}
                                     </Option>
@@ -347,7 +410,7 @@ const EducatorForm = ({ direction }) => {
                                             allowClear
                                             className="w-100"
                                             onChange={(e) => setEducatorId(e)}>
-                                            {casehandlers.data && casehandlers.data?.map((doctor) => (
+                                            {casehandlers.data && casehandlers.data?.filter((ch) => !ch.isCaseHandler).map((doctor) => (
                                                 <Option key={doctor.id} value={doctor.id}>
                                                     {doctor.name ? doctor.name : doctor.email}
                                                 </Option>
@@ -405,12 +468,20 @@ const EducatorForm = ({ direction }) => {
         setPlanStatus(newState);
     };
     const onCreatePatient = () => {
-        form.validateFields(['name', 'phoneNumber', 'diabetesType'])
-            .then(() => {
-                setFormValues({ ...form.getFieldsValue() });
-                addPatientMutate(formValues);
-            })
-            .catch((err) => console.log({ err }));
+        if (!patientCSVfile)
+            form.validateFields(['name', 'phoneNumber', 'diabetesType', 'doctorId', 'educatorId'])
+                .then(() => {
+                    setFormValues({ ...form.getFieldsValue() });
+                    addPatientMutate(form.getFieldsValue());
+                })
+                .catch((err) => console.log({ err }));
+        else
+            form.validateFields(['doctorId', 'educatorId'])
+                .then(() => {
+                    setFormValues({ ...form.getFieldsValue() });
+                    addPatientMutate(form.getFieldsValue());
+                })
+                .catch((err) => console.log({ err }));
     };
     const onCreatePlan = () => {
         form.validateFields(['intensityId', 'planDuration', 'dpEducatorId'])
@@ -462,20 +533,34 @@ const EducatorForm = ({ direction }) => {
                 )}
                 <div className={Styles.action}>
                     {current < steps.length - 1 && (
-                        <CustomButton
-                            text="Next"
-                            handleButtonClick={() => onCreatePatient()}
-                            className="pinkBG w-50"
-                            loading={loading}
-                        />
+                        <>
+                            <CustomButton
+                                text="Next"
+                                handleButtonClick={() => onCreatePatient()}
+                                className="pinkBG w-50 mr-10"
+                                loading={loading}
+                            />
+                            <UploadCSVfile setFile={setPatientCSVfile} t={t} />
+
+                        </>
+
                     )}
                     {current === steps.length - 1 && (
-                        <CustomButton
-                            text="Done"
-                            className="pinkBG w-50"
-                            handleButtonClick={() => onCreatePlan()}
-                            loading={loading}
-                        />
+                        <>
+                            <CustomButton
+                                text="Done"
+                                className="pinkBG w-50"
+                                handleButtonClick={() => onCreatePlan()}
+                                loading={loading}
+                            />
+                            <CustomButton
+                                text="Don't create a plan"
+                                className="whiteBG w-50"
+                                handleButtonClick={() => router.push('/overview')}
+                                loading={loading}
+                            />
+                        </>
+
                     )}
                 </div>
             </ConfigProvider>
