@@ -32,7 +32,8 @@ const EducatorForm = ({ direction }) => {
             }),
             intensityId: intensityId,
             planPaid,
-            dpEducatorId
+            dpEducatorId,
+            dpCasehandlerId
         });
         router.push('/overview');
     };
@@ -48,7 +49,8 @@ const EducatorForm = ({ direction }) => {
             }),
             intensityId: intensityId,
             planPaid,
-            dpEducatorId
+            dpEducatorId,
+            dpCasehandlerId
         }).then((result) => {
                 setLoading(false)
                 router.push('/overview');
@@ -76,6 +78,7 @@ const EducatorForm = ({ direction }) => {
     const [intensitiesArray, setIntensitiesArray] = useState(['aaa', 'bbb']);
     const [intensityId, setIntensityId] = useState('');
     const [dpEducatorId, setEducatorId] = useState('');
+    const [dpCasehandlerId, setCasehandlerId] = useState('');
     const [planPaid, setPlanPaid] = useState(false);
 
     useEffect(() => {
@@ -124,7 +127,7 @@ const EducatorForm = ({ direction }) => {
             })
             .catch((error) => {
                 setLoading(false);
-                toastr.error(error.response.data.error.message.en);
+                toastr.error(error.response?.data?.error?.message?.en);
                 return error;
             });
         setPatinetList(patients);
@@ -265,7 +268,7 @@ const EducatorForm = ({ direction }) => {
                             className={`w-100 ${FormStyles.form_item}`}
                             label={<p className={FormStyles.label_form}>{t('app casehandler')}</p>}
                             rules={[{ required: true, message: 'Please select a casehandler' }]}>
-                            <Select allowClear className="w-100" onChange={(e) => { }}>
+                            <Select allowClear className="w-100" onChange={(e) => setCasehandlerId(e)}>
                                 {casehandlers.data && casehandlers.data?.filter((ch) => ch.isCaseHandler).map((doctor) => (
                                     <Option key={doctor.id} value={doctor.id}>
                                         {doctor.name ? doctor.name : doctor.email}
