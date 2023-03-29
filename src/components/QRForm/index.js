@@ -84,7 +84,10 @@ const QRForm = ({ name, id }) => {
         const data = {
             name: values?.username?.trim(),
             phoneNumber: `${values.number.number}`,
-            doctorId: id
+            doctorId: id,
+            // educatorId: "1c735207-5ac5-4aa9-b5cd-17242fe95af1",
+            diabetesType: "T1D",
+            educatorId: "946d3dad-8898-4d1b-bc2e-bb06c529dd05"
         };
         try {
             const res = await API.post('patient/createPatient', data);
