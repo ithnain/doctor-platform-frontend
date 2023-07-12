@@ -80,6 +80,7 @@ NumberInput.propTypes = {
 };
 const QRForm = ({ name, id }) => {
     const { Text } = Typography;
+    const [error, setError] = useState(false);
     const onFinish = async (values) => {
         const data = id === "be0ee729-25db-442f-aefc-515b87054043" || id === "61254b6b-3d08-424d-a9f3-acd231a9afcc" ? {
             name: values?.username?.trim(),
@@ -99,7 +100,8 @@ const QRForm = ({ name, id }) => {
                 router.push('/create-patient-qr/success');
             }
         } catch (error) {
-            router.push('/create-patient-qr/error');
+            if(error.response.status === 409) setError(true);
+            else router.push('/create-patient-qr/error');
         }
     };
     const onFinishFailed = (errorInfo) => {
@@ -189,6 +191,7 @@ const QRForm = ({ name, id }) => {
                                     ]}>
                                     <NumberInput />
                                 </Form.Item>
+                                {error && <Text className={styles.error} type="secondary">لديك حساب سابق و سنقوم بربطك مع الطبيب</Text> }
                                 <Form.Item wrapperCol={{ span: 24 }}>
                                     <CustomButton
                                         type="primary"
