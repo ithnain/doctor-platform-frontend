@@ -82,18 +82,20 @@ const QRForm = ({ name, id }) => {
     const { Text } = Typography;
     const [error, setError] = useState(false);
     const onFinish = async (values) => {
-        const data = id === "be0ee729-25db-442f-aefc-515b87054043" || id === "61254b6b-3d08-424d-a9f3-acd231a9afcc" ? {
-            name: values?.username?.trim(),
-            phoneNumber: `${values.number.number}`,
-            doctorId: id,
-            // educatorId: "1c735207-5ac5-4aa9-b5cd-17242fe95af1",
-            diabetesType: "T1D",
-            educatorId: "946d3dad-8898-4d1b-bc2e-bb06c529dd05"
-        } : {
+        const data = {
             name: values?.username?.trim(),
             phoneNumber: `${values.number.number}`,
             doctorId: id,
         };
+        // id === "be0ee729-25db-442f-aefc-515b87054043" || id === "61254b6b-3d08-424d-a9f3-acd231a9afcc" ? {
+        //     name: values?.username?.trim(),
+        //     phoneNumber: `${values.number.number}`,
+        //     doctorId: id,
+        //     // educatorId: "1c735207-5ac5-4aa9-b5cd-17242fe95af1",
+            // diabetesType: "T1D",
+            // educatorId: "946d3dad-8898-4d1b-bc2e-bb06c529dd05"
+        // } :
+         
         try {
             const res = await API.post('patient/createPatient', data);
             if (res.status === 201) {
