@@ -471,7 +471,9 @@ const EducatorForm = ({ direction }) => {
     };
     const onCreatePatient = () => {
         if (!patientCSVfile)
-            form.validateFields(['name', 'phoneNumber', 'diabetesType', 'doctorId', 'educatorId'])
+            // MUST Change back when using other accounts
+            // form.validateFields(['name', 'phoneNumber', 'diabetesType', 'doctorId', 'educatorId'])
+            form.validateFields(['name', 'phoneNumber', 'doctorId'])
                 .then(() => {
                     setFormValues({ ...form.getFieldsValue() });
                     addPatientMutate(form.getFieldsValue());
