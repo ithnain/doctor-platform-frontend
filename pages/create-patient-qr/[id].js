@@ -15,7 +15,8 @@ const QRFormPage = () => {
     return (
         <Row justify="space-around">
             <Col xs={24}>
-                <QRForm name={name} id={id} />
+                <QRForm name={name} id={name === "Sukkar_Tbok" ? "1983c3bf-aa3f-421b-90af-81bf5d7a1627" : id} /> 
+                {/* Solving issue with Sukkar Tabok url */}
             </Col>
         </Row>
     );
