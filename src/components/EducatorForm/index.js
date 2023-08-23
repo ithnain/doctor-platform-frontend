@@ -475,8 +475,11 @@ const EducatorForm = ({ direction }) => {
             form.validateFields(['name', 'phoneNumber', 'diabetesType', 'doctorId', 'educatorId'])
             // form.validateFields(['name', 'phoneNumber', 'doctorId'])
                 .then(() => {
-                    // setFormValues({ ...form.getFieldsValue() });
-                    setFormValues({ name: form.getFieldsValue().name,  phoneNumber: form.getFieldsValue().phoneNumber, doctorId: form.getFieldsValue().doctorId});
+                    if (form.getFieldsValue().doctorId === "11e1cd36-f96a-41ff-8773-99684e24eedb" || form.getFieldsValue().doctorId === "da3c0558-e5e0-4a9d-b602-3531cbac4417" || form.getFieldsValue().doctorId === "a2c2ecc6-6706-4b08-9554-ea338afcd328" || form.getFieldsValue().doctorId === "be0ee729-25db-442f-aefc-515b87054043" || form.getFieldsValue().doctorId === "61254b6b-3d08-424d-a9f3-acd231a9afcc" || form.getFieldsValue().doctorId === "0f9a5102-1bcf-4698-b041-825cb13a6d68" || form.getFieldsValue().doctorId === "1983c3bf-aa3f-421b-90af-81bf5d7a1627" || form.getFieldsValue().doctorId === "64b03fe4-4cb0-453f-9d7a-b29b8cda0c5e" || form.getFieldsValue().doctorId === "c4424748-f4b2-4e87-b6e0-60fca0dcacb8" || form.getFieldsValue().doctorId === "07e0e21f-533b-465f-96af-bd8ff4d8c248" || form.getFieldsValue().doctorId === "f0947827-73e2-4f20-9ae2-23eb0c4fa3e3") {
+                        setFormValues({ name: form.getFieldsValue().name,  phoneNumber: form.getFieldsValue().phoneNumber, doctorId: form.getFieldsValue().doctorId});                    
+                    }
+                    else
+                        setFormValues({ ...form.getFieldsValue() });
                     addPatientMutate(form.getFieldsValue());
                 })
                 .catch((err) => console.log({ err }));
