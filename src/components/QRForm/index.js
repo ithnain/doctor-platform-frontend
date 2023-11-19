@@ -5,7 +5,7 @@ import { ConfigProvider } from 'antd';
 import CustomButton from '@src/components/CustomBtn';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import router from 'next/router';
 import styles from './QR.module.scss';
 import { useState } from 'react';
@@ -81,6 +81,10 @@ NumberInput.propTypes = {
 const QRForm = ({ name, id }) => {
     const { Text } = Typography;
     const [error, setError] = useState(false);
+
+    useEffect(() => {
+        qrCodeCounter();
+    }, []);
     const onFinish = async (values) => {
         const data = {
             name: values?.username?.trim(),
@@ -104,6 +108,16 @@ const QRForm = ({ name, id }) => {
         } catch (error) {
             if(error.response.status === 409) setError(true);
             else router.push('/create-patient-qr/error');
+        }
+    };
+    const qrCodeCounter = async () => {
+        const data = {
+            referrerId: id,
+        };         
+        try {
+            const res = await API.post('auth/incrementQrCounter', data);
+        } catch (error) {
+            console.log(error);
         }
     };
     const onFinishFailed = (errorInfo) => {
